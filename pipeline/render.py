@@ -451,12 +451,46 @@ def thumb_image():
     f = B(40); d.text((W / 2 - d.textlength(th["series"], font=f) / 2, 1545), th["series"], font=f, fill=RUST, stroke_width=4, stroke_fill=(0, 0, 0))
     return img
 
+def thumb_wide():
+    """1280x720 custom thumbnail: text left, the lesson's visual right."""
+    th = thumb_spec(); vis = th["visual"]; TW, THH = 1280, 720
+    params = next((x for x in SCENES if x.get("visual") == vis), {}); params = dict(params, **th.get("params", {}))
+    params = {k: v for k, v in params.items() if k not in ("heading", "sub", "caption")}
+    bg = background(4.0, 0.0)[560:560 + 608] * VIG[560:560 + 608]
+    img = Image.fromarray(np.clip(bg, 0, 255).astype(np.uint8)).resize((TW, THH), Image.BILINEAR)
+    layer = Image.new("RGB", (W, H)); VIS.VISUALS[vis](ImageDraw.Draw(layer), 30.0, 6.0, params)
+    art = layer.crop((40, 520, 1040, 1380)).resize((780, 671), Image.BILINEAR)
+    glow = art.resize((195, 168), Image.BILINEAR).filter(ImageFilter.GaussianBlur(6)).resize((780, 671), Image.BILINEAR)
+    region = np.asarray(img, np.float32); x0, y0 = TW - 780 + 40, 30
+    sub = region[y0:y0 + 671, x0:x0 + 740]
+    sub += (np.asarray(art, np.float32) * 0.95 + np.asarray(glow, np.float32) * 1.3)[:, :740][: sub.shape[0]]
+    img = Image.fromarray(np.clip(region, 0, 255).astype(np.uint8)); d = ImageDraw.Draw(img)
+    y = 70
+    if th.get("badge"):
+        f = B(48); bw = d.textlength(th["badge"], font=f) + 56
+        d.rounded_rectangle((60, y, 60 + bw, y + 76), 38, fill=RUST); d.text((88, y + 12), th["badge"], font=f, fill=(8, 8, 12)); y += 110
+    for i, line in enumerate(th["lines"][:3]):
+        lines, f, sz = wrap(d, line, B, 120, 640, 1, 50)
+        d.text((60, y), lines[0], font=f, fill=WHITE if i == 0 else RUST, stroke_width=8, stroke_fill=(0, 0, 0)); y += sz * 1.08
+    f = B(40); tw = d.textlength(th["tag"], font=f) + 50
+    d.rounded_rectangle((60, y + 20, 60 + tw, y + 90), 35, fill=(250, 250, 252)); d.text((85, y + 32), th["tag"], font=f, fill=(8, 8, 12))
+    f = B(32); d.text((60, THH - 70), th["series"], font=f, fill=RUST, stroke_width=3, stroke_fill=(0, 0, 0))
+    return img
+
+def save_thumbs(img):
+    img.convert("RGB").save(os.path.join(BUILD, "thumbnail.png"))
+    img.convert("RGB").save(os.path.join(BUILD, "thumbnail_vertical.jpg"), quality=90, optimize=True)
+    thumb_wide().save(os.path.join(BUILD, "thumbnail_16x9.jpg"), quality=92, optimize=True)
+    for n in ("thumbnail_vertical.jpg", "thumbnail_16x9.jpg"):
+        q = 90
+        while os.path.getsize(os.path.join(BUILD, n)) > 1_900_000 and q > 50:
+            q -= 10; Image.open(os.path.join(BUILD, n)).save(os.path.join(BUILD, n), quality=q, optimize=True)
+
 THUMB_FRAMES = int(SPEC.get("thumbnail", {}).get("frames", 8))  # ~0.27 s cover at the very start
 
 if __name__ == "__main__":
     for sc in SCENES: assert sc["type"] in TYPES, f"unknown scene type {sc['type']}"
-    TH_IMG = thumb_image(); TH_IMG.save(os.path.join(BUILD, "thumbnail.png"))
-    TH_IMG.convert("RGB").save(os.path.join(BUILD, "thumbnail.jpg"), quality=90)
+    TH_IMG = thumb_image(); save_thumbs(TH_IMG)
     if "--thumb" in sys.argv: print("thumbnail", os.path.join(BUILD, "thumbnail.png")); sys.exit()
     TH_BYTES = np.asarray(TH_IMG.convert("RGB")).tobytes()
     if "--preview" in sys.argv:

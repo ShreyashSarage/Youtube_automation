@@ -90,7 +90,9 @@ YouTube does not accept uploaded thumbnails for Shorts, so the pipeline renders 
                "visual": "shield",                 // the most telling visual for the lesson
                "params": { "label": "memory safe · no GC" } }   // optional overrides for that visual
 ```
-`DAY N`, `IN 60 SECONDS` and the series name are added automatically. Check `thumbnail.png` (it is
+`DAY N`, `IN 60 SECONDS` and the series name are added automatically. The render also writes
+`build/thumbnail_16x9.jpg` (1280×720) and `build/thumbnail_vertical.jpg` (1080×1920), both < 2 MB,
+for the owner to upload by hand in YouTube Studio. Check `thumbnail.png` (it is
 also the first tile of `preview.png`) before rendering.
 
 ### Title, description, tags (trendy, searchable)
@@ -143,9 +145,13 @@ pipeline/build.sh episodes/TODAY             # about 3-5 min → build/video.mp4
 ## 6. Record and push
 Append to `state/history.json → posted`:
 `{"date": TODAY, "day": N, "topic": ..., "title": ..., "url": ..., "publishAt": ..., "sources": [...]}`.
-Commit `episodes/TODAY/spec.json` + `state/history.json` (videos are git-ignored) and push to `main`:
+Copy `build/thumbnail_16x9.jpg` and `build/thumbnail_vertical.jpg` into `episodes/TODAY/`.
+Commit `episodes/TODAY/spec.json`, the two thumbnails and `state/history.json` (videos are git-ignored) and push to `main`:
 `git -c push.negotiate=true push origin main` (retry up to 4 times on network errors).
 
 ## 7. Final report (last message)
 Day number, lesson, title, YouTube link, scheduled time (IST), and anything the owner should check.
+Attach both thumbnails with SendUserFile if that tool exists, and give their GitHub links
+(`https://github.com/ShreyashSarage/Youtube_automation/blob/main/episodes/TODAY/thumbnail_16x9.jpg`, same for `thumbnail_vertical.jpg`)
+with the reminder: YouTube Studio → Content → the video → Thumbnail → Upload file.
 If something failed, say which step and why.
