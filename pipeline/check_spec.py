@@ -1,8 +1,10 @@
 """Validate an episode spec before spending time on rendering.  Usage: python3 check_spec.py EPISODE_DIR"""
 import json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from visuals import VISUALS as VIS
 EP = sys.argv[1]; s = json.load(open(os.path.join(EP, "spec.json"))); errs = []
 REQ = dict(hook=["big"], title=["title"], bullets=["heading", "items"], terminal=["heading", "commands"], code=["heading", "code"],
-           bars=["heading", "bars"], cards=["heading", "cards"], timeline=["heading", "points"], cta=[])
+           bars=["heading", "bars"], cards=["heading", "cards"], timeline=["heading", "points"], cta=[], visual=["visual"])
 for k in ("topic", "sources", "youtube", "scenes"):
     if k not in s: errs.append(f"missing top-level '{k}'")
 yt = s.get("youtube", {})
@@ -18,7 +20,8 @@ if sc and sc[0].get("type") != "hook": errs.append("first scene should be type '
 if sc and sc[-1].get("type") != "cta": errs.append("last scene should be type 'cta'")
 for i, x in enumerate(sc):
     if x.get("type") not in REQ: errs.append(f"scene {i}: unknown type {x.get('type')}"); continue
-    for f in REQ[x["type"]] + ["say"]:
+    if x.get("visual") and x["visual"] not in VIS: errs.append(f"scene {i}: unknown visual {x['visual']} (have: {', '.join(VIS)})")
+    for f in REQ[x["type"]] + ([] if x.get("dur") else ["say"]):
         if not x.get(f): errs.append(f"scene {i} ({x['type']}): missing '{f}'")
     if x.get("type") == "code":
         cl = x.get("code", "").rstrip("\n").split("\n")
@@ -26,5 +29,10 @@ for i, x in enumerate(sc):
         lw = max(len(l) for l in cl) if cl else 0
         if lw > 34: errs.append(f"scene {i}: code line {lw} chars (max 34, phones need big text)")
     if len(x.get("say", "").split()) > 55: errs.append(f"scene {i}: narration over 55 words")
+nv = sum(1 for x in sc if x.get("type") == "visual")
+need = max(2, len(sc) - 3)
+if nv < need: errs.append(f"only {nv} 'visual' scenes; use at least {need} (motion graphics from the title)")
+if sc and not sc[0].get("visual"): errs.append("hook has no 'visual'; set one from pipeline/suggest.py")
+if s.get("theme") not in (None, "rust", "ocean", "matrix", "neon", "gold"): errs.append(f"unknown theme {s.get('theme')}")
 if errs: print("SPEC ERRORS:\n  " + "\n  ".join(errs)); sys.exit(1)
 print("spec ok:", len(sc), "scenes")

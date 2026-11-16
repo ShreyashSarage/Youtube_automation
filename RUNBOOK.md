@@ -29,7 +29,7 @@ Prefer: big news > hot new tool > a new feature in a recent stable release > an 
 release notes), plus a second source for anything surprising.
 
 ## 3. Write `episodes/TODAY/spec.json`
-Schema (see `examples/kiri/spec.json` and `examples/question-mark/spec.json`):
+Schema (see `samples/kiri-ocean`, `samples/ownership-matrix`, `samples/async-neon`):
 ```jsonc
 {
   "topic": "short topic label (used for de-duplication)",
@@ -56,6 +56,30 @@ Scene types and fields:
 | `cards` | `heading`, `cards` [{title, text, highlight}] ≤ 4 |
 | `timeline` | `heading`, `points` [{top, bottom}] ≤ 3, `callout`, `sub` |
 | `cta` | `heading`, `link` (short, no https://), `question` [lines], `sub` |
+
+| `visual` | `visual` (one of the motion graphics below), `heading`, `sub`, `caption`, plus that visual's params |
+
+**Motion graphics come from the title.** Run `python3 pipeline/suggest.py "<your title>"` to get
+the colour `theme` (set it top-level in the spec) and visuals ranked for the topic. Then:
+- The `hook` gets `"visual": "<best visual>"` so the first frame already shows the subject.
+- At least **max(2, scenes − 3)** scenes are `visual` scenes (the spec check enforces it); use `code` / `terminal` / `bars` only where
+  real code, commands or numbers are the point. Pick the visual that *shows* what the narration says.
+
+| visual | shows | params |
+|---|---|---|
+| `containers` | isometric containers dropping onto a platform | `label`, `count` |
+| `race` | lanes racing to a checkered finish, times pop in | `lanes` [{label, value, decimals}], `unit` (real numbers only) |
+| `gauge` | speedometer needle + counting number | `value`, `max`, `unit`, `label`, `decimals` |
+| `ownership` | stack vars → heap value, arrow moves, old owner struck out | `a`, `b`, `value`, `note` |
+| `shield` | memory grid, a bad pointer gets blocked by a shield | `label` |
+| `lanes` | async runtime dispatching tasks across lanes, `.await` pauses | `labels` [≤ 5], `hub` |
+| `compiler` | source file → particles → gears → binary + ✓ badge | `file`, `output`, `badge` |
+| `network` | server hub with nodes and packets flowing | `center`, `nodes` [labels] |
+| `layers` | isometric stack; highlighted layer drops in | `layers` [bottom→top, ≤ 5], `highlight` (index) |
+| `tree` | dependency tree growing from a root crate | `root`, `children` [{name, children: [..]}] |
+
+Themes: `rust` (orange/blue), `ocean` (cyan, containers/cloud/web), `matrix` (green, safety/memory),
+`neon` (pink/purple, async), `gold` (releases/compiler). See `samples/*/spec.json` for full examples.
 
 Writing style: punchy, conversational, one idea per scene. On-screen text matches the narration.
 Hook in the first 2 s (a question or a surprising number). Total 35-75 s. Spell out

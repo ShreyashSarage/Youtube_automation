@@ -1,0 +1,15 @@
+{"topic": "visual library demo", "sources": ["n/a (demo)"], "theme": "rust", "brand": "MOTION  ·  LIBRARY",
+ "youtube": {"title": "demo", "description": "demo", "tags": []},
+ "scenes": [
+  {"type": "visual", "visual": "containers", "heading": "containers", "sub": "Docker · Kubernetes · deploys", "label": "docker compose up", "dur": 4.2},
+  {"type": "visual", "visual": "race", "heading": "race", "sub": "benchmarks · A vs B", "lanes": [{"label": "Rust", "value": 1.2}, {"label": "Other", "value": 4.8}], "unit": "s", "dur": 5.0},
+  {"type": "visual", "visual": "gauge", "heading": "gauge", "sub": "speed · a single big number", "value": 98, "max": 100, "unit": "% demo", "label": "demo value", "dur": 4.2},
+  {"type": "visual", "visual": "ownership", "heading": "ownership", "sub": "moves · borrows · lifetimes", "a": "s1", "b": "s2", "value": "String", "note": "s1 can't be used anymore", "dur": 5.5},
+  {"type": "visual", "visual": "shield", "heading": "shield", "sub": "memory safety · security", "label": "caught at compile time", "dur": 4.6},
+  {"type": "visual", "visual": "lanes", "heading": "lanes", "sub": "async · threads · concurrency", "hub": "runtime", "dur": 5.0},
+  {"type": "visual", "visual": "compiler", "heading": "compiler", "sub": "releases · cargo · build", "file": "main.rs", "output": "binary", "badge": "release", "dur": 4.8},
+  {"type": "visual", "visual": "network", "heading": "network", "sub": "web servers · APIs · p2p", "center": "server", "nodes": ["client", "client", "db", "cache", "client", "api", "client", "queue", "client"], "dur": 4.4},
+  {"type": "visual", "visual": "layers", "heading": "layers", "sub": "kernel · OS · architecture", "layers": ["Hardware", "Kernel", "Rust drivers", "Apps"], "highlight": 2, "dur": 4.6},
+  {"type": "visual", "visual": "tree", "heading": "tree", "sub": "crates · dependencies", "root": "my-app", "children": [{"name": "tokio", "children": ["mio", "bytes"]}, {"name": "serde", "children": ["derive"]}, {"name": "clap"}], "dur": 4.8},
+  {"type": "cta", "heading": "Pick per title", "link": "10 topic visuals", "question": ["Auto-chosen from", "each day's title"], "dur": 3.4}
+ ]}

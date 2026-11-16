@@ -127,7 +127,7 @@ for k in ("pad", "bass", "arp"): bus[k] *= sc
 v, vsr = sf.read(D + "voice.wav")
 if v.ndim > 1: v = v.mean(1)
 v = np.interp(np.arange(N) / SR, np.arange(len(v)) / vsr, np.abs(v), right=0)
-env = lp(v, 6, 1); env = env / (np.percentile(env[env > 1e-4], 90) + 1e-9)
+env = lp(v, 6, 1); nz = env[env > 1e-4]; env = env / (np.percentile(nz, 90) + 1e-9) if nz.size else env * 0
 duck = 1 - 0.5 * np.clip(env, 0, 1)
 duck = lp(duck, 4, 1)
 

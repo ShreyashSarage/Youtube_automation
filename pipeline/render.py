@@ -10,7 +10,7 @@ import numpy as np
 from multiprocessing import Pool
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-EP = os.path.abspath(sys.argv[1]); BUILD = os.path.join(EP, "build")
+EP = os.path.abspath(sys.argv[1]); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); BUILD = os.path.join(EP, "build")
 SPEC = json.load(open(os.path.join(EP, "spec.json")))
 SCENES = SPEC["scenes"]
 DURS = json.load(open(os.path.join(BUILD, "durs.json")))
@@ -30,8 +30,20 @@ R = lambda s: font("DejaVuSans.ttf", s)
 M = lambda s: font("DejaVuSansMono.ttf", s)
 MB = lambda s: font("DejaVuSansMono-Bold.ttf", s)
 
-RUST = (255, 104, 36); WHITE = (240, 242, 245); DIM = (150, 158, 170); GREEN = (70, 210, 95)
-PANEL = (24, 30, 40); BLUE = (88, 166, 255); BLUE_BAR = (45, 105, 190); PURPLE = (190, 120, 255); YELLOW = (240, 200, 90)
+WHITE = (240, 242, 245); DIM = (150, 158, 170); GREEN = (70, 210, 95)
+PANEL = (24, 30, 40); PURPLE = (190, 120, 255); YELLOW = (240, 200, 90)
+# colour themes: accent, second, blob colours (warm, cool, extra)
+THEMES = {
+    "rust":   dict(A=(255, 104, 36), A2=(88, 166, 255),  b1=(90, 30, 8),  b2=(10, 30, 75), b3=(60, 18, 40)),
+    "ocean":  dict(A=(40, 200, 255), A2=(120, 110, 255), b1=(5, 50, 85),  b2=(30, 20, 80), b3=(0, 45, 55)),
+    "matrix": dict(A=(60, 235, 130), A2=(40, 170, 255),  b1=(5, 60, 30),  b2=(5, 30, 60),  b3=(20, 50, 20)),
+    "neon":   dict(A=(255, 70, 190), A2=(140, 100, 255), b1=(80, 10, 60), b2=(30, 15, 90), b3=(70, 10, 30)),
+    "gold":   dict(A=(255, 190, 40), A2=(255, 110, 60),  b1=(80, 55, 5),  b2=(60, 20, 10), b3=(50, 35, 0)),
+}
+TH = THEMES[SPEC.get("theme", "rust")]
+RUST = TH["A"]; BLUE = TH["A2"]; BLUE_BAR = tuple(int(c * 0.65) for c in TH["A2"])
+import visuals as VIS
+VIS.setpal(A=RUST, A2=BLUE)
 
 def clamp(t): return max(0.0, min(1.0, t))
 def ease(t): t = clamp(t); return 1 - (1 - t) ** 3
@@ -67,7 +79,36 @@ def stagger(n, dur, start=0.6, end_frac=0.72):
     return [start + i * span / max(1, n) for i in range(n)]
 
 # ---------------- scene types ----------------
+def dimmed_visual(d, name, t, dur, s, k=0.5):
+    from PIL import ImageChops
+    tmp = Image.new("RGB", (W, H)); VIS.VISUALS[name](ImageDraw.Draw(tmp), t, dur, s)
+    base = d._image; base.paste(ImageChops.add(base, tmp.point(lambda v: int(v * k))))
+
+def sc_visual(d, t, s, dur):
+    if s.get("heading"):
+        a, dy = appear(t, 0.0); y = cblock(d, 290, s["heading"], B, 80, WHITE, a, dy, maxlines=2)
+        if s.get("sub"): a, dy = appear(t, 0.3); cblock(d, y + 5, s["sub"], R, 44, DIM, a, dy, maxlines=2)
+    VIS.VISUALS[s["visual"]](d, t, dur, s)
+    if s.get("caption"):
+        a, dy = appear(t, dur * 0.62); cblock(d, 1440, s["caption"], B, 60, RUST, a, dy, maxlines=2)
+
 def sc_hook(d, t, s, dur):
+    if s.get("visual"):
+        dimmed_visual(d, s["visual"], t, dur, s, 0.42)
+        a, dy = appear(t, 0.1); ybig = 470
+        if s.get("top"):
+            lines, f, sz = wrap(d, s["top"], MB, 90, 960, 1, 40)
+            ctext(d, 330, lines[0], f, WHITE, a, dy); ybig = 330 + sz * 1.25
+        big = s.get("big", "")
+        if "count" in s and "{n}" in big:
+            n = s["count"] * ease((t - 0.6) / 1.0)
+            big = big.replace("{n}", f"{n:.0f}" if float(s["count"]).is_integer() else f"{n:.2f}")
+        sc = backout((t - 0.5) / 0.5)
+        lines, f, sz = wrap(d, big, B, int(140 * (0.7 + 0.3 * sc)), 960, 2)
+        for i, l in enumerate(lines): ctext(d, ybig + (1 - sc) * 40 + i * sz * 1.05, l, f, RUST, clamp(sc))
+        a, dy = appear(t, 1.9); y = 1460
+        for l in s.get("sub", []): y = cblock(d, y, l, B, 54, WHITE, a, dy, maxlines=2)
+        return
     p = ease((t - 0.6) / 1.0); cx, cy, r = 540, 880, 470
     d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=mix((60, 30, 20), ease(t / 0.4)), width=6)
     if p > 0:
@@ -268,7 +309,7 @@ def sc_cta(d, t, s, dur):
     if s.get("sub"): a, dy = appear(t, dur * 0.6); cblock(d, y + 80, s["sub"], R, 50, DIM, a, dy, maxlines=2)
 
 TYPES = dict(hook=sc_hook, title=sc_title, bullets=sc_bullets, terminal=sc_terminal, code=sc_code,
-             bars=sc_bars, cards=sc_cards, timeline=sc_timeline, cta=sc_cta)
+             bars=sc_bars, cards=sc_cards, timeline=sc_timeline, cta=sc_cta, visual=sc_visual)
 
 # ---------------- background, camera, post FX ----------------
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
@@ -280,7 +321,7 @@ del yy, xx, rr, g
 def blob(rad, col):
     y, x = np.mgrid[-rad:rad, -rad:rad].astype(np.float32)
     return (np.exp(-(x * x + y * y) / (2 * (rad / 2.6) ** 2))[..., None] * np.array(col, np.float32)).astype(np.float32)
-BLOB1 = blob(560, (90, 30, 8)); BLOB2 = blob(520, (10, 30, 75)); BLOB3 = blob(380, (60, 18, 40))
+BLOB1 = blob(560, TH['b1']); BLOB2 = blob(520, TH['b2']); BLOB3 = blob(380, TH['b3'])
 rng = np.random.default_rng(3)
 GRAIN = [(rng.standard_normal((H // 2, W // 2)).astype(np.float32) * 6).repeat(2, 0).repeat(2, 1)[..., None] for _ in range(6)]
 P = [(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(30, 110), rng.uniform(0.3, 1.2), rng.uniform(0, 6.28), rng.uniform(1.5, 4.5), rng.uniform(0.3, 1)) for _ in range(70)]
@@ -295,11 +336,11 @@ def background(T, beat):
     img = Image.new("RGB", (W, H)); d = ImageDraw.Draw(img); sp = (T * 0.55) % 1.0
     for i in range(14):
         z = (i + sp) / 14; y = HORIZON + (H - HORIZON) * z ** 2.2
-        c = int(25 + 70 * z ** 1.5 * (1 + 0.4 * beat)); d.line((0, y, W, y), fill=(c, c // 3, c // 8), width=2 + int(2 * z))
-    for i in range(-12, 13): d.line((W / 2 + i * 14, HORIZON, W / 2 + i * 190, H), fill=(60, 22, 8), width=2)
+        c = int(25 + 70 * z ** 1.5 * (1 + 0.4 * beat)); d.line((0, y, W, y), fill=tuple(int(c * v / 255) for v in RUST), width=2 + int(2 * z))
+    for i in range(-12, 13): d.line((W / 2 + i * 14, HORIZON, W / 2 + i * 190, H), fill=tuple(int(v * 0.24) for v in RUST), width=2)
     for (x, y0, v, f, ph, s, br) in P:
         y = (y0 - T * v) % (H + 60) - 30; x2 = x + 35 * math.sin(T * f + ph)
-        d.ellipse((x2 - s, y - s, x2 + s, y + s), fill=mix((255, 130, 60), br * (0.5 + 0.5 * math.sin(T * 3 + ph))))
+        d.ellipse((x2 - s, y - s, x2 + s, y + s), fill=mix(tuple(min(255, v + 40) for v in RUST), br * (0.5 + 0.5 * math.sin(T * 3 + ph))))
     arr = BASE + np.asarray(img, np.float32)
     addblob(arr, BLOB1, W * 0.25 + 220 * math.sin(T * 0.31), H * 0.32 + 260 * math.cos(T * 0.23), 1 + 0.35 * beat)
     addblob(arr, BLOB2, W * 0.8 + 200 * math.cos(T * 0.27), H * 0.62 + 240 * math.sin(T * 0.19))

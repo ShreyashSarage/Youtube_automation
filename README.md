@@ -15,6 +15,6 @@ state/history.json     what's been posted (topic de-duplication)
 Try it locally:
 ```bash
 bash pipeline/setup.sh
-pipeline/build.sh examples/question-mark --preview
-pipeline/build.sh examples/question-mark
+pipeline/build.sh samples/async-neon --preview
+pipeline/build.sh samples/async-neon
 ```

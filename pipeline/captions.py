@@ -17,6 +17,7 @@ def chunks(text, maxc=42):
     return out
 srt, n = [], 1
 for a, b, text in cues:
+    if not text.strip(): continue
     cs = chunks(text); tot = sum(len(c) for c in cs) or 1; c0 = a
     for c in cs:
         c1 = c0 + (b - a) * len(c) / tot
