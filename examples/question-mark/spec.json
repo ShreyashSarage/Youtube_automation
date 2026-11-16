@@ -1,0 +1,17 @@
+{
+  "topic": "Rust ? operator for error propagation",
+  "sources": ["https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html"],
+  "youtube": {"title": "Stop Writing match for Every Error in Rust 🦀 #shorts", "description": "Example episode.\n\n#rust #rustlang #shorts", "tags": ["rust", "rust error handling"]},
+  "scenes": [
+    {"type": "hook", "top": "Rust error handling", "big": "in 1 character", "sub": ["The question mark operator"],
+     "say": "What if Rust error handling took just one character?"},
+    {"type": "code", "heading": "The long way", "file": "main.rs", "code": "fn load() -> io::Result<File> {\n    let f = match File::open(p) {\n        Ok(f) => f,\n        Err(e) => return Err(e),\n    };\n    Ok(f)\n}", "highlight": [2, 3, 4, 5],
+     "say": "Here's the long way: a match that returns the error early, just to open a file."},
+    {"type": "code", "heading": "With ?", "file": "main.rs", "code": "fn load() -> io::Result<File> {\n    let f = File::open(p)?;\n    Ok(f)\n}", "highlight": [2], "caption": "Same behavior, way less code",
+     "say": "With the question mark, Rust returns the error for you if something fails, and unwraps the value if it works."},
+    {"type": "bullets", "heading": "What ? actually does", "items": ["Ok(v) → gives you v", "Err(e) → returns early", "Converts e with From::from", "Works on Option too"],
+     "say": "On Ok, it hands you the value. On Err, it returns early, converting the error with From. And it works on Option too."},
+    {"type": "cta", "heading": "Use it today", "link": "doc.rust-lang.org/book", "question": ["What Rust feature should I cover next?"], "sub": "Follow for a Rust tip every day",
+     "say": "Read more in chapter nine of the Rust book. What should I cover next? Follow for a Rust tip every day."}
+  ]
+}
