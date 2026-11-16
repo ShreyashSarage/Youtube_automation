@@ -5,6 +5,7 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"; EP="$(cd "$1" && pwd)"
 python3 "$HERE/check_spec.py" "$EP"
+python3 "$HERE/check_code.py" "$EP"
 python3 "$HERE/voice.py" "$EP"
 python3 "$HERE/music.py" "$EP"
 python3 "$HERE/captions.py" "$EP"

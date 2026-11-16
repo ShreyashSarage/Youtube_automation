@@ -1,0 +1,126 @@
+{
+ "day": 1,
+ "topic": "What is Rust & why learn it",
+ "theme": "ocean",
+ "brand": "RUST  ·  DAY 1",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch00-00-introduction.html",
+  "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+  "https://doc.rust-lang.org/book/ch01-02-hello-world.html"
+ ],
+ "youtube": {
+  "title": "Rust Day 1: Why Learn Rust? (in 60 Seconds) 🦀",
+  "description": "Rust Day 1: What is Rust and why learn it? Here's why developers love it, in 60 seconds.\n\n📌 In this short:\n✅ Rust gives you low-level control without the usual hassle\n✅ No garbage collector: memory is managed by ownership rules the compiler checks\n✅ Great tooling: Cargo, rustfmt and editor support\n\n💻 Code from the video:\nfn main() {\n    println!(\"Hello, world!\");\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch00-00-introduction.html\n⏭️ Tomorrow: Install Rust & Hello, World!\n\nFollow for a new Rust lesson every day at 6 PM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #systemsprogramming #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 1",
+   "rustlang",
+   "why learn rust",
+   "what is rust",
+   "rust programming language",
+   "systems programming",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "compiler",
+   "file": "main.rs",
+   "output": "binary",
+   "top": "Rust Day 1",
+   "big": "Why learn Rust?",
+   "sub": [
+    "Zero to pro, one day at a time"
+   ],
+   "say": "Rust, day one. Why are so many developers learning Rust? Let's find out in sixty seconds."
+  },
+  {
+   "type": "visual",
+   "visual": "layers",
+   "heading": "Low-level control",
+   "sub": "without the usual hassle",
+   "layers": [
+    "Hardware",
+    "Memory",
+    "Rust",
+    "Your app"
+   ],
+   "highlight": 2,
+   "say": "Rust helps you write faster, more reliable software. It gives you low-level control, like managing memory, without the usual hassle."
+  },
+  {
+   "type": "visual",
+   "visual": "shield",
+   "heading": "No garbage collector",
+   "sub": "memory is managed by ownership",
+   "label": "rules checked by the compiler",
+   "say": "There's no garbage collector. Memory is managed by ownership rules that the compiler checks. Break a rule, and the program won't compile."
+  },
+  {
+   "type": "code",
+   "heading": "Your first Rust program",
+   "file": "main.rs",
+   "code": "fn main() {\n    println!(\"Hello, world!\");\n}",
+   "highlight": [
+    2
+   ],
+   "expect": "Hello, world!",
+   "caption": "main always runs first",
+   "say": "Here's your first program. F N main is where every Rust program starts, and println bang prints a line of text."
+  },
+  {
+   "type": "visual",
+   "visual": "tree",
+   "heading": "Tooling you'll love",
+   "root": "rust",
+   "children": [
+    {
+     "name": "cargo",
+     "children": [
+      "build",
+      "deps"
+     ]
+    },
+    {
+     "name": "rustfmt",
+     "children": [
+      "style"
+     ]
+    },
+    {
+     "name": "IDE",
+     "children": [
+      "errors"
+     ]
+    }
+   ],
+   "say": "And the tooling is great. Cargo builds your code and manages dependencies, rust format keeps your style consistent, and your editor shows errors as you type."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "Fast and reliable",
+    "Memory safe, no GC",
+    "Compiler catches bugs"
+   ],
+   "say": "Quick recap: Rust is fast and reliable, memory safe without a garbage collector, and its compiler catches bugs early."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 1 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Install Rust"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: installing Rust and running hello world. Follow to learn Rust every day!"
+  }
+ ]
+}

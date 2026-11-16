@@ -1,1 +1,17 @@
-{"posted": []}
+{
+ "posted": [
+  {
+   "date": "2026-11-16",
+   "day": 1,
+   "topic": "What is Rust & why learn it",
+   "title": "Rust Day 1: Why Learn Rust? (in 60 Seconds) 🦀",
+   "url": "https://www.youtube.com/watch?v=AF1OWvVV1iw",
+   "publishAt": "2026-11-16T18:00:00+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch00-00-introduction.html",
+    "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+    "https://doc.rust-lang.org/book/ch01-02-hello-world.html"
+   ]
+  }
+ ]
+}

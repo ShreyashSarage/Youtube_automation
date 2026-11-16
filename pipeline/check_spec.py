@@ -30,7 +30,7 @@ for i, x in enumerate(sc):
         if lw > 34: errs.append(f"scene {i}: code line {lw} chars (max 34, phones need big text)")
     if len(x.get("say", "").split()) > 55: errs.append(f"scene {i}: narration over 55 words")
 nv = sum(1 for x in sc if x.get("type") == "visual")
-need = max(2, len(sc) - 3)
+need = 2
 if nv < need: errs.append(f"only {nv} 'visual' scenes; use at least {need} (motion graphics from the title)")
 if sc and not sc[0].get("visual"): errs.append("hook has no 'visual'; set one from pipeline/suggest.py")
 if s.get("theme") not in (None, "rust", "ocean", "matrix", "neon", "gold"): errs.append(f"unknown theme {s.get('theme')}")

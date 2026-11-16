@@ -1,0 +1,12 @@
+spec ok: 5 scenes
+voice 36.33 s [4.63, 8.5, 8.13, 8.0, 7.07]
+music.wav 36.333333333333336 s, bars 19
+captions 20 cues
+frame 0/1090
+frame 300/1090
+frame 600/1090
+frame 900/1090
+video /home/user/rust-shorts-bot/samples/async-neon/build/video.mp4
+stream|codec_type=video|width=1080|height=1920|duration=36.333333
+stream|codec_type=audio|duration=36.400000
+-rw-r--r-- 1 root root 74548172 Nov 16 09:41 /home/user/rust-shorts-bot/samples/async-neon/build/video.mp4

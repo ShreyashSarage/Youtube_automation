@@ -1,0 +1,600 @@
+{
+ "series": "Rust Zero to Pro",
+ "note": "Daily runs take the first lesson whose day is not in state/history.json. Edit freely; keep order beginner -> advanced.",
+ "lessons": [
+  {
+   "day": 1,
+   "title": "What is Rust & why learn it",
+   "points": "fast like C/C++, memory safe without a GC, great tooling (cargo), used by big companies",
+   "visuals": [
+    "compiler",
+    "race",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch00-00-introduction.html"
+  },
+  {
+   "day": 2,
+   "title": "Install Rust & Hello, World!",
+   "points": "rustup installs rustc+cargo; fn main; println! macro; rustc main.rs",
+   "visuals": [
+    "compiler",
+    "layers"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch01-01-installation.html"
+  },
+  {
+   "day": 3,
+   "title": "Cargo: your Rust toolbox",
+   "points": "cargo new, cargo build, cargo run, Cargo.toml, cargo check",
+   "visuals": [
+    "compiler",
+    "tree"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch01-03-hello-cargo.html"
+  },
+  {
+   "day": 4,
+   "title": "Variables & mutability",
+   "points": "let is immutable by default; let mut; cannot assign twice error",
+   "visuals": [
+    "vars",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
+  },
+  {
+   "day": 5,
+   "title": "Constants & shadowing",
+   "points": "const needs a type and is always immutable; shadowing with let x = x + 1 creates a new variable",
+   "visuals": [
+    "vars",
+    "layers"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
+  },
+  {
+   "day": 6,
+   "title": "Scalar types",
+   "points": "i32 default integer, u8..u128/i8..i128, f64 default float, bool, char is 4 bytes Unicode",
+   "visuals": [
+    "vars",
+    "gauge"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+  },
+  {
+   "day": 7,
+   "title": "Tuples & arrays",
+   "points": "tuple (i32, f64, char) destructuring and .0; array [i32; 5] fixed size, index out of bounds panics",
+   "visuals": [
+    "vars",
+    "pipeline"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+  },
+  {
+   "day": 8,
+   "title": "Functions",
+   "points": "fn name(param: Type) -> Ret; snake_case; parameters need types",
+   "visuals": [
+    "compiler",
+    "flow"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
+  },
+  {
+   "day": 9,
+   "title": "Statements vs expressions",
+   "points": "blocks are expressions; last expression without ; is the return value",
+   "visuals": [
+    "flow",
+    "compiler"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
+  },
+  {
+   "day": 10,
+   "title": "if / else",
+   "points": "condition must be bool; if is an expression: let x = if c { 5 } else { 6 };",
+   "visuals": [
+    "flow"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+  },
+  {
+   "day": 11,
+   "title": "Loops: loop, while, for",
+   "points": "loop with break value; while; for x in collection; for i in 0..5 ranges",
+   "visuals": [
+    "pipeline",
+    "lanes"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+  },
+  {
+   "day": 12,
+   "title": "Ownership: the 3 rules",
+   "points": "each value has one owner; one owner at a time; dropped when owner goes out of scope",
+   "visuals": [
+    "ownership",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html"
+  },
+  {
+   "day": 13,
+   "title": "Stack vs heap",
+   "points": "fixed-size data on the stack; String data on the heap; pointer, length, capacity",
+   "visuals": [
+    "layers",
+    "ownership"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html"
+  },
+  {
+   "day": 14,
+   "title": "Move vs Copy",
+   "points": "let s2 = s1 moves a String; integers are Copy; .clone() for deep copy",
+   "visuals": [
+    "ownership",
+    "vars"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html"
+  },
+  {
+   "day": 15,
+   "title": "References & borrowing",
+   "points": "&s borrows without taking ownership; function takes &String; owner stays valid",
+   "visuals": [
+    "ownership",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html"
+  },
+  {
+   "day": 16,
+   "title": "Mutable references",
+   "points": "&mut s; only one mutable reference at a time; no mixing & and &mut; prevents data races",
+   "visuals": [
+    "ownership",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html"
+  },
+  {
+   "day": 17,
+   "title": "Slices",
+   "points": "&s[0..5] string slices; &str; array slices &a[1..3]",
+   "visuals": [
+    "pipeline",
+    "vars"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch04-03-slices.html"
+  },
+  {
+   "day": 18,
+   "title": "Structs",
+   "points": "struct User { name: String, age: u32 }; field init shorthand; update syntax ..",
+   "visuals": [
+    "vars",
+    "tree"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch05-01-defining-structs.html"
+  },
+  {
+   "day": 19,
+   "title": "Methods with impl",
+   "points": "impl Rect { fn area(&self) -> u32 }; associated functions like Rect::new",
+   "visuals": [
+    "compiler",
+    "tree"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch05-03-method-syntax.html"
+  },
+  {
+   "day": 20,
+   "title": "Enums",
+   "points": "enum IpAddr { V4(u8,u8,u8,u8), V6(String) }; variants can hold data",
+   "visuals": [
+    "flow",
+    "tree"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html"
+  },
+  {
+   "day": 21,
+   "title": "Option: no more null",
+   "points": "Option<T> is Some(T) or None; the compiler makes you handle None",
+   "visuals": [
+    "flow",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html"
+  },
+  {
+   "day": 22,
+   "title": "match",
+   "points": "match must be exhaustive; arms with patterns; _ catch-all",
+   "visuals": [
+    "flow"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch06-02-match.html"
+  },
+  {
+   "day": 23,
+   "title": "if let & let else",
+   "points": "if let Some(x) = opt; let Some(x) = opt else { return };",
+   "visuals": [
+    "flow"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch06-03-if-let.html"
+  },
+  {
+   "day": 24,
+   "title": "Packages, crates & modules",
+   "points": "mod, pub, use; crate root; files map to modules",
+   "visuals": [
+    "tree",
+    "layers"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"
+  },
+  {
+   "day": 25,
+   "title": "Vec<T>",
+   "points": "Vec::new, vec![1,2,3], push, get returns Option, indexing can panic",
+   "visuals": [
+    "pipeline",
+    "vars"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch08-01-vectors.html"
+  },
+  {
+   "day": 26,
+   "title": "String vs &str",
+   "points": "String is owned and growable; &str is a borrowed slice; push_str, format!",
+   "visuals": [
+    "ownership",
+    "vars"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch08-02-strings.html"
+  },
+  {
+   "day": 27,
+   "title": "HashMap",
+   "points": "use std::collections::HashMap; insert, get, entry().or_insert() for counting",
+   "visuals": [
+    "tree",
+    "pipeline"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch08-03-hash-maps.html"
+  },
+  {
+   "day": 28,
+   "title": "panic! vs Result",
+   "points": "unrecoverable panic!; recoverable Result<T, E>; Ok and Err",
+   "visuals": [
+    "flow",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch09-00-error-handling.html"
+  },
+  {
+   "day": 29,
+   "title": "The ? operator",
+   "points": "propagates errors early; works in functions returning Result or Option",
+   "visuals": [
+    "flow",
+    "pipeline"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html"
+  },
+  {
+   "day": 30,
+   "title": "unwrap & expect: when to use",
+   "points": "unwrap panics on Err/None; expect adds a message; fine in tests/prototypes",
+   "visuals": [
+    "flow",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html"
+  },
+  {
+   "day": 31,
+   "title": "Generics",
+   "points": "fn largest<T: PartialOrd>(list: &[T]) -> &T; generic structs Point<T>; zero-cost via monomorphization",
+   "visuals": [
+    "tree",
+    "compiler"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch10-01-syntax.html"
+  },
+  {
+   "day": 32,
+   "title": "Traits",
+   "points": "trait Summary { fn summarize(&self) -> String; } impl for types; default methods",
+   "visuals": [
+    "tree",
+    "layers"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch10-02-traits.html"
+  },
+  {
+   "day": 33,
+   "title": "Trait bounds & impl Trait",
+   "points": "fn notify(item: &impl Summary); where clauses; returning impl Trait",
+   "visuals": [
+    "tree",
+    "flow"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch10-02-traits.html"
+  },
+  {
+   "day": 34,
+   "title": "Derive: Debug, Clone, PartialEq",
+   "points": "#[derive(Debug)] and {:?}; derive Clone, PartialEq",
+   "visuals": [
+    "compiler",
+    "tree"
+   ],
+   "source": "https://doc.rust-lang.org/book/appendix-03-derivable-traits.html"
+  },
+  {
+   "day": 35,
+   "title": "Lifetimes explained",
+   "points": "'a ties reference lifetimes; fn longest<'a>(x: &'a str, y: &'a str) -> &'a str; prevents dangling references",
+   "visuals": [
+    "ownership",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html"
+  },
+  {
+   "day": 36,
+   "title": "Writing tests",
+   "points": "#[test], assert_eq!, cargo test, #[cfg(test)] mod tests",
+   "visuals": [
+    "compiler",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch11-01-writing-tests.html"
+  },
+  {
+   "day": 37,
+   "title": "Closures",
+   "points": "|x| x + 1; capture environment; Fn, FnMut, FnOnce; move closures",
+   "visuals": [
+    "pipeline",
+    "ownership"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch13-01-closures.html"
+  },
+  {
+   "day": 38,
+   "title": "Iterators",
+   "points": "iter(), map, filter, collect, sum; lazy until consumed",
+   "visuals": [
+    "pipeline"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch13-02-iterators.html"
+  },
+  {
+   "day": 39,
+   "title": "Iterator power moves",
+   "points": "enumerate, zip, take, skip, fold, chain",
+   "visuals": [
+    "pipeline"
+   ],
+   "source": "https://doc.rust-lang.org/std/iter/trait.Iterator.html"
+  },
+  {
+   "day": 40,
+   "title": "Box<T>",
+   "points": "heap allocation; recursive types like enum List { Cons(i32, Box<List>), Nil }",
+   "visuals": [
+    "ownership",
+    "layers"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch15-01-box.html"
+  },
+  {
+   "day": 41,
+   "title": "Rc<T>: shared ownership",
+   "points": "Rc::new, Rc::clone, strong_count; single-threaded only",
+   "visuals": [
+    "ownership",
+    "tree"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch15-04-rc.html"
+  },
+  {
+   "day": 42,
+   "title": "RefCell & interior mutability",
+   "points": "borrow and borrow_mut checked at runtime; panics on violation; Rc<RefCell<T>>",
+   "visuals": [
+    "ownership",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch15-05-interior-mutability.html"
+  },
+  {
+   "day": 43,
+   "title": "Drop trait",
+   "points": "drop runs when a value goes out of scope; RAII; std::mem::drop",
+   "visuals": [
+    "compiler",
+    "ownership"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch15-03-drop.html"
+  },
+  {
+   "day": 44,
+   "title": "Threads",
+   "points": "std::thread::spawn, join handles, move closures into threads",
+   "visuals": [
+    "lanes"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch16-01-threads.html"
+  },
+  {
+   "day": 45,
+   "title": "Channels",
+   "points": "mpsc::channel, tx.send, rx.recv; multiple producers",
+   "visuals": [
+    "lanes",
+    "network"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch16-02-message-passing.html"
+  },
+  {
+   "day": 46,
+   "title": "Arc & Mutex",
+   "points": "Arc for shared ownership across threads; Mutex lock; Arc<Mutex<T>> counter",
+   "visuals": [
+    "lanes",
+    "shield"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch16-03-shared-state.html"
+  },
+  {
+   "day": 47,
+   "title": "Send & Sync",
+   "points": "marker traits; Rc is not Send; the compiler prevents data races",
+   "visuals": [
+    "shield",
+    "lanes"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch16-04-extensible-concurrency-sync-and-send.html"
+  },
+  {
+   "day": 48,
+   "title": "Trait objects: dyn Trait",
+   "points": "Vec<Box<dyn Draw>>; dynamic dispatch vs generics",
+   "visuals": [
+    "tree",
+    "layers"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch18-02-trait-objects.html"
+  },
+  {
+   "day": 49,
+   "title": "Pattern matching deep dive",
+   "points": "destructuring structs and tuples, ranges 1..=5, guards if x > 5, @ bindings",
+   "visuals": [
+    "flow"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch19-03-pattern-syntax.html"
+  },
+  {
+   "day": 50,
+   "title": "Unsafe Rust",
+   "points": "unsafe blocks: raw pointers, unsafe fns, FFI; you uphold the guarantees",
+   "visuals": [
+    "shield",
+    "layers"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html"
+  },
+  {
+   "day": 51,
+   "title": "Declarative macros",
+   "points": "macro_rules!; how vec! works; repetition $( ),*",
+   "visuals": [
+    "compiler",
+    "pipeline"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch20-05-macros.html"
+  },
+  {
+   "day": 52,
+   "title": "Async/await basics",
+   "points": "async fn returns a Future; .await; needs a runtime like tokio",
+   "visuals": [
+    "lanes",
+    "network"
+   ],
+   "source": "https://rust-lang.github.io/async-book/"
+  },
+  {
+   "day": 53,
+   "title": "Tokio: async runtime",
+   "points": "#[tokio::main], tokio::spawn, many tasks on few threads",
+   "visuals": [
+    "lanes",
+    "network"
+   ],
+   "source": "https://tokio.rs/tokio/tutorial"
+  },
+  {
+   "day": 54,
+   "title": "Error handling with anyhow & thiserror",
+   "points": "thiserror for library error enums, anyhow for apps, context()",
+   "visuals": [
+    "flow",
+    "tree"
+   ],
+   "source": "https://docs.rs/anyhow/latest/anyhow/"
+  },
+  {
+   "day": 55,
+   "title": "Serde: JSON in Rust",
+   "points": "#[derive(Serialize, Deserialize)]; serde_json::to_string / from_str",
+   "visuals": [
+    "pipeline",
+    "tree"
+   ],
+   "source": "https://serde.rs/"
+  },
+  {
+   "day": 56,
+   "title": "Build a CLI with clap",
+   "points": "#[derive(Parser)] struct Args; cargo run -- --name x",
+   "visuals": [
+    "compiler",
+    "tree"
+   ],
+   "source": "https://docs.rs/clap/latest/clap/"
+  },
+  {
+   "day": 57,
+   "title": "A web server with axum",
+   "points": "Router::new().route(\"/\", get(handler)); tokio::net::TcpListener",
+   "visuals": [
+    "network",
+    "lanes"
+   ],
+   "source": "https://docs.rs/axum/latest/axum/"
+  },
+  {
+   "day": 58,
+   "title": "Smart pointer cheat sheet",
+   "points": "Box vs Rc vs Arc vs RefCell vs Mutex: when to use which",
+   "visuals": [
+    "layers",
+    "tree"
+   ],
+   "source": "https://doc.rust-lang.org/book/ch15-00-smart-pointers.html"
+  },
+  {
+   "day": 59,
+   "title": "Performance tips",
+   "points": "--release builds, avoid needless clone, iterators are zero-cost, measure with cargo bench/criterion",
+   "visuals": [
+    "race",
+    "gauge"
+   ],
+   "source": "https://nnethercote.github.io/perf-book/"
+  },
+  {
+   "day": 60,
+   "title": "What to build next",
+   "points": "project ideas: CLI tool, web API, game with Bevy, contribute to open source",
+   "visuals": [
+    "tree",
+    "network"
+   ],
+   "source": "https://www.rust-lang.org/learn"
+  }
+ ]
+}

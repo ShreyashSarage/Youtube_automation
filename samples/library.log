@@ -1,0 +1,7 @@
+frame 0/1515
+frame 300/1515
+frame 600/1515
+frame 900/1515
+frame 1200/1515
+frame 1500/1515
+video /home/user/rust-shorts-bot/samples/library/build/video.mp4

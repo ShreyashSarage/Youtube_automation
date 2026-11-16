@@ -1,20 +1,27 @@
-# Rust Shorts Bot 🦀
+# Rust Zero to Pro: daily YouTube Shorts 🦀
 
-Researches a trending Rust topic every day, writes a script, renders a cinematic vertical video
-(animated background, motion graphics, AI voiceover, synthesized BGM), and uploads it to YouTube
-as Private with a scheduled public time, so the owner can review it first.
+Every day a Claude Code cloud session makes the next lesson in `state/curriculum.json`
+(60 lessons, beginner → advanced), renders a vertical Short with topic-driven motion graphics,
+AI voiceover, synthesized music and burned-in captions, and uploads it to YouTube (via Uplika)
+as Private, scheduled to go public at **18:00 IST**.
 
 ```
-pipeline/setup.sh      install deps (ffmpeg, Kokoro TTS model, scipy, pillow)
-pipeline/build.sh EP   spec.json → voice.wav → music.wav → captions.srt → video.mp4
-pipeline/render.py     generic scene renderer (hook, title, bullets, terminal, code, bars, cards, timeline, cta)
-RUNBOOK.md             step-by-step instructions the daily Claude session follows
-state/history.json     what's been posted (topic de-duplication)
+RUNBOOK.md              step-by-step instructions each daily run follows
+state/curriculum.json   the lesson plan (edit freely; order = beginner → advanced)
+state/history.json      what has been posted
+episodes/YYYY-MM-DD/    each day's spec.json (video files are not committed)
+samples/                reference styles: kiri-ocean, ownership-matrix (+ async-neon, library)
+pipeline/
+  setup.sh              installs ffmpeg deps, Kokoro TTS model, scipy, pillow
+  build.sh EP           check_spec → check_code (rustc) → voice → music → captions → render
+  render.py             scene renderer (hook, visual, code, terminal, bars, cards, timeline, bullets, cta)
+  visuals.py            13 motion graphics (vars, flow, pipeline, ownership, shield, compiler, ...)
+  suggest.py            theme + visuals from a title
+  fetch_doc.py          read Rust Book pages (from the Book's Markdown source)
 ```
 
-Try it locally:
+Local try-out:
 ```bash
 bash pipeline/setup.sh
-pipeline/build.sh samples/async-neon --preview
-pipeline/build.sh samples/async-neon
+pipeline/build.sh samples/ownership-matrix --preview
 ```

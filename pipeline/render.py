@@ -90,7 +90,7 @@ def sc_visual(d, t, s, dur):
         if s.get("sub"): a, dy = appear(t, 0.3); cblock(d, y + 5, s["sub"], R, 44, DIM, a, dy, maxlines=2)
     VIS.VISUALS[s["visual"]](d, t, dur, s)
     if s.get("caption"):
-        a, dy = appear(t, dur * 0.62); cblock(d, 1440, s["caption"], B, 60, RUST, a, dy, maxlines=2)
+        a, dy = appear(t, dur * 0.62); cblock(d, 1365, s["caption"], B, 56, RUST, a, dy, maxlines=1)
 
 def sc_hook(d, t, s, dur):
     if s.get("visual"):
@@ -106,8 +106,8 @@ def sc_hook(d, t, s, dur):
         sc = backout((t - 0.5) / 0.5)
         lines, f, sz = wrap(d, big, B, int(140 * (0.7 + 0.3 * sc)), 960, 2)
         for i, l in enumerate(lines): ctext(d, ybig + (1 - sc) * 40 + i * sz * 1.05, l, f, RUST, clamp(sc))
-        a, dy = appear(t, 1.9); y = 1460
-        for l in s.get("sub", []): y = cblock(d, y, l, B, 54, WHITE, a, dy, maxlines=2)
+        a, dy = appear(t, 1.9); y = 1340
+        for l in s.get("sub", [])[:1]: y = cblock(d, y, l, B, 54, WHITE, a, dy, maxlines=1)
         return
     p = ease((t - 0.6) / 1.0); cx, cy, r = 540, 880, 470
     d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=mix((60, 30, 20), ease(t / 0.4)), width=6)
@@ -241,7 +241,7 @@ def sc_code(d, t, s, dur):
             for tok, col in hl_line(l):
                 d.text((x, yy), tok, font=f, fill=mix(col, la)); x += d.textlength(tok, font=f)
     if s.get("caption"):
-        a, dy = appear(t, dur * 0.7); cblock(d, min(top + hgt + 70, 1600), s["caption"], B, 56, RUST, a, dy, maxlines=2)
+        a, dy = appear(t, dur * 0.7); cblock(d, min(top + hgt + 50, 1380), s["caption"], B, 52, RUST, a, dy, maxlines=1)
 
 def sc_bars(d, t, s, dur):
     a, dy = appear(t, 0.0); y = cblock(d, 300, s["heading"], B, 80, WHITE, a, dy, maxlines=2)
@@ -264,7 +264,7 @@ def sc_bars(d, t, s, dur):
         sc = backout((t - dur * 0.6) / 0.5)
         if sc > 0: ctext(d, 640 + len(bars) * gap + 40, s["callout"], B(int(74 * (0.6 + 0.4 * sc))), RUST, clamp(sc * 1.5))
     if s.get("footnote"):
-        a, _ = appear(t, dur * 0.7); yy = 1560
+        a, _ = appear(t, dur * 0.7); yy = 1625
         for l in s["footnote"][:3]: yy = cblock(d, yy, l, R, 36, DIM, a, 0, maxlines=1)
 
 def sc_cards(d, t, s, dur):
@@ -351,7 +351,6 @@ def hud(T):
     img = Image.new("RGB", (W, H)); d = ImageDraw.Draw(img)
     d.rectangle((0, 0, W, 8), fill=(30, 36, 44)); d.rectangle((0, 0, W * T / TOTAL, 8), fill=RUST)
     d.text((60, 64), BRAND, font=B(34), fill=RUST)
-    d.text((W - 60 - d.textlength("#shorts", font=R(34)), 64), "#shorts", font=R(34), fill=DIM)
     return np.asarray(img, np.float32)
 
 def render(idx):
@@ -382,7 +381,36 @@ def render(idx):
         if si == 0:
             for y0 in (820, 900, 960): out[y0:y0 + 40] = np.roll(out[y0:y0 + 40], int(30 * math.sin(T * 50 + y0)), 1)
     out += GRAIN[idx % 6]
-    return np.clip(out, 0, 255).astype(np.uint8).tobytes()
+    frame = np.clip(out, 0, 255).astype(np.uint8)
+    if CAPS: frame = burn_caption(frame, T)
+    return frame.tobytes()
+
+CAPS = []
+_cp = os.path.join(BUILD, "captions_burn.json")
+if SPEC.get("captions", True) and os.path.exists(_cp): CAPS = json.load(open(_cp))
+CAP_Y = 1505
+def burn_caption(frame, T):
+    cur = next((c for c in CAPS if c[0] <= T < c[1] + 0.08), None)
+    if not cur: return frame
+    a0, a1, text = cur; words = text.split(); img = Image.fromarray(frame); d = ImageDraw.Draw(img)
+    pop = backout((T - a0) / 0.18); size = int(66 * (0.82 + 0.18 * pop)); f = B(size)
+    sp = d.textlength(" ", font=f); widths = [d.textlength(w_, font=f) for w_ in words]
+    total = sum(widths) + sp * (len(words) - 1)
+    while total > 860 and size > 40:
+        size -= 4; f = B(size); sp = d.textlength(" ", font=f); widths = [d.textlength(w_, font=f) for w_ in words]; total = sum(widths) + sp * (len(words) - 1)
+    # active word by character-proportional timing
+    chars = [len(w_) + 1 for w_ in words]; prog = (T - a0) / max(0.05, a1 - a0) * sum(chars); acc = 0; act = len(words) - 1
+    for i, c in enumerate(chars):
+        if prog < acc + c: act = i; break
+        acc += c
+    x = (W - total) / 2; y = CAP_Y - (size - 66) / 2
+    for i, (w_, wd) in enumerate(zip(words, widths)):
+        on = i == act
+        if on:  # highlight pill behind the active word
+            d.rounded_rectangle((x - 12, y - 6, x + wd + 12, y + size * 1.16), 16, fill=RUST)
+        d.text((x, y), w_, font=f, fill=(10, 10, 14) if on else WHITE, stroke_width=0 if on else 6, stroke_fill=(0, 0, 0))
+        x += wd + sp
+    return np.asarray(img)
 
 if __name__ == "__main__":
     for sc in SCENES: assert sc["type"] in TYPES, f"unknown scene type {sc['type']}"

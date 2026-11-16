@@ -1,0 +1,12 @@
+spec ok: 5 scenes
+voice 37.43 s [5.33, 10.0, 8.13, 7.4, 6.57]
+music.wav 37.43333333333333 s, bars 19
+captions 18 cues
+frame 0/1123
+frame 300/1123
+frame 600/1123
+frame 900/1123
+video /home/user/rust-shorts-bot/samples/ownership-matrix/build/video.mp4
+stream|codec_type=video|width=1080|height=1920|duration=37.433333
+stream|codec_type=audio|duration=37.500000
+-rw-r--r-- 1 root root 76928695 Nov 16 09:38 /home/user/rust-shorts-bot/samples/ownership-matrix/build/video.mp4

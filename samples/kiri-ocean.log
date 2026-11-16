@@ -3,3 +3,11 @@ voice 40.8 s [7.0, 10.7, 7.93, 8.17, 7.0]
 music.wav 40.8 s, bars 21
 captions 20 cues
 frame 0/1224
+frame 300/1224
+frame 600/1224
+frame 900/1224
+frame 1200/1224
+video /home/user/rust-shorts-bot/samples/kiri-ocean/build/video.mp4
+stream|codec_type=video|width=1080|height=1920|duration=40.800000
+stream|codec_type=audio|duration=40.800000
+-rw-r--r-- 1 root root 83410959 Nov 16 09:36 /home/user/rust-shorts-bot/samples/kiri-ocean/build/video.mp4

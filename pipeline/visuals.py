@@ -150,18 +150,24 @@ def ownership(d, t, dur, s):
         if sub: text_c(d, (x0 + x1) / 2, y0 + 100, sub, R(34), C("DIM", a * (1 - 0.5 * dead)))
     tA, tH, tArr, tB, tMove = 0.3 * k, 0.8 * k, 1.2 * k, 2.2 * k, 2.7 * k
     text_c(d, 540, 560, "STACK", B(36), C("DIM", ease(t / 0.5))); text_c(d, 540, 1000, "HEAP", B(36), C("DIM", ease((t - tH) / 0.5)))
-    dead = ease((t - tMove - 0.3) / 0.5)
+    borrow = s.get("mode") == "borrow"
+    dead = 0.0 if borrow else ease((t - tMove - 0.3) / 0.5)
     if t > tA: box(110, 630, 450, 790, A_, "owner" if dead < 0.5 else "moved", backout((t - tA) / 0.5), PAL["A"], dead)
-    if t > tB: box(630, 630, 970, 790, B_, "owner", backout((t - tB) / 0.5), PAL["A"])
+    if t > tB: box(630, 630, 970, 790, B_, "borrows" if borrow else "owner", backout((t - tB) / 0.5), PAL["A2"] if borrow else PAL["A"])
     if t > tH:
         a = backout((t - tH) / 0.5); d.rounded_rectangle((270, 1070, 810, 1230), 26, fill=C("PANEL", 1.6 * a), outline=C("A2", a), width=5)
         text_c(d, 540, 1115, val, fit(d, val, MB, 64, 480), C("WH", a))
-    fade = 1 - ease((t - tMove) / 0.5)
+    fade = 1.0 if borrow else 1 - ease((t - tMove) / 0.5)
     arrow(d, bez((280, 800), (280, 980), (470, 1060)), ease((t - tArr) / 0.6), C("A", fade), 9)
-    arrow(d, bez((800, 800), (800, 980), (610, 1060)), ease((t - tMove) / 0.6), C("A"), 9)
+    if borrow:  # reference: dashed arrow b -> a
+        g = ease((t - tMove) / 0.6); pts = bez((630, 700), (540, 640), (452, 700), 30)
+        for q in range(0, int(len(pts) * g) - 1, 2): d.line([pts[q], pts[q + 1]], fill=C("A2"), width=8)
+        if g > 0.95: arrow(d, [pts[-3], pts[-1]], 1, C("A2"), 8)
+    else:
+        arrow(d, bez((800, 800), (800, 980), (610, 1060)), ease((t - tMove) / 0.6), C("A"), 9)
     if dead > 0:
         d.line((140, 650, 420, 770), fill=C("BAD", dead), width=10); d.line((140, 770, 420, 650), fill=C("BAD", dead), width=10)
-    if s.get("note"): text_c(d, 540, 1290, s["note"], fit(d, s["note"], B, 46, 920), C("BAD" if s.get("note_bad", True) else "A", ease((t - tMove - 0.8) / 0.5)))
+    if s.get("note"): text_c(d, 540, 1290, s["note"], fit(d, s["note"], B, 46, 920), C("A" if borrow or not s.get("note_bad", True) else "BAD", ease((t - tMove - 0.8) / 0.5)))
 
 # ------------------------------------------------------------------ shield (memory safety)
 def shield(d, t, dur, s):
@@ -332,5 +338,94 @@ def tree(d, t, dur, s):
                 d.rounded_rectangle((gx - r0 * sc, 1135, gx + r0 * sc, 1195), 18, fill=C("PANEL", 1.8), outline=C("DIM"), width=3)
                 if sc > 0.7: text_c(d, gx, 1148, gname, f, C("DIM"))
 
-VISUALS = dict(containers=containers, race=race, gauge=gauge, ownership=ownership, shield=shield,
+# ------------------------------------------------------------------ vars (variables & mutability)
+def padlock(d, x, y, sz, col, open_=False):
+    d.rounded_rectangle((x - sz, y, x + sz, y + sz * 1.4), 8, fill=col)
+    sx = x + (sz * 0.5 if open_ else 0); d.arc((sx - sz * 0.7, y - sz * 0.9, sx + sz * 0.7, y + sz * 0.5), 180, 360, fill=col, width=int(sz * 0.3))
+    if not open_: d.line((x - sz * 0.7, y - sz * 0.2, x - sz * 0.7, y + 4), fill=col, width=int(sz * 0.3)); d.line((x + sz * 0.7, y - sz * 0.2, x + sz * 0.7, y + 4), fill=col, width=int(sz * 0.3))
+
+def vars(d, t, dur, s):
+    items = s.get("items", [{"name": "x", "value": "5"}, {"name": "y", "value": "10", "mut": True, "change": "11"}])[:3]
+    k = tscale(dur); n = len(items); gap = 260
+    y0 = 960 - (n - 1) * gap / 2 - 80
+    for i, it in enumerate(items):
+        y = y0 + i * gap; st = 0.3 + i * 0.35; a = backout((t - st) / 0.5)
+        if a <= 0: continue
+        mut = it.get("mut"); kw = "let mut " if mut else "let "
+        d.text((110, y + 40), kw, font=MB(46), fill=C("A2" if mut else "DIM", clamp(a)))
+        d.text((110 + d.textlength(kw, font=MB(46)), y + 40), it["name"], font=MB(46), fill=C("WH", clamp(a)))
+        bx0, bx1 = 560, 900
+        tc = 1.6 * k + i * 0.5; ch = it.get("change"); e = ease((t - tc) / 0.5) if ch else 0
+        shake = 0
+        if ch and not mut and 0 < t - tc < 0.6: shake = 14 * math.sin((t - tc) * 60) * (1 - (t - tc) / 0.6)
+        col = PAL["BAD"] if (ch and not mut and t > tc) else PAL["A"]
+        d.rounded_rectangle((bx0 + shake, y, bx1 + shake, y + 150), 24, fill=C("PANEL", 1.7 * a), outline=mix(col, clamp(a)), width=5)
+        cx = (bx0 + bx1) / 2 + shake
+        if ch and mut:
+            if e < 1: text_c(d, cx, y + 38 - 60 * e, it["value"], fit(d, it["value"], MB, 64, 300), C("WH", clamp(a) * (1 - e)))
+            if e > 0: text_c(d, cx, y + 38 + 60 * (1 - e), ch, fit(d, ch, MB, 64, 300), C("A", e))
+        else:
+            text_c(d, cx, y + 38, it["value"], fit(d, it["value"], MB, 64, 300), C("WH", clamp(a)))
+        padlock(d, 970 + shake, y + 50, 26, C("A2" if mut else ("BAD" if ch and t > tc else "DIM"), clamp(a)), open_=bool(mut))
+        if ch and not mut and t > tc + 0.2:
+            d.text((bx0, y + 165), "cannot assign twice ✗", font=B(36), fill=C("BAD", ease((t - tc - 0.2) / 0.4)))
+
+# ------------------------------------------------------------------ flow (match / if branching)
+def flow(d, t, dur, s):
+    arms = s.get("arms", [{"pattern": "1", "result": "one"}, {"pattern": "2", "result": "two"}, {"pattern": "_", "result": "other"}])[:4]
+    hit = s.get("hit", 1); val = s.get("input", "2"); k = tscale(dur); n = len(arms)
+    xs = [540 + (q - (n - 1) / 2) * min(250, 900 / n) for q in range(n)]
+    a = backout(t / 0.5)
+    w0 = d.textlength(val, font=MB(60)) / 2 + 50
+    d.rounded_rectangle((540 - w0, 600, 540 + w0, 700), 50, fill=C("A", a)); text_c(d, 540, 615, val, MB(60), (0, 0, 0))
+    text_c(d, 540, 560 - 20, s.get("kind", "match"), MB(34), C("DIM", a))
+    for q, (arm, x) in enumerate(zip(arms, xs)):
+        g = ease((t - 0.5 - q * 0.12) / 0.5)
+        if g <= 0: continue
+        d.line(bez((540, 700), (540, 800), (x, 860))[: max(2, int(25 * g))], fill=C("DIM", 0.5), width=4)
+        bw = min(115, 900 / n / 2 - 8)
+        ok = q == hit and t > 2.2 * k
+        d.rounded_rectangle((x - bw, 870, x + bw, 980), 22, fill=C("PANEL", 1.8 * g), outline=C("A" if ok else "DIM", g if ok else 0.6 * g), width=6 if ok else 3)
+        text_c(d, x, 895, arm["pattern"], fit(d, arm["pattern"], MB, 46, bw * 2 - 20), C("WH", g))
+    # ball tests arms in order, then settles on the hit arm
+    tb = t - 1.2 * k
+    if tb > 0:
+        step = 0.35 * k; idx = min(hit, int(tb / step)); x = xs[idx]
+        fr = clamp((tb - idx * step) / step) if idx < hit else 1
+        y = 760 + 70 * math.sin(math.pi * min(1, fr)) * (0 if idx == hit else 1)
+        bx = xs[idx] + ((xs[min(hit, idx + 1)] - xs[idx]) * ease(fr) if idx < hit else 0)
+        d.ellipse((bx - 24, 820 - 24, bx + 24, 820 + 24), fill=C("A2"))
+        if idx < hit and fr < 0.5: text_c(d, xs[idx], 990, "✗", B(48), C("BAD", 1 - fr * 2))
+    if t > 2.2 * k:
+        sc = backout((t - 2.2 * k) / 0.45); x = xs[hit]; res = arms[hit]["result"]
+        arrow(d, [(x, 990), (x, 1080)], ease((t - 2.2 * k) / 0.3), C("A"), 7)
+        f = fit(d, res, MB, int(58 * (0.6 + 0.4 * sc)), 520); w1 = d.textlength(res, font=f) / 2 + 40
+        d.rounded_rectangle((x - w1, 1110, x + w1, 1210), 30, fill=C("A", clamp(sc))); text_c(d, x, 1132, res, f, (0, 0, 0))
+        ring(d, x, 925, 90 + 120 * clamp((t - 2.2 * k) / 0.5), C("A", 1 - clamp((t - 2.2 * k) / 0.5)), 5)
+
+# ------------------------------------------------------------------ pipeline (iterator chains)
+def pipeline(d, t, dur, s):
+    stages = s.get("stages", [{"name": "iter()", "out": ["1", "2", "3", "4"]}, {"name": "filter", "out": ["2", "4"]}, {"name": "map", "out": ["4", "16"]}, {"name": "sum()", "out": ["20"]}])[:4]
+    k = tscale(dur); n = len(stages); gap = 200
+    y0 = 960 - (n - 1) * gap / 2 - 50
+    for i, stg in enumerate(stages):
+        st = 0.3 + i * 0.75 * k; y = y0 + i * gap; a = backout((t - st) / 0.45)
+        if a <= 0: continue
+        f = fit(d, stg["name"], MB, 40, 330); lw = d.textlength(stg["name"], font=f)
+        d.rounded_rectangle((90, y, 140 + lw, y + 90), 24, fill=C("PANEL", 1.8), outline=C("A" if i in (0, n - 1) else "A2", clamp(a)), width=4)
+        d.text((115, y + 22), stg["name"], font=f, fill=C("WH", clamp(a)))
+        vals = stg["out"][:6]; x = 190 + lw
+        for q, v in enumerate(vals):
+            sc = backout((t - st - 0.2 - q * 0.08) / 0.35)
+            if sc <= 0: continue
+            fv = fit(d, v, MB, 40, 110); r = max(42, d.textlength(v, font=fv) / 2 + 18) * sc
+            cx = x + 20 + r / max(sc, 1e-3); d.ellipse((cx - r, y + 45 - r, cx + r, y + 45 + r) if r < 60 else (cx - r, y + 45 - 45 * sc, cx + r, y + 45 + 45 * sc), fill=C("A" if i == n - 1 else "A2", 0.85))
+            if sc > 0.7: text_c(d, cx, y + 23, v, fv, (0, 0, 0))
+            x = cx + r / max(sc, 1e-3) + 12
+        if i < n - 1 and t > st + 0.5:
+            for q in range(5):
+                ph = (t * 1.5 + q / 5) % 1.0; py = y + 95 + ph * (gap - 100)
+                d.ellipse((140 - 6, py - 6, 140 + 6, py + 6), fill=C("A", 1 - ph))
+
+VISUALS = dict(vars=vars, flow=flow, pipeline=pipeline, containers=containers, race=race, gauge=gauge, ownership=ownership, shield=shield,
                lanes=lanes, compiler=compiler, network=network, layers=layers, tree=tree)
