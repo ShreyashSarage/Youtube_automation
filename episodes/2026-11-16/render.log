@@ -1,1 +1,8 @@
 frame 0/1782
+frame 300/1782
+frame 600/1782
+frame 900/1782
+frame 1200/1782
+frame 1500/1782
+video /home/user/youtube_automation/episodes/2026-11-16/build/video.mp4
+exit 0
