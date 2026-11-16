@@ -82,6 +82,17 @@ contains it, e.g. code `let mut x = 5;\nx = 6;\nprintln!("{x}");` with
 check `fn main() {\n    let mut x = 5;\n    x = 6;\n    println!("{x}");\n}` and expect `6`.
 Mistake scenes: `expect_error: "E0384"` (the build fails if it compiles or the code differs).
 
+### Thumbnail (cover frame)
+YouTube does not accept uploaded thumbnails for Shorts, so the pipeline renders a designed cover
+(`build/thumbnail.png`) and uses it as the **first frames** of the video. Add to the spec:
+```jsonc
+"thumbnail": { "lines": ["WHY LEARN", "RUST?"],   // 1-2 punchy lines, ≤ 11 chars each, CAPS; line 2 is accent-coloured
+               "visual": "shield",                 // the most telling visual for the lesson
+               "params": { "label": "memory safe · no GC" } }   // optional overrides for that visual
+```
+`DAY N`, `IN 60 SECONDS` and the series name are added automatically. Check `thumbnail.png` (it is
+also the first tile of `preview.png`) before rendering.
+
 ### Title, description, tags (trendy, searchable)
 - Title (≤ 70 chars): `Rust Day N: <Lesson> in 60 Seconds 🦀` or a hook form like
   `Why Rust Won't Let You Change x 🦀 | Rust Day N`.

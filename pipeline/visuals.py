@@ -49,7 +49,9 @@ def arrow(d, pts, prog, col, width=8, head=26):
                    (x1 + head * 0.8 * math.cos(ang - 2.4), y1 + head * 0.8 * math.sin(ang - 2.4))], fill=col)
 def bez(p0, p1, p2, n=24):
     return [((1 - u) ** 2 * p0[0] + 2 * (1 - u) * u * p1[0] + u * u * p2[0], (1 - u) ** 2 * p0[1] + 2 * (1 - u) * u * p1[1] + u * u * p2[1]) for u in [i / n for i in range(n + 1)]]
-def ring(d, x, y, r, col, w=5): d.ellipse((x - r, y - r, x + r, y + r), outline=col, width=w)
+def ring(d, x, y, r, col, w=5):
+    if sum(col) < 6: return
+    d.ellipse((x - r, y - r, x + r, y + r), outline=col, width=w)
 def check(d, x, y, sz, col, w=12): d.line([(x - sz * 0.5, y), (x - sz * 0.12, y + sz * 0.4), (x + sz * 0.55, y - sz * 0.45)], fill=col, width=w, joint="curve")
 
 # ------------------------------------------------------------------ containers

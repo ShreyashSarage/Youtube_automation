@@ -1,15 +1,70 @@
-{"topic": "Rust ownership and move semantics", "theme": "matrix", "brand": "RUST  ·  DAILY",
- "sources": ["https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html"],
- "youtube": {"title": "How Rust Is Memory Safe Without a GC 🦀", "description": "sample", "tags": ["rust ownership"]},
+{
+ "topic": "Rust ownership and move semantics",
+ "theme": "matrix",
+ "brand": "RUST  ·  DAILY",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html"
+ ],
+ "youtube": {
+  "title": "How Rust Is Memory Safe Without a GC 🦀",
+  "description": "sample",
+  "tags": [
+   "rust ownership"
+  ]
+ },
  "scenes": [
-  {"type": "hook", "visual": "shield", "top": "No garbage collector.", "big": "No dangling pointers.", "sub": ["So how does Rust do it?"],
-   "say": "No garbage collector, and no dangling pointers. So how does Rust do it?"},
-  {"type": "visual", "visual": "ownership", "heading": "Every value has one owner", "a": "s1", "b": "s2", "value": "String", "note": "s1 can't be used anymore",
-   "say": "Every value has exactly one owner. When you write let s2 equals s1, the String moves to s2, and s1 can't be used anymore."},
-  {"type": "visual", "visual": "shield", "heading": "Use it after a move?", "label": "compile error, not a crash",
-   "say": "Try to use s1 after the move, and the borrow checker stops you at compile time, before your program ever runs."},
-  {"type": "visual", "visual": "compiler", "heading": "Owner goes out of scope", "file": "main.rs", "output": "drop()", "badge": "freed",
-   "say": "And when the owner goes out of scope, Rust frees the memory automatically. No GC, no manual free."},
-  {"type": "cta", "heading": "Learn more", "link": "doc.rust-lang.org/book", "question": ["Borrowing next?"], "sub": "Follow for daily Rust tips",
-   "say": "Read chapter four of the Rust book. Want borrowing next? Follow for a Rust tip every day."}
- ]}
+  {
+   "type": "hook",
+   "visual": "shield",
+   "top": "No garbage collector.",
+   "big": "No dangling pointers.",
+   "sub": [
+    "So how does Rust do it?"
+   ],
+   "say": "No garbage collector, and no dangling pointers. So how does Rust do it?"
+  },
+  {
+   "type": "visual",
+   "visual": "ownership",
+   "heading": "Every value has one owner",
+   "a": "s1",
+   "b": "s2",
+   "value": "String",
+   "note": "s1 can't be used anymore",
+   "say": "Every value has exactly one owner. When you write let s2 equals s1, the String moves to s2, and s1 can't be used anymore."
+  },
+  {
+   "type": "visual",
+   "visual": "shield",
+   "heading": "Use it after a move?",
+   "label": "compile error, not a crash",
+   "say": "Try to use s1 after the move, and the borrow checker stops you at compile time, before your program ever runs."
+  },
+  {
+   "type": "visual",
+   "visual": "compiler",
+   "heading": "Owner goes out of scope",
+   "file": "main.rs",
+   "output": "drop()",
+   "badge": "freed",
+   "say": "And when the owner goes out of scope, Rust frees the memory automatically. No GC, no manual free."
+  },
+  {
+   "type": "cta",
+   "heading": "Learn more",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Borrowing next?"
+   ],
+   "sub": "Follow for daily Rust tips",
+   "say": "Read chapter four of the Rust book. Want borrowing next? Follow for a Rust tip every day."
+  }
+ ],
+ "thumbnail": {
+  "lines": [
+   "NO GC.",
+   "NO BUGS?"
+  ],
+  "visual": "ownership"
+ }
+}

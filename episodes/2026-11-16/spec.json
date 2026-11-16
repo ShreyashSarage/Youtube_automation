@@ -122,5 +122,15 @@
    "sub": "Follow to learn Rust daily",
    "say": "Tomorrow: installing Rust and running hello world. Follow to learn Rust every day!"
   }
- ]
+ ],
+ "thumbnail": {
+  "lines": [
+   "WHY LEARN",
+   "RUST?"
+  ],
+  "visual": "shield",
+  "params": {
+   "label": "memory safe · no GC"
+  }
+ }
 }

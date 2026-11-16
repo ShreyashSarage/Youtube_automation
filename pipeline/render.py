@@ -412,8 +412,53 @@ def burn_caption(frame, T):
         x += wd + sp
     return np.asarray(img)
 
+# ---------------- thumbnail (cover frame) ----------------
+def thumb_spec():
+    th = dict(SPEC.get("thumbnail", {}))
+    if "lines" not in th:
+        words = SPEC.get("topic", "Rust").upper().split(); half = (len(words) + 1) // 2
+        th["lines"] = [" ".join(words[:half]), " ".join(words[half:])] if len(words) > 2 else [" ".join(words)]
+    th.setdefault("visual", SCENES[0].get("visual") or next((x["visual"] for x in SCENES if x.get("visual")), "compiler"))
+    if SPEC.get("day"): th.setdefault("badge", f"DAY {SPEC['day']}")
+    th.setdefault("tag", "IN 60 SECONDS"); th.setdefault("series", "RUST  ·  ZERO TO PRO")
+    return th
+
+def thumb_image():
+    th = thumb_spec(); vis = th["visual"]
+    params = next((x for x in SCENES if x.get("visual") == vis), {}); params = dict(params, **th.get("params", {}))
+    out = background(4.0, 0.0)
+    layer = Image.new("RGB", (W, H)); VIS.VISUALS[vis](ImageDraw.Draw(layer), 30.0, 6.0, params)  # finished state
+    sc = 1.12; layer = layer.transform((W, H), Image.AFFINE, (1 / sc, 0, W / 2 - W / 2 / sc, 0, 1 / sc, 1010 - 1010 / sc + 60 / sc), Image.BILINEAR)
+    small = layer.resize((W // 4, H // 4), Image.BILINEAR).filter(ImageFilter.GaussianBlur(9)).resize((W, H), Image.BILINEAR)
+    out += np.asarray(layer, np.float32) * 0.9 + np.asarray(small, np.float32) * 1.4
+    out *= VIG
+    img = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)); d = ImageDraw.Draw(img)
+    # top band: badge + title (inside Shorts-safe area)
+    if th.get("badge"):
+        f = B(64); bw = d.textlength(th["badge"], font=f) + 80
+        d.rounded_rectangle((W / 2 - bw / 2, 150, W / 2 + bw / 2, 250), 50, fill=RUST)
+        d.text((W / 2 - d.textlength(th["badge"], font=f) / 2, 165), th["badge"], font=f, fill=(8, 8, 12))
+    y = 300
+    for i, line in enumerate(th["lines"][:3]):
+        lines, f, sz = wrap(d, line, B, 150, W - 100, 1, 60)
+        col = WHITE if i == 0 else RUST
+        d.text(((W - d.textlength(lines[0], font=f)) / 2, y), lines[0], font=f, fill=col, stroke_width=10, stroke_fill=(0, 0, 0))
+        y += sz * 1.08
+    # bottom: tag pill + series name (above the Shorts UI)
+    f = B(56); tw = d.textlength(th["tag"], font=f) + 70
+    d.rounded_rectangle((W / 2 - tw / 2, 1420, W / 2 + tw / 2, 1510), 45, fill=(250, 250, 252))
+    d.text((W / 2 - d.textlength(th["tag"], font=f) / 2, 1434), th["tag"], font=f, fill=(8, 8, 12))
+    f = B(40); d.text((W / 2 - d.textlength(th["series"], font=f) / 2, 1545), th["series"], font=f, fill=RUST, stroke_width=4, stroke_fill=(0, 0, 0))
+    return img
+
+THUMB_FRAMES = int(SPEC.get("thumbnail", {}).get("frames", 8))  # ~0.27 s cover at the very start
+
 if __name__ == "__main__":
     for sc in SCENES: assert sc["type"] in TYPES, f"unknown scene type {sc['type']}"
+    TH_IMG = thumb_image(); TH_IMG.save(os.path.join(BUILD, "thumbnail.png"))
+    TH_IMG.convert("RGB").save(os.path.join(BUILD, "thumbnail.jpg"), quality=90)
+    if "--thumb" in sys.argv: print("thumbnail", os.path.join(BUILD, "thumbnail.png")); sys.exit()
+    TH_BYTES = np.asarray(TH_IMG.convert("RGB")).tobytes()
     if "--preview" in sys.argv:
         fr = [float(v) for v in sys.argv[sys.argv.index("--preview") + 1].split(",")]
         thumbs = []
@@ -421,6 +466,9 @@ if __name__ == "__main__":
             for f in fr: thumbs.append(Image.frombytes("RGB", (W, H), render(int((st + du * f) * FPS))).resize((270, 480)))
         cols = len(fr) * 4; rows = math.ceil(len(thumbs) / cols)
         sheet = Image.new("RGB", (270 * cols, 480 * rows))
+        for i, im in enumerate(thumbs): sheet.paste(im, ((i % cols) * 270, (i // cols) * 480))
+        thumbs.insert(0, TH_IMG.resize((270, 480)))
+        cols = len(fr) * 4; rows = math.ceil(len(thumbs) / cols); sheet = Image.new("RGB", (270 * cols, 480 * rows))
         for i, im in enumerate(thumbs): sheet.paste(im, ((i % cols) * 270, (i // cols) * 480))
         sheet.save(os.path.join(BUILD, "preview.png")); print("preview", os.path.join(BUILD, "preview.png")); sys.exit()
     OUT = os.path.join(BUILD, "video.mp4")
@@ -434,7 +482,8 @@ if __name__ == "__main__":
         "-c:v", "libx264", "-preset", "medium", "-crf", "23", "-maxrate", "16M", "-bufsize", "32M", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", OUT], stdin=subprocess.PIPE)
     with Pool(os.cpu_count() or 4) as pool:
-        for i, fr in enumerate(pool.imap(render, range(NFR), chunksize=4)):
+        for i in range(min(THUMB_FRAMES, NFR)): p.stdin.write(TH_BYTES)  # designed cover = first frames
+        for i, fr in enumerate(pool.imap(render, range(min(THUMB_FRAMES, NFR), NFR), chunksize=4)):
             p.stdin.write(fr)
             if i % 300 == 0: print(f"frame {i}/{NFR}", flush=True)
     p.stdin.close(); p.wait()

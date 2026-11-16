@@ -1,16 +1,86 @@
-{"topic": "Kiri Rust container runtime", "theme": "ocean", "brand": "RUST  ·  DAILY",
- "sources": ["https://github.com/libracoder/kiri", "https://www.opensourceprojects.dev/post/kiri"],
- "youtube": {"title": "Docker in 2.55 ms? Meet Kiri 🦀", "description": "sample", "tags": ["kiri"]},
+{
+ "topic": "Kiri Rust container runtime",
+ "theme": "ocean",
+ "brand": "RUST  ·  DAILY",
+ "sources": [
+  "https://github.com/libracoder/kiri",
+  "https://www.opensourceprojects.dev/post/kiri"
+ ],
+ "youtube": {
+  "title": "Docker in 2.55 ms? Meet Kiri 🦀",
+  "description": "sample",
+  "tags": [
+   "kiri"
+  ]
+ },
  "scenes": [
-  {"type": "hook", "visual": "containers", "count": 12, "top": "docker run", "big": "in 2.55 ms?", "sub": ["A Rust runtime vs Docker Desktop"],
-   "say": "Docker run, in two point five milliseconds? Meet Kiri, a container runtime written in Rust."},
-  {"type": "visual", "visual": "race", "heading": "Container start time", "sub": "author's own benchmark · not verified",
-   "lanes": [{"label": "Kiri", "value": 2.55}, {"label": "Docker Desktop", "value": 213}], "unit": "ms",
-   "say": "In the author's own benchmark, it starts a throwaway Alpine container in 2.55 milliseconds. Docker Desktop took 213."},
-  {"type": "visual", "visual": "containers", "heading": "Same Docker workflow", "label": "docker compose up", "caption": "Docker CLI + Compose ✓",
-   "say": "And you keep your workflow. It speaks the Docker Engine API, so the Docker CLI and Compose just work."},
-  {"type": "visual", "visual": "layers", "heading": "How it runs", "sub": "on macOS & Windows", "layers": ["Your Mac / PC", "Linux VM", "Kiri", "Containers"], "highlight": 2,
-   "say": "On Mac and Windows, Kiri runs your containers inside a lightweight Linux VM. On Linux, straight on the kernel."},
-  {"type": "cta", "heading": "Try it", "link": "github.com/libracoder/kiri", "question": ["Would you switch?"], "sub": "Follow for daily Rust news",
-   "say": "It's brand new, so try it at github dot com slash libracoder slash kiri. Would you switch?"}
- ]}
+  {
+   "type": "hook",
+   "visual": "containers",
+   "count": 12,
+   "top": "docker run",
+   "big": "in 2.55 ms?",
+   "sub": [
+    "A Rust runtime vs Docker Desktop"
+   ],
+   "say": "Docker run, in two point five milliseconds? Meet Kiri, a container runtime written in Rust."
+  },
+  {
+   "type": "visual",
+   "visual": "race",
+   "heading": "Container start time",
+   "sub": "author's own benchmark · not verified",
+   "lanes": [
+    {
+     "label": "Kiri",
+     "value": 2.55
+    },
+    {
+     "label": "Docker Desktop",
+     "value": 213
+    }
+   ],
+   "unit": "ms",
+   "say": "In the author's own benchmark, it starts a throwaway Alpine container in 2.55 milliseconds. Docker Desktop took 213."
+  },
+  {
+   "type": "visual",
+   "visual": "containers",
+   "heading": "Same Docker workflow",
+   "label": "docker compose up",
+   "caption": "Docker CLI + Compose ✓",
+   "say": "And you keep your workflow. It speaks the Docker Engine API, so the Docker CLI and Compose just work."
+  },
+  {
+   "type": "visual",
+   "visual": "layers",
+   "heading": "How it runs",
+   "sub": "on macOS & Windows",
+   "layers": [
+    "Your Mac / PC",
+    "Linux VM",
+    "Kiri",
+    "Containers"
+   ],
+   "highlight": 2,
+   "say": "On Mac and Windows, Kiri runs your containers inside a lightweight Linux VM. On Linux, straight on the kernel."
+  },
+  {
+   "type": "cta",
+   "heading": "Try it",
+   "link": "github.com/libracoder/kiri",
+   "question": [
+    "Would you switch?"
+   ],
+   "sub": "Follow for daily Rust news",
+   "say": "It's brand new, so try it at github dot com slash libracoder slash kiri. Would you switch?"
+  }
+ ],
+ "thumbnail": {
+  "lines": [
+   "DOCKER IN",
+   "2.55 MS?"
+  ],
+  "visual": "race"
+ }
+}

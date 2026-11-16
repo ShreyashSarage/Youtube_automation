@@ -1,15 +1,89 @@
-{"topic": "Async Rust and tokio basics", "theme": "neon", "brand": "RUST  ·  DAILY",
- "sources": ["https://rust-lang.github.io/async-book/", "https://tokio.rs/tokio/tutorial"],
- "youtube": {"title": "Async Rust in 30 Seconds ⚡🦀", "description": "sample", "tags": ["async rust"]},
+{
+ "topic": "Async Rust and tokio basics",
+ "theme": "neon",
+ "brand": "RUST  ·  DAILY",
+ "sources": [
+  "https://rust-lang.github.io/async-book/",
+  "https://tokio.rs/tokio/tutorial"
+ ],
+ "youtube": {
+  "title": "Async Rust in 30 Seconds ⚡🦀",
+  "description": "sample",
+  "tags": [
+   "async rust"
+  ]
+ },
  "scenes": [
-  {"type": "hook", "visual": "lanes", "top": "A few threads.", "big": "Thousands of tasks.", "sub": ["That's async Rust."], "hub": "tokio",
-   "say": "A few threads, running thousands of tasks. That's async Rust."},
-  {"type": "visual", "visual": "lanes", "heading": "Tasks take turns", "sub": ".await = pause, let others run", "hub": "tokio", "labels": ["task A", "task B", "task C", "task D"],
-   "say": "When a task hits dot await and has to wait, say for the network, it pauses, and the runtime runs another task on that thread."},
-  {"type": "visual", "visual": "network", "heading": "Perfect for servers", "center": "tokio", "nodes": ["client", "client", "db", "client", "api", "client", "cache", "client", "client"],
-   "say": "That's why async is great for servers: one process can juggle many connections at once, without a thread per connection."},
-  {"type": "code", "heading": "Spawn a task", "file": "main.rs", "code": "#[tokio::main]\nasync fn main() {\n    let h = tokio::spawn(async {\n        fetch().await\n    });\n    h.await.unwrap();\n}", "highlight": [3, 4],
-   "say": "With tokio, you spawn a task with tokio spawn, and await its result."},
-  {"type": "cta", "heading": "Try it", "link": "tokio.rs/tokio/tutorial", "question": ["Threads or async?"], "sub": "Follow for daily Rust tips",
-   "say": "Start with the tokio tutorial. Threads or async, which do you use? Follow for daily Rust tips."}
- ]}
+  {
+   "type": "hook",
+   "visual": "lanes",
+   "top": "A few threads.",
+   "big": "Thousands of tasks.",
+   "sub": [
+    "That's async Rust."
+   ],
+   "hub": "tokio",
+   "say": "A few threads, running thousands of tasks. That's async Rust."
+  },
+  {
+   "type": "visual",
+   "visual": "lanes",
+   "heading": "Tasks take turns",
+   "sub": ".await = pause, let others run",
+   "hub": "tokio",
+   "labels": [
+    "task A",
+    "task B",
+    "task C",
+    "task D"
+   ],
+   "say": "When a task hits dot await and has to wait, say for the network, it pauses, and the runtime runs another task on that thread."
+  },
+  {
+   "type": "visual",
+   "visual": "network",
+   "heading": "Perfect for servers",
+   "center": "tokio",
+   "nodes": [
+    "client",
+    "client",
+    "db",
+    "client",
+    "api",
+    "client",
+    "cache",
+    "client",
+    "client"
+   ],
+   "say": "That's why async is great for servers: one process can juggle many connections at once, without a thread per connection."
+  },
+  {
+   "type": "code",
+   "heading": "Spawn a task",
+   "file": "main.rs",
+   "code": "#[tokio::main]\nasync fn main() {\n    let h = tokio::spawn(async {\n        fetch().await\n    });\n    h.await.unwrap();\n}",
+   "highlight": [
+    3,
+    4
+   ],
+   "say": "With tokio, you spawn a task with tokio spawn, and await its result."
+  },
+  {
+   "type": "cta",
+   "heading": "Try it",
+   "link": "tokio.rs/tokio/tutorial",
+   "question": [
+    "Threads or async?"
+   ],
+   "sub": "Follow for daily Rust tips",
+   "say": "Start with the tokio tutorial. Threads or async, which do you use? Follow for daily Rust tips."
+  }
+ ],
+ "thumbnail": {
+  "lines": [
+   "ASYNC",
+   "RUST"
+  ],
+  "visual": "lanes"
+ }
+}
