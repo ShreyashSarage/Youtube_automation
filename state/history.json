@@ -13,6 +13,18 @@
     "https://doc.rust-lang.org/book/ch01-02-hello-world.html"
    ],
    "note": "replaced the first upload with a version that has the thumbnail cover"
+  },
+  {
+   "date": "2026-11-17",
+   "day": 2,
+   "topic": "Install Rust & Hello, World!",
+   "title": "Rust Day 2: Install Rust & Run Hello, World! 🦀",
+   "url": "https://www.youtube.com/watch?v=djaspjXhqII",
+   "publishAt": "2026-11-17T12:00:00+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch01-01-installation.html",
+    "https://doc.rust-lang.org/book/ch01-02-hello-world.html"
+   ]
   }
  ]
 }

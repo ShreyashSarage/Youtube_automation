@@ -1,0 +1,153 @@
+{
+ "day": 2,
+ "topic": "Install Rust & Hello, World!",
+ "theme": "matrix",
+ "brand": "RUST  ·  DAY 2",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch01-01-installation.html",
+  "https://doc.rust-lang.org/book/ch01-02-hello-world.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "HELLO,",
+   "WORLD!"
+  ],
+  "visual": "compiler",
+  "params": {
+   "file": "main.rs",
+   "output": "./main",
+   "badge": ""
+  }
+ },
+ "youtube": {
+  "title": "Rust Day 2: Install Rust & Run Hello, World! 🦀",
+  "description": "Rust Day 2: Install Rust and run your first program, Hello, World! Step by step in 60 seconds.\n\n📌 In this short:\n✅ Install Rust with rustup and check it with rustc --version\n✅ Write main.rs: Rust files always end in .rs\n✅ Compile with rustc, run with ./main, and why println! has a !\n\n💻 Install (Linux / macOS):\ncurl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh\n🪟 Windows: https://www.rust-lang.org/tools/install\n\n💻 Code from the video (main.rs):\nfn main() {\n    println!(\"Hello, world!\");\n}\nThen: rustc main.rs && ./main\n\n📖 Learn more: https://doc.rust-lang.org/book/ch01-01-installation.html\n⏭️ Tomorrow: Cargo, your Rust toolbox\n\nFollow for a new Rust lesson every day at 12 PM IST, from zero to pro 🦀\n💬 Stuck installing? Drop your error in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #helloworld #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 2",
+   "rustlang",
+   "install rust",
+   "rustup",
+   "rust hello world",
+   "rustc",
+   "println",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "compiler",
+   "file": "main.rs",
+   "output": "./main",
+   "badge": "Hello!",
+   "top": "Rust Day 2",
+   "big": "Your first program",
+   "sub": [
+    "Install + Hello, World!"
+   ],
+   "say": "Rust, day two. Let's install Rust and run your very first program."
+  },
+  {
+   "type": "terminal",
+   "heading": "Install with rustup",
+   "sub": "full command in the description",
+   "commands": [
+    [
+     "curl ... sh.rustup.rs -sSf | sh",
+     "Rust is installed now. Great!"
+    ],
+    [
+     "rustc --version",
+     "rustc x.y.z (abcabcabc yyyy-mm-dd)"
+    ]
+   ],
+   "checks": [
+    "Linux & macOS: curl",
+    "Windows: rust-lang.org"
+   ],
+   "say": "On Linux or Mac, run the rustup install script. The full command is in the description. On Windows, use the installer from rust lang dot org. Then check it with rustc dash dash version.",
+   "captions": "On Linux or Mac, run the rustup install script. The full command is in the description. On Windows, use the installer from rust-lang.org. Then check it with rustc --version."
+  },
+  {
+   "type": "code",
+   "heading": "Write main.rs",
+   "sub": "Rust files end in .rs",
+   "file": "main.rs",
+   "code": "fn main() {\n    println!(\"Hello, world!\");\n}",
+   "highlight": [
+    2
+   ],
+   "expect": "Hello, world!",
+   "caption": "main runs first",
+   "say": "Create a file called main dot R S. Inside, write F N main, and inside it, println bang, hello world.",
+   "captions": "Create a file called main.rs. Inside, write fn main, and inside it, println! hello world."
+  },
+  {
+   "type": "visual",
+   "visual": "compiler",
+   "heading": "Compile, then run",
+   "sub": "rustc main.rs  →  ./main",
+   "file": "main.rs",
+   "output": "./main",
+   "badge": "Hello!",
+   "say": "Compile it with rustc main dot R S. That creates a program you run with dot slash main, or dot backslash main on Windows. Hello, world!",
+   "captions": "Compile it with rustc main.rs. That creates a program you run with ./main, or .\\main on Windows. Hello, world!"
+  },
+  {
+   "type": "visual",
+   "visual": "layers",
+   "heading": "Compiled ahead of time",
+   "sub": "share the program, not the code",
+   "layers": [
+    "main.rs",
+    "rustc",
+    "main (program)",
+    "Runs without Rust"
+   ],
+   "highlight": 3,
+   "say": "Rust is compiled ahead of time. You can give the program to a friend, and it runs even if they don't have Rust installed."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "forgot the ! ?",
+   "file": "main.rs",
+   "code": "fn main() {\n    println(\"Hello, world!\");\n}",
+   "highlight": [
+    2
+   ],
+   "expect_error": "E0423",
+   "caption": "error: expected function, found macro",
+   "say": "Forgot the exclamation mark? That's an error. println bang is a macro, not a function, and the bang is how you call a macro.",
+   "captions": "Forgot the exclamation mark? That's an error. println! is a macro, not a function, and the ! is how you call a macro."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "rustup installs Rust",
+    "Files end in .rs",
+    "rustc builds, ./main runs",
+    "! means macro"
+   ],
+   "say": "Recap: rustup installs Rust, files end in dot R S, rustc builds, dot slash main runs, and bang means macro.",
+   "captions": "Recap: rustup installs Rust, files end in .rs, rustc builds, ./main runs, and ! means macro."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 2 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Cargo"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: Cargo, your Rust toolbox. Follow to learn Rust every day!"
+  }
+ ]
+}

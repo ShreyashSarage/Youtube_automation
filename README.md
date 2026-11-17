@@ -3,7 +3,7 @@
 Every day a Claude Code cloud session makes the next lesson in `state/curriculum.json`
 (60 lessons, beginner → advanced), renders a vertical Short with topic-driven motion graphics,
 AI voiceover, synthesized music and burned-in captions, and uploads it to YouTube (via Uplika)
-as Private, scheduled to go public at **18:00 IST**.
+as Private, scheduled to go public at **12:00 IST (noon)**.
 
 ```
 RUNBOOK.md              step-by-step instructions each daily run follows

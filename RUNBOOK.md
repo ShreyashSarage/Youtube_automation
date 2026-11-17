@@ -1,7 +1,7 @@
 # Daily "Rust Zero to Pro" Short: runbook
 
 Each daily run is a fresh Claude Code cloud session that makes **one beginner-friendly lesson** and
-schedules it to go public at **18:00 IST**. Follow these steps in order.
+schedules it to go public at **12:00 IST (noon)**. Follow these steps in order.
 
 `TODAY` = today's date in **Asia/Kolkata** (YYYY-MM-DD). Episode folder: `episodes/TODAY/`.
 
@@ -113,7 +113,7 @@ Rust Day N: <lesson>. <one-sentence hook / what you'll learn>.
 📖 Learn more: <source url>
 ⏭️ Tomorrow: <next lesson title>
 
-Follow for a new Rust lesson every day at 6 PM IST, from zero to pro 🦀
+Follow for a new Rust lesson every day at 12 PM IST, from zero to pro 🦀
 💬 Questions? Drop them in the comments 👇
 
 #rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #<1-2 lesson tags> #shorts
@@ -137,9 +137,9 @@ pipeline/build.sh episodes/TODAY             # about 3-5 min → build/video.mp4
 3. `curl -sS --retry 3 -o /dev/null -w "%{http_code}\n" -X PUT -H "Content-Type: video/mp4" --upload-file episodes/TODAY/build/video.mp4 "<uploadUrl>"` → must print 200.
 4. `media_complete`.
 5. `publish` with `wait: true`, `content` = description, `options.youtube` =
-   `{ title, tags, privacyStatus: "private", publishAt: "<TODAY>T18:00:00+05:30", categoryId: "27",
-   defaultLanguage: "en", containsSyntheticMedia: false }` (27 = Education). If 18:00 IST has
-   passed, use tomorrow 18:00.
+   `{ title, tags, privacyStatus: "private", publishAt: "<TODAY>T12:00:00+05:30", categoryId: "27",
+   defaultLanguage: "en", containsSyntheticMedia: false }` (27 = Education). If 12:00 IST has
+   passed (or is less than 20 min away), use tomorrow 12:00.
 6. Confirm status `published` (uploaded + scheduled); note permalink and warnings.
 
 ## 6. Record and push

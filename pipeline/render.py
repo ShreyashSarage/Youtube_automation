@@ -195,11 +195,11 @@ def sc_terminal(d, t, s, dur):
                 if outp and n == len(c) and tt - i * step > len(c) / 26 + 0.2:
                     d.text((x0 + 45, y + 60), outp[:44], font=M(34), fill=DIM)
             y += 160
-    for i, (lab, st) in enumerate(zip(s.get("checks", []), stagger(len(s.get("checks", [])), dur, dur * 0.55, 0.85))):
+    for i, (lab, st) in enumerate(zip(s.get("checks", [])[:2], stagger(len(s.get("checks", [])), dur, dur * 0.55, 0.85))):
         sc = backout((t - st) / 0.45)
         if sc > 0:
-            lines, f, sz = wrap(d, "✓  " + lab, B, int(56 * (0.5 + 0.5 * sc)), W - 140, 1, 30)
-            ctext(d, 1340 + i * 105 + (1 - sc) * 20, lines[0], f, GREEN, clamp(sc * 1.5))
+            lines, f, sz = wrap(d, "✓  " + lab, B, int(50 * (0.5 + 0.5 * sc)), W - 140, 1, 30)
+            ctext(d, 1250 + i * 88 + (1 - sc) * 20, lines[0], f, GREEN, clamp(sc * 1.5))
 
 KW = set("fn let mut pub struct enum impl trait use mod match if else for while loop return async await move ref where as in const static type unsafe dyn self Self crate super true false Some None Ok Err".split())
 def hl_line(line):
