@@ -89,7 +89,7 @@ def T(cmd, out="", term=1, d="proj", speed=None, pause=0.6, keys=None, stream=No
 # ------------------------------------------------------------------ shots
 SHOTS = [
  dict(id="cold_open", scene="terminal", zoom=1.18, actions=[
-   T("docker compose up", stream=[(t, l) for t, l in compose_up_lines() if "|" in l][:26], d="proj", speed=2.5, term=3)],
+   T("docker compose up", stream=[(t, l) for t, l in compose_up_lines() if "|" in l and "auto-" not in l][:26], d="proj", speed=2.5, term=3)],
    say="This is what we're building today. A Rust publisher sending sensor data to a Mosquitto MQTT broker, and a Rust subscriber receiving every message. All three are running as containers, not on Docker, but on Kiri, a tiny container engine written in Rust."),
  dict(id="intro", scene="title", title="Kiri on Linux", subtitle="Install it, then run MQTT publish/subscribe in Rust", chapter=None,
    say="Hey everyone, welcome back! In this one we'll install Kiri on Linux step by step, check that it works, then write the publisher and subscriber in Rust, test them, put everything in containers with Docker Compose, and run it on Kiri. All the code and commands are in the description, so feel free to follow along."),

@@ -92,7 +92,7 @@ def schedule():
                             dt = rel / 3.0 if x <= build_end else (build_end - t_first) / 3.0 + (x - build_end)
                             EV[key].append((tt0 + dt / act.get("speed", 1.0), "line", l))
                         last = tt0 + ((build_end - t_first) / 3.0 + (st[-1][0] - build_end)) / act.get("speed", 1.0)
-                        if any(x <= build_end and "#" in l for x, l in st): EV["badge"].append((tt0, tt0 + (build_end - t_first) / 3.0, "⏩ 3× speed"))
+                        if any(x <= build_end and "#" in l for x, l in st): EV["badge"].append((tt0, tt0 + (build_end - t_first) / 3.0, "▶▶  3× speed"))
                         cur = last + act.get("pause", 0.6)
                     elif act.get("bg"):
                         bg = act["bg"]; L = bg["lines"]; anchor = cur + 0.25; t_a = L[0][0]
