@@ -1,0 +1,56 @@
+[
+ {
+  "cmd": "docker version --format 'Client: {{.Client.Version}}  Server: {{.Server.Platform.Name}} (API {{.Server.APIVersion}})'",
+  "out": "Client: 29.9.2  Server: Kiri (API 1.47)\n",
+  "code": 0,
+  "secs": 0.0
+ },
+ {
+  "cmd": "docker run --rm alpine echo \"hello from kiri\"",
+  "out": "hello from kiri\nUnable to find image 'alpine:latest' locally\nlatest: Pulling from library/alpine\n881fc932939e: Already exists\nDigest: sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf\nStatus: Downloaded newer image for alpine:latest\n",
+  "code": 0,
+  "secs": 0.3
+ },
+ {
+  "cmd": "cargo new mqtt-demo",
+  "out": "    Creating binary (application) `mqtt-demo` package\nnote: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html\n",
+  "code": 0,
+  "secs": 0.1
+ },
+ {
+  "cmd": "cargo add rumqttc --no-default-features",
+  "out": "    Updating crates.io index\n      Adding rumqttc v0.25.1 to dependencies\n             Features:\n             - proxy\n             - url\n             - use-native-tls\n             - use-rustls\n             - use-rustls-no-provider\n             - websocket\n    Updating crates.io index\n     Locking 30 packages to latest Rust 1.97.0 compatible versions\n",
+  "code": 0,
+  "secs": 0.4
+ },
+ {
+  "cmd": "cargo add tokio --features full",
+  "out": "    Updating crates.io index\n      Adding tokio v1.54.1 to dependencies\n             Features:\n             + bytes\n             + fs\n             + full\n             + io-std\n             + io-util\n             + libc\n             + macros\n             + net\n             + parking_lot\n             + process\n             + rt\n             + rt-multi-thread\n             + signal\n             + signal-hook-registry\n             + socket2\n             + sync\n             + time\n             + tokio-macros\n             - io-uring\n             - mio\n             - schedule-latency\n             - taskdump\n             - test-util\n             - tracing\n             - windows-sys\n     Locking 8 packages to latest Rust 1.97.0 compatible versions\n      Adding bitflags v2.13.2\n      Adding cfg-if v1.0.5\n      Adding errno v0.3.15\n      Adding parking_lot v0.12.5\n      Adding parking_lot_core v0.9.12\n      Adding redox_syscall v0.5.18\n      Adding signal-hook-registry v1.4.8\n      Adding smallvec v1.16.5\n",
+  "code": 0,
+  "secs": 0.2
+ },
+ {
+  "cmd": "cat Cargo.toml",
+  "out": "[package]\nname = \"mqtt-demo\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[dependencies]\nrumqttc = { version = \"0.25.1\", default-features = false }\ntokio = { version = \"1.54.1\", features = [\"full\"] }\n",
+  "code": 0,
+  "secs": 0.0
+ },
+ {
+  "cmd": "#files",
+  "out": "",
+  "code": 0,
+  "secs": 0.0
+ },
+ {
+  "cmd": "cargo build --release",
+  "out": "   Compiling libc v0.2.191\n   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.27\n   Compiling quote v1.0.47\n   Compiling scopeguard v1.2.0\n   Compiling lock_api v0.4.14\n   Compiling parking_lot_core v0.9.12\n   Compiling smallvec v1.16.5\n   Compiling cfg-if v1.0.5\n   Compiling pin-project-lite v0.2.17\n   Compiling futures-core v0.3.34\n   Compiling futures-sink v0.3.34\n   Compiling bytes v1.12.1\n   Compiling thiserror v2.0.21\n   Compiling spin v0.9.9\n   Compiling syn v3.0.10\n   Compiling futures-task v0.3.34\n   Compiling errno v0.3.15\n   Compiling signal-hook-registry v1.4.8\n   Compiling parking_lot v0.12.5\n   Compiling socket2 v0.6.5\n   Compiling mio v1.2.5\n   Compiling slab v0.4.12\n   Compiling flume v0.11.1\n   Compiling log v0.4.35\n   Compiling futures-util v0.3.34\n   Compiling fixedbitset v0.5.9\n   Compiling tokio-macros v2.7.2\n   Compiling thiserror-impl v2.0.21\n   Compiling tokio v1.54.1\n   Compiling tokio-util v0.7.20\n   Compiling tokio-stream v0.1.19\n   Compiling rumqttc v0.25.1\n   Compiling mqtt-demo v0.1.0 (/home/user/video-run/mqtt-demo)\n    Finished `release` profile [optimized] target(s) in 14.43s\n",
+  "code": 0,
+  "secs": 14.5
+ },
+ {
+  "cmd": "tree -I target",
+  "out": "./.dockerignore\n./.git/HEAD\n./.git/config\n./.git/description\n./.git/hooks/applypatch-msg.sample\n./.git/hooks/commit-msg.sample\n./.git/hooks/fsmonitor-watchman.sample\n./.git/hooks/post-update.sample\n./.git/hooks/pre-applypatch.sample\n./.git/hooks/pre-commit.sample\n./.git/hooks/pre-merge-commit.sample\n./.git/hooks/pre-push.sample\n./.git/hooks/pre-rebase.sample\n./.git/hooks/pre-receive.sample\n./.git/hooks/prepare-commit-msg.sample\n./.git/hooks/push-to-checkout.sample\n./.git/hooks/sendemail-validate.sample\n./.git/hooks/update.sample\n./.git/info/exclude\n./.gitignore\n./Cargo.toml\n./Dockerfile\n./compose.yaml\n./mosquitto/mosquitto.conf\n./src/bin/publisher.rs\n./src/bin/subscriber.rs\n",
+  "code": 0,
+  "secs": 0.0
+ }
+]

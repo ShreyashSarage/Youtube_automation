@@ -1,0 +1,23 @@
+services:
+  broker:
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  subscriber:
+    build: .
+    command: subscriber
+    environment:
+      MQTT_HOST: broker
+    depends_on:
+      - broker
+
+  publisher:
+    build: .
+    command: publisher
+    environment:
+      MQTT_HOST: broker
+    depends_on:
+      - subscriber

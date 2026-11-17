@@ -1,0 +1,966 @@
+[
+ {
+  "cmd": "docker run -d --name test-broker -p 1883:1883 eclipse-mosquitto:2 mosquitto -c /mosquitto-no-auth.conf",
+  "out": "927e481fa8e6675d542abeebde84afba75742e8ffe9f04de3d5093cdb52dc071\n",
+  "code": 0,
+  "secs": 0.0
+ },
+ {
+  "cmd": "docker ps",
+  "out": "NAMES                         IMAGE                           STATUS                  PORTS\ntest-broker                   eclipse-mosquitto:2             Up Less than a second   0.0.0.0:1883->1883/tcp\nbuildx_buildkit_default       moby/buildkit:buildx-stable-1   Up 3 minutes            \nbuildx_buildkit_kiri-build0   moby/buildkit:buildx-stable-1   Up 4 minutes            \n",
+  "code": 0,
+  "secs": 0.0
+ },
+ {
+  "cmd": "cargo run --release --bin publisher",
+  "out": "publisher: sending to sensors/room1/temperature on localhost:1883\npublished #1: {\"reading\":1,\"celsius\":22.5}\npublished #2: {\"reading\":2,\"celsius\":23.0}\npublished #3: {\"reading\":3,\"celsius\":23.5}\npublished #4: {\"reading\":4,\"celsius\":24.0}\npublished #5: {\"reading\":5,\"celsius\":22.0}\npublished #6: {\"reading\":6,\"celsius\":22.5}\npublished #7: {\"reading\":7,\"celsius\":23.0}\npublished #8: {\"reading\":8,\"celsius\":23.5}\npublished #9: {\"reading\":9,\"celsius\":24.0}\npublished #10: {\"reading\":10,\"celsius\":22.0}\npublisher: done\n",
+  "code": 0,
+  "secs": 20.0
+ },
+ {
+  "cmd": "cargo run --release --bin subscriber",
+  "out": "subscriber: listening on sensors/# at localhost:1883\nreceived on sensors/room1/temperature: {\"reading\":1,\"celsius\":22.5}\nreceived on sensors/room1/temperature: {\"reading\":2,\"celsius\":23.0}\nreceived on sensors/room1/temperature: {\"reading\":3,\"celsius\":23.5}\nreceived on sensors/room1/temperature: {\"reading\":4,\"celsius\":24.0}\nreceived on sensors/room1/temperature: {\"reading\":5,\"celsius\":22.0}\nreceived on sensors/room1/temperature: {\"reading\":6,\"celsius\":22.5}\nreceived on sensors/room1/temperature: {\"reading\":7,\"celsius\":23.0}\nreceived on sensors/room1/temperature: {\"reading\":8,\"celsius\":23.5}\nreceived on sensors/room1/temperature: {\"reading\":9,\"celsius\":24.0}\nreceived on sensors/room1/temperature: {\"reading\":10,\"celsius\":22.0}\nsubscriber: bye\n",
+  "code": 0,
+  "secs": 0,
+  "terminal": 2
+ },
+ {
+  "cmd": "docker rm -f test-broker",
+  "out": "test-broker\n",
+  "code": 0,
+  "secs": 0.0
+ },
+ {
+  "cmd": "docker compose ps",
+  "out": "SERVICE      IMAGE                  STATUS         PORTS\nbroker       eclipse-mosquitto:2    Up 4 seconds   0.0.0.0:1883->1883/tcp\npublisher    mqtt-demo-publisher    Up 4 seconds   \nsubscriber   mqtt-demo-subscriber   Up 4 seconds   \n",
+  "code": 0,
+  "secs": 0.1
+ },
+ {
+  "cmd": "docker exec mqtt-demo-broker-1 mosquitto_sub -t 'sensors/#' -v -C 3",
+  "out": "sensors/room1/temperature {\"reading\":4,\"celsius\":24.0}\nsensors/room1/temperature {\"reading\":5,\"celsius\":22.0}\nsensors/room1/temperature {\"reading\":6,\"celsius\":22.5}\n",
+  "code": 0,
+  "secs": 5.7
+ },
+ {
+  "cmd": "docker compose up --build",
+  "timed": [
+   [
+    0.11,
+    " Image mqtt-demo-subscriber Building "
+   ],
+   [
+    0.11,
+    " Image mqtt-demo-publisher Building "
+   ],
+   [
+    0.17,
+    "#1 [internal] load local bake definitions"
+   ],
+   [
+    0.4,
+    "#1 reading from stdin 991B done"
+   ],
+   [
+    0.4,
+    "#1 DONE 0.0s"
+   ],
+   [
+    0.4,
+    ""
+   ],
+   [
+    0.4,
+    "#2 [subscriber internal] load build definition from Dockerfile"
+   ],
+   [
+    0.4,
+    "#2 transferring dockerfile: 566B done"
+   ],
+   [
+    0.4,
+    "#2 DONE 0.0s"
+   ],
+   [
+    0.4,
+    ""
+   ],
+   [
+    0.4,
+    "#3 [subscriber internal] load metadata for docker.io/library/rust:1"
+   ],
+   [
+    0.55,
+    "#3 ..."
+   ],
+   [
+    0.55,
+    ""
+   ],
+   [
+    0.55,
+    "#4 [subscriber internal] load metadata for docker.io/library/debian:bookworm-slim"
+   ],
+   [
+    0.55,
+    "#4 DONE 0.2s"
+   ],
+   [
+    0.55,
+    ""
+   ],
+   [
+    0.55,
+    "#3 [subscriber internal] load metadata for docker.io/library/rust:1"
+   ],
+   [
+    0.74,
+    "#3 DONE 0.3s"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#5 [subscriber internal] load .dockerignore"
+   ],
+   [
+    0.74,
+    "#5 transferring context: 47B done"
+   ],
+   [
+    0.74,
+    "#5 DONE 0.0s"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#6 [subscriber stage-1 1/3] FROM docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc"
+   ],
+   [
+    0.74,
+    "#6 resolve docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc done"
+   ],
+   [
+    0.74,
+    "#6 DONE 0.0s"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#7 [publisher build 1/7] FROM docker.io/library/rust:1@sha256:0b0ea86881537b3f645aace7e8e39556289f8787db057317c8d4978548213b9e"
+   ],
+   [
+    0.74,
+    "#7 resolve docker.io/library/rust:1@sha256:0b0ea86881537b3f645aace7e8e39556289f8787db057317c8d4978548213b9e done"
+   ],
+   [
+    0.74,
+    "#7 DONE 0.0s"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#8 [publisher internal] load build context"
+   ],
+   [
+    0.74,
+    "#8 transferring context: 201.68kB done"
+   ],
+   [
+    0.74,
+    "#8 DONE 0.0s"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#9 [publisher build 2/7] COPY .sandbox/ca.crt /usr/local/share/ca-certificates/sandbox-proxy.crt"
+   ],
+   [
+    0.74,
+    "#9 CACHED"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#10 [publisher build 3/7] RUN update-ca-certificates"
+   ],
+   [
+    0.74,
+    "#10 CACHED"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#11 [publisher build 4/7] WORKDIR /app"
+   ],
+   [
+    0.74,
+    "#11 CACHED"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#12 [publisher build 5/7] COPY Cargo.toml Cargo.lock ./"
+   ],
+   [
+    0.74,
+    "#12 CACHED"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#13 [publisher build 6/7] COPY src ./src"
+   ],
+   [
+    0.74,
+    "#13 DONE 0.0s"
+   ],
+   [
+    0.74,
+    ""
+   ],
+   [
+    0.74,
+    "#14 [publisher build 7/7] RUN cargo build --release"
+   ],
+   [
+    0.74,
+    "#14 0.142     Updating crates.io index"
+   ],
+   [
+    1.1,
+    "#14 0.505  Downloading crates ..."
+   ],
+   [
+    1.38,
+    "#14 0.660   Downloaded cfg-if v1.0.5"
+   ],
+   [
+    1.38,
+    "#14 0.661   Downloaded futures-task v0.3.34"
+   ],
+   [
+    1.38,
+    "#14 0.668   Downloaded parking_lot_core v0.9.12"
+   ],
+   [
+    1.38,
+    "#14 0.670   Downloaded slab v0.4.12"
+   ],
+   [
+    1.38,
+    "#14 0.671   Downloaded futures-sink v0.3.34"
+   ],
+   [
+    1.38,
+    "#14 0.675   Downloaded proc-macro2 v1.0.107"
+   ],
+   [
+    1.38,
+    "#14 0.680   Downloaded pin-project-lite v0.2.17"
+   ],
+   [
+    1.38,
+    "#14 0.684   Downloaded signal-hook-registry v1.4.8"
+   ],
+   [
+    1.38,
+    "#14 0.686   Downloaded smallvec v1.16.5"
+   ],
+   [
+    1.38,
+    "#14 0.686   Downloaded scopeguard v1.2.0"
+   ],
+   [
+    1.38,
+    "#14 0.687   Downloaded socket2 v0.6.5"
+   ],
+   [
+    1.38,
+    "#14 0.689   Downloaded spin v0.9.9"
+   ],
+   [
+    1.38,
+    "#14 0.692   Downloaded thiserror-impl v2.0.21"
+   ],
+   [
+    1.38,
+    "#14 0.693   Downloaded unicode-ident v1.0.27"
+   ],
+   [
+    1.38,
+    "#14 0.696   Downloaded fixedbitset v0.5.9"
+   ],
+   [
+    1.38,
+    "#14 0.697   Downloaded futures-core v0.3.34"
+   ],
+   [
+    1.38,
+    "#14 0.698   Downloaded log v0.4.35"
+   ],
+   [
+    1.38,
+    "#14 0.700   Downloaded errno v0.3.15"
+   ],
+   [
+    1.38,
+    "#14 0.702   Downloaded thiserror v2.0.21"
+   ],
+   [
+    1.38,
+    "#14 0.706   Downloaded bytes v1.12.1"
+   ],
+   [
+    1.38,
+    "#14 0.710   Downloaded flume v0.11.1"
+   ],
+   [
+    1.38,
+    "#14 0.713   Downloaded tokio-macros v2.7.2"
+   ],
+   [
+    1.38,
+    "#14 0.714   Downloaded lock_api v0.4.14"
+   ],
+   [
+    1.38,
+    "#14 0.715   Downloaded mio v1.2.5"
+   ],
+   [
+    1.38,
+    "#14 0.720   Downloaded parking_lot v0.12.5"
+   ],
+   [
+    1.38,
+    "#14 0.722   Downloaded quote v1.0.47"
+   ],
+   [
+    1.38,
+    "#14 0.725   Downloaded futures-util v0.3.34"
+   ],
+   [
+    1.38,
+    "#14 0.735   Downloaded tokio-stream v0.1.19"
+   ],
+   [
+    1.38,
+    "#14 0.739   Downloaded tokio-util v0.7.20"
+   ],
+   [
+    1.38,
+    "#14 0.744   Downloaded rumqttc v0.25.1"
+   ],
+   [
+    1.38,
+    "#14 0.748   Downloaded syn v3.0.10"
+   ],
+   [
+    1.38,
+    "#14 0.758   Downloaded libc v0.2.191"
+   ],
+   [
+    1.38,
+    "#14 0.786   Downloaded tokio v1.54.1"
+   ],
+   [
+    1.52,
+    "#14 0.832    Compiling libc v0.2.191"
+   ],
+   [
+    1.52,
+    "#14 0.832    Compiling proc-macro2 v1.0.107"
+   ],
+   [
+    1.52,
+    "#14 0.834    Compiling quote v1.0.47"
+   ],
+   [
+    1.52,
+    "#14 0.834    Compiling unicode-ident v1.0.27"
+   ],
+   [
+    1.52,
+    "#14 0.881    Compiling scopeguard v1.2.0"
+   ],
+   [
+    1.52,
+    "#14 0.927    Compiling lock_api v0.4.14"
+   ],
+   [
+    1.64,
+    "#14 0.956    Compiling parking_lot_core v0.9.12"
+   ],
+   [
+    1.75,
+    "#14 1.048    Compiling smallvec v1.16.5"
+   ],
+   [
+    1.75,
+    "#14 1.119    Compiling cfg-if v1.0.5"
+   ],
+   [
+    1.85,
+    "#14 1.154    Compiling futures-core v0.3.34"
+   ],
+   [
+    1.85,
+    "#14 1.221    Compiling pin-project-lite v0.2.17"
+   ],
+   [
+    1.85,
+    "#14 1.229    Compiling bytes v1.12.1"
+   ],
+   [
+    2.04,
+    "#14 1.257    Compiling futures-sink v0.3.34"
+   ],
+   [
+    2.04,
+    "#14 1.297    Compiling thiserror v2.0.21"
+   ],
+   [
+    2.08,
+    "#14 1.486    Compiling spin v0.9.9"
+   ],
+   [
+    2.2,
+    "#14 1.585    Compiling syn v3.0.10"
+   ],
+   [
+    2.2,
+    "#14 1.600    Compiling futures-task v0.3.34"
+   ],
+   [
+    2.4,
+    "#14 1.690    Compiling slab v0.4.12"
+   ],
+   [
+    2.56,
+    "#14 1.807    Compiling futures-util v0.3.34"
+   ],
+   [
+    2.74,
+    "#14 2.020    Compiling errno v0.3.15"
+   ],
+   [
+    2.94,
+    "#14 2.146    Compiling signal-hook-registry v1.4.8"
+   ],
+   [
+    2.94,
+    "#14 2.194    Compiling parking_lot v0.12.5"
+   ],
+   [
+    3.22,
+    "#14 2.472    Compiling mio v1.2.5"
+   ],
+   [
+    3.75,
+    "#14 2.920    Compiling socket2 v0.6.5"
+   ],
+   [
+    3.75,
+    "#14 3.001    Compiling flume v0.11.1"
+   ],
+   [
+    3.89,
+    "#14 3.178    Compiling log v0.4.35"
+   ],
+   [
+    4.04,
+    "#14 3.298    Compiling fixedbitset v0.5.9"
+   ],
+   [
+    4.54,
+    "#14 3.943    Compiling tokio-macros v2.7.2"
+   ],
+   [
+    4.54,
+    "#14 3.943    Compiling thiserror-impl v2.0.21"
+   ],
+   [
+    4.81,
+    "#14 4.214    Compiling tokio v1.54.1"
+   ],
+   [
+    9.1,
+    "#14 8.359    Compiling tokio-util v0.7.20"
+   ],
+   [
+    9.1,
+    "#14 8.359    Compiling tokio-stream v0.1.19"
+   ],
+   [
+    9.48,
+    "#14 8.735    Compiling rumqttc v0.25.1"
+   ],
+   [
+    13.81,
+    "#14 13.07    Compiling mqtt-demo v0.1.0 (/app)"
+   ],
+   [
+    15.33,
+    "#14 14.58     Finished `release` profile [optimized] target(s) in 14.50s"
+   ],
+   [
+    15.5,
+    "#14 DONE 14.8s"
+   ],
+   [
+    15.5,
+    ""
+   ],
+   [
+    15.5,
+    "#15 [publisher stage-1 2/3] COPY --from=build /app/target/release/publisher /usr/local/bin/publisher"
+   ],
+   [
+    15.5,
+    "#15 CACHED"
+   ],
+   [
+    15.5,
+    ""
+   ],
+   [
+    15.5,
+    "#16 [publisher stage-1 3/3] COPY --from=build /app/target/release/subscriber /usr/local/bin/subscriber"
+   ],
+   [
+    15.5,
+    "#16 DONE 0.0s"
+   ],
+   [
+    15.5,
+    ""
+   ],
+   [
+    15.5,
+    "#17 [publisher] exporting to docker image format"
+   ],
+   [
+    15.5,
+    "#17 exporting layers 0.1s done"
+   ],
+   [
+    15.67,
+    "#17 exporting manifest sha256:512910b750880804de50d0aac1015f66e038bde2c2df4a3b1e9e2c86a27e1c58 done"
+   ],
+   [
+    15.67,
+    "#17 exporting config sha256:7b0319198f00b7cf06a39c5312a911e3a77e84cddd26512f6be97beda4f1bf02 done"
+   ],
+   [
+    15.67,
+    "#17 sending tarball"
+   ],
+   [
+    15.97,
+    "#17 sending tarball 0.4s done"
+   ],
+   [
+    15.97,
+    "#17 DONE 0.5s"
+   ],
+   [
+    15.97,
+    ""
+   ],
+   [
+    15.97,
+    "#18 [subscriber] exporting to docker image format"
+   ],
+   [
+    15.97,
+    "#18 exporting layers 0.1s done"
+   ],
+   [
+    15.97,
+    "#18 exporting manifest sha256:33a0cf2d5e8f3437c28e75ce773cbef02b2747f6f1952292aa26ad15ffa23019 0.0s done"
+   ],
+   [
+    15.97,
+    "#18 exporting config sha256:4f8aca37044fb1f315507aba9808f511db89072d4a8184e231b26d772bbce5bb done"
+   ],
+   [
+    15.97,
+    "#18 sending tarball 0.4s done"
+   ],
+   [
+    15.97,
+    "#18 DONE 0.5s"
+   ],
+   [
+    15.97,
+    ""
+   ],
+   [
+    15.97,
+    "#19 importing to docker"
+   ],
+   [
+    15.97,
+    "#19 DONE 0.0s"
+   ],
+   [
+    15.97,
+    ""
+   ],
+   [
+    15.97,
+    "#20 importing to docker"
+   ],
+   [
+    15.97,
+    "#20 DONE 0.0s"
+   ],
+   [
+    15.97,
+    ""
+   ],
+   [
+    15.97,
+    "#21 [subscriber] resolving provenance for metadata file"
+   ],
+   [
+    15.97,
+    "#21 DONE 0.0s"
+   ],
+   [
+    15.97,
+    ""
+   ],
+   [
+    15.97,
+    "#22 [publisher] resolving provenance for metadata file"
+   ],
+   [
+    15.97,
+    "#22 DONE 0.0s"
+   ],
+   [
+    15.97,
+    " Image mqtt-demo-subscriber Built "
+   ],
+   [
+    15.97,
+    " Image mqtt-demo-publisher Built "
+   ],
+   [
+    15.97,
+    " Network mqtt-demo_default Creating "
+   ],
+   [
+    15.97,
+    " Network mqtt-demo_default Creating "
+   ],
+   [
+    15.97,
+    " Network mqtt-demo_default Created "
+   ],
+   [
+    15.97,
+    " Network mqtt-demo_default Created "
+   ],
+   [
+    15.97,
+    " Container mqtt-demo-broker-1 Creating "
+   ],
+   [
+    15.97,
+    " Container mqtt-demo-broker-1 Created "
+   ],
+   [
+    15.97,
+    " Container mqtt-demo-subscriber-1 Creating "
+   ],
+   [
+    15.99,
+    " Container mqtt-demo-subscriber-1 Created "
+   ],
+   [
+    15.99,
+    " Container mqtt-demo-publisher-1 Creating "
+   ],
+   [
+    15.99,
+    " Container mqtt-demo-publisher-1 Created "
+   ],
+   [
+    15.99,
+    "Attaching to broker-1, publisher-1, subscriber-1"
+   ],
+   [
+    15.99,
+    " Container mqtt-demo-broker-1 Starting "
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Info: running mosquitto as user: mosquitto."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: mosquitto version 2.1.2 starting"
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Config loaded from /mosquitto/config/mosquitto.conf."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Bridge support available."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Persistence support available."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: TLS support available."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: TLS-PSK support available."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Websockets support available."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Opening ipv4 listen socket on port 1883."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Opening ipv6 listen socket on port 1883."
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: Warning: Address family not supported by protocol"
+   ],
+   [
+    16.02,
+    "broker-1  | 1794899142: mosquitto version 2.1.2 running"
+   ],
+   [
+    16.02,
+    " Container mqtt-demo-broker-1 Started "
+   ],
+   [
+    16.02,
+    " Container mqtt-demo-subscriber-1 Starting "
+   ],
+   [
+    16.03,
+    " Container mqtt-demo-subscriber-1 Started "
+   ],
+   [
+    16.03,
+    " Container mqtt-demo-publisher-1 Starting "
+   ],
+   [
+    16.03,
+    "subscriber-1  | subscriber: listening on sensors/# at broker:1883"
+   ],
+   [
+    16.03,
+    "broker-1      | 1794899142: New connection from 172.19.0.3:41570 on port 1883."
+   ],
+   [
+    16.03,
+    "broker-1      | 1794899142: New client connected from 172.19.0.3:41570 as rust-subscriber (p4, c1, k5)."
+   ],
+   [
+    16.03,
+    " Container mqtt-demo-publisher-1 Started "
+   ],
+   [
+    16.03,
+    "publisher-1   | publisher: sending to sensors/room1/temperature on broker:1883"
+   ],
+   [
+    16.03,
+    "publisher-1   | published #1: {\"reading\":1,\"celsius\":22.5}"
+   ],
+   [
+    16.03,
+    "broker-1      | 1794899142: New connection from 172.19.0.4:37518 on port 1883."
+   ],
+   [
+    16.03,
+    "broker-1      | 1794899142: New client connected from 172.19.0.4:37518 as rust-publisher (p4, c1, k5)."
+   ],
+   [
+    16.07,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":1,\"celsius\":22.5}"
+   ],
+   [
+    18.03,
+    "publisher-1   | published #2: {\"reading\":2,\"celsius\":23.0}"
+   ],
+   [
+    18.03,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":2,\"celsius\":23.0}"
+   ],
+   [
+    20.03,
+    "publisher-1   | published #3: {\"reading\":3,\"celsius\":23.5}"
+   ],
+   [
+    20.03,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":3,\"celsius\":23.5}"
+   ],
+   [
+    20.33,
+    "broker-1      | 1794899146: New connection from 127.0.0.1:46372 on port 1883."
+   ],
+   [
+    20.33,
+    "broker-1      | 1794899146: New client connected from 127.0.0.1:46372 as auto-ED48A5F9-7EA9-541D-D7D8-058C175F90C3 (p4, c1, k60)."
+   ],
+   [
+    22.03,
+    "publisher-1   | published #4: {\"reading\":4,\"celsius\":24.0}"
+   ],
+   [
+    22.03,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":4,\"celsius\":24.0}"
+   ],
+   [
+    24.04,
+    "publisher-1   | published #5: {\"reading\":5,\"celsius\":22.0}"
+   ],
+   [
+    24.04,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":5,\"celsius\":22.0}"
+   ],
+   [
+    26.04,
+    "publisher-1   | published #6: {\"reading\":6,\"celsius\":22.5}"
+   ],
+   [
+    26.04,
+    "broker-1      | 1794899152: Client auto-ED48A5F9-7EA9-541D-D7D8-058C175F90C3 [127.0.0.1:46372] disconnected."
+   ],
+   [
+    26.08,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":6,\"celsius\":22.5}"
+   ],
+   [
+    28.04,
+    "publisher-1   | published #7: {\"reading\":7,\"celsius\":23.0}"
+   ],
+   [
+    28.04,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":7,\"celsius\":23.0}"
+   ],
+   [
+    30.04,
+    "publisher-1   | published #8: {\"reading\":8,\"celsius\":23.5}"
+   ],
+   [
+    30.04,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":8,\"celsius\":23.5}"
+   ],
+   [
+    32.04,
+    "publisher-1   | published #9: {\"reading\":9,\"celsius\":24.0}"
+   ],
+   [
+    32.04,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":9,\"celsius\":24.0}"
+   ],
+   [
+    34.04,
+    "publisher-1   | published #10: {\"reading\":10,\"celsius\":22.0}"
+   ],
+   [
+    34.04,
+    "subscriber-1  | received on sensors/room1/temperature: {\"reading\":10,\"celsius\":22.0}"
+   ],
+   [
+    36.05,
+    "publisher-1   | publisher: done"
+   ],
+   [
+    36.05,
+    "broker-1      | 1794899162: Client rust-publisher [172.19.0.4:37518] disconnected: connection closed by client."
+   ],
+   [
+    36.05,
+    ""
+   ],
+   [
+    36.05,
+    "\u001b[Kpublisher-1 exited with code 0"
+   ],
+   [
+    38.05,
+    " Compose Stopping Gracefully Stopping... press Ctrl+C again to force"
+   ],
+   [
+    38.05,
+    " Container mqtt-demo-publisher-1 Stopping "
+   ],
+   [
+    38.05,
+    " Container mqtt-demo-publisher-1 Stopped "
+   ],
+   [
+    38.05,
+    " Container mqtt-demo-subscriber-1 Stopping "
+   ],
+   [
+    38.06,
+    " Container mqtt-demo-subscriber-1 Stopped "
+   ],
+   [
+    38.06,
+    " Container mqtt-demo-broker-1 Stopping "
+   ],
+   [
+    38.06,
+    " Container mqtt-demo-broker-1 Stopped "
+   ],
+   [
+    38.06,
+    ""
+   ]
+  ],
+  "code": 130,
+  "terminal": 1
+ },
+ {
+  "cmd": "docker compose down",
+  "out": " Container mqtt-demo-publisher-1 Stopping \n Container mqtt-demo-publisher-1 Stopped \n Container mqtt-demo-publisher-1 Removing \n Container mqtt-demo-publisher-1 Removed \n Container mqtt-demo-subscriber-1 Stopping \n Container mqtt-demo-subscriber-1 Stopped \n Container mqtt-demo-subscriber-1 Removing \n Container mqtt-demo-subscriber-1 Removed \n Container mqtt-demo-broker-1 Stopping \n Container mqtt-demo-broker-1 Stopped \n Container mqtt-demo-broker-1 Removing \n Container mqtt-demo-broker-1 Removed \n Network mqtt-demo_default Removing \n Network mqtt-demo_default Removed \n",
+  "code": 0,
+  "secs": 0.1
+ }
+]
