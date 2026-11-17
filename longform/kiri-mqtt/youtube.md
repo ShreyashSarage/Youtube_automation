@@ -1,4 +1,4 @@
-# YouTube draft (NOT posted; waiting for the owner's approval)
+# YouTube post: published 2026-11-17, https://www.youtube.com/watch?v=16lhtq-LCgg (public)
 
 ## Title
 Kiri on Linux: Install + MQTT Pub/Sub in Rust with Docker Compose (only 23 MB RAM!)
