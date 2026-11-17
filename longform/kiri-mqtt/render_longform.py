@@ -38,7 +38,7 @@ def voice_for(text, key):
 
 # ------------------------------------------------------------------ timeline
 rng = random.Random(7)
-EV = {"t1": [], "t2": [], "t3": [], "ed": [], "keys": [], "clicks": [], "mouse": [], "badge": []}
+EV = {"t1": [], "t2": [], "t3": [], "t4": [], "ed": [], "keys": [], "clicks": [], "mouse": [], "badge": []}
 SHOTS = []  # dicts: start, dur, shot
 CHAPTERS = []
 
@@ -94,6 +94,15 @@ def schedule():
                         last = tt0 + ((build_end - t_first) / 3.0 + (st[-1][0] - build_end)) / act.get("speed", 1.0)
                         if any(x <= build_end and "#" in l for x, l in st): EV["badge"].append((tt0, tt0 + (build_end - t_first) / 3.0, "▶▶  3× speed"))
                         cur = last + act.get("pause", 0.6)
+                    elif act.get("htop"):
+                        hp_ = act["htop"]; snaps = hp_["snaps"][hp_["start"]:]; keyat = dict((k - hp_["start"], v) for k, v in hp_["keys"])
+                        hold = max(1.2, (vdur - (cur - start) - 2.5) / len(snaps)); tt = cur + 0.4
+                        for i, sn in enumerate(snaps):
+                            if i in keyat:
+                                EV["badge"].append((tt - 0.35, tt + 1.2, keyat[i])); EV["keys"].append(tt - 0.3)
+                            EV[key].append((tt, "screen", sn["screen"])); tt += hold
+                        EV["badge"].append((tt - 0.3, tt + 1.0, "q")); EV["keys"].append(tt - 0.25)
+                        EV[key].append((tt, "endscreen", None)); cur = tt + 0.5
                     elif act.get("bg"):
                         bg = act["bg"]; L = bg["lines"]; anchor = cur + 0.25; t_a = L[0][0]
                         bgt = [anchor + (x - t_a) for x, _ in L]
@@ -167,7 +176,7 @@ def shot_at(t):
 
 # ------------------------------------------------------------------ state reconstruction
 def term_state(key, t):
-    lines = []; inp = None; prompt = None
+    lines = []; inp = None; prompt = None; screen = None
     n = bisect.bisect_right(EVT[key], t)
     for (_, op, val) in EV[key][:n]:
         if op == "prompt": prompt = val; inp = ""
@@ -180,6 +189,9 @@ def term_state(key, t):
             else: lines.append(("out", "", val))
         elif op == "prompt_idle": prompt = val; inp = ""
         elif op == "noop": pass
+        elif op == "screen": screen = val
+        elif op == "endscreen": screen = None
+    if screen is not None: return lines, ("SCREEN", screen), None
     return lines, prompt, inp
 
 def editor_state(t):
@@ -243,6 +255,8 @@ def draw_terminal(img, rect, key, t, title, focused):
     x, y, w, h = rect; bx, by = win_frame(img, x, y, w, h, title, focused)
     d = ImageDraw.Draw(img); cols = int((w - 36) / TCW); rows = int((h - 46 - 24) / TLH)
     lines, prompt, inp = term_state(key, t)
+    if isinstance(prompt, tuple) and prompt[0] == "SCREEN":
+        return draw_ansi_screen(d, bx, by, w, h, prompt[1])
     vis = []
     for kind, p, txt in lines:
         if kind == "cmd": segs = [(p.split(":")[0], (138, 226, 52), True), (":", (225, 225, 225), False), (p.split(":", 1)[1][:-2], (114, 159, 207), True), ("$ ", (225, 225, 225), False), (txt, (235, 235, 235), False)]
@@ -265,6 +279,49 @@ def draw_terminal(img, rect, key, t, title, focused):
     elif vis:
         r = min(len(vis), rows) - 1; focus = (bx + 18 + 20 * TCW, by + 12 + r * TLH)
     return focus
+
+ANSI16 = [(30, 30, 30), (205, 49, 49), (78, 201, 90), (229, 229, 16), (36, 114, 200), (188, 63, 188), (17, 168, 205), (229, 229, 229),
+          (102, 102, 102), (241, 76, 76), (35, 209, 139), (245, 245, 67), (59, 142, 234), (214, 112, 214), (41, 184, 219), (255, 255, 255)]
+def x256(n):
+    if n < 16: return ANSI16[n]
+    if n >= 232: v = 8 + (n - 232) * 10; return (v, v, v)
+    n -= 16; return tuple(0 if c == 0 else 55 + c * 40 for c in (n // 36, (n // 6) % 6, n % 6))
+def ansi_line(line):
+    segs = []; fg = None; bg = None; bold = False; rev = False; pos = 0
+    for m in re.finditer(r"\x1b\[([0-9;]*)m|([^\x1b]+)", line):
+        if m.group(2) is not None:
+            f, b = (bg, fg) if rev else (fg, bg)
+            segs.append((m.group(2), f, b, bold)); continue
+        codes = [int(c) if c else 0 for c in m.group(1).split(";")]; i = 0
+        while i < len(codes):
+            c = codes[i]
+            if c == 0: fg = bg = None; bold = rev = False
+            elif c == 1: bold = True
+            elif c == 22: bold = False
+            elif c == 7: rev = True
+            elif c == 27: rev = False
+            elif 30 <= c <= 37: fg = ANSI16[c - 30 + (8 if bold else 0)]
+            elif 90 <= c <= 97: fg = ANSI16[c - 90 + 8]
+            elif 40 <= c <= 47: bg = ANSI16[c - 40]
+            elif 100 <= c <= 107: bg = ANSI16[c - 100 + 8]
+            elif c == 39: fg = None
+            elif c == 49: bg = None
+            elif c in (38, 48) and i + 2 < len(codes) and codes[i + 1] == 5:
+                (fg if False else None); col = x256(codes[i + 2])
+                if c == 38: fg = col
+                else: bg = col
+                i += 2
+            i += 1
+    return segs
+def draw_ansi_screen(d, bx, by, w, h, screen):
+    rows = screen.split("\n")
+    for r, line in enumerate(rows[: int((h - 46 - 24) / TLH)]):
+        xx = bx + 18; yy = by + 12 + r * TLH
+        for txt, fg, bg, bold in ansi_line(line):
+            wd = TCW * len(txt)
+            if bg: d.rectangle((xx, yy, xx + wd, yy + TLH), fill=bg)
+            d.text((xx, yy), txt, font=(MONOB if bold else MONO)(TFS), fill=fg or (225, 225, 225)); xx += wd
+    return (bx + 18 + 40 * TCW, by + 12 + 12 * TLH)
 
 def wrap_segs(segs, cols):
     out = [[]]; n = 0
@@ -518,7 +575,7 @@ def compose_base(t):
     focus = None
     if sh["scene"] == "terminal":
         tk = "t%d" % next((a.get("term", 1) for a in sh.get("actions", []) if a.get("term")), 1)
-        focus = draw_terminal(img, TERM_POS["single"][1], tk, t, "dev@ubuntu: " + S.PROMPT_DIR.get("proj"), True)
+        focus = draw_terminal(img, TERM_POS["single"][1], tk, t, "Terminal 3" if tk == "t4" else "dev@ubuntu: " + S.PROMPT_DIR.get("proj"), True)
     elif sh["scene"] == "split":
         n = bisect.bisect_right(EVT["mouse"], t); ev = EV["mouse"][n - 1][1] if n else None
         act = ev[2] if ev and ev[0] == "term" else 1

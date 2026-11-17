@@ -10,6 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.join(HERE, "project")
 CAP1 = {c["cmd"]: c for c in json.load(open(os.path.join(HERE, "captures/cap1.json")))}
 CAP2 = json.load(open(os.path.join(HERE, "captures/cap2.json")))
+HTOP = json.load(open(os.path.join(HERE, "captures/htop.json")))  # real htop screens (tmux capture-pane -e), 1 s apart
 def cap2(cmd): return next(c for c in CAP2 if c["cmd"] == cmd)
 def src(path): return open(os.path.join(PROJ, path)).read().rstrip("\n").split("\n")
 
@@ -83,8 +84,8 @@ FILES = {
     "compose.yaml": src("compose.yaml"),
 }
 
-def T(cmd, out="", term=1, d="proj", speed=None, pause=0.6, keys=None, stream=None):
-    return dict(kind="cmd", cmd=cmd, out=out, term=term, dir=d, speed=speed, pause=pause, keys=keys, stream=stream)
+def T(cmd, out="", term=1, d="proj", speed=None, pause=0.6, keys=None, stream=None, htop=None):
+    return dict(kind="cmd", cmd=cmd, out=out, term=term, dir=d, speed=speed, pause=pause, keys=keys, stream=stream, htop=htop)
 
 # ------------------------------------------------------------------ shots
 SHOTS = [
@@ -92,7 +93,7 @@ SHOTS = [
    T("docker compose up", stream=[(t, l) for t, l in compose_up_lines() if "|" in l and "auto-" not in l][:26], d="proj", speed=2.5, term=3)],
    say="This is what we're building today. A Rust publisher sending sensor data to a Mosquitto MQTT broker, and a Rust subscriber receiving every message. All three are running as containers, not on Docker, but on Kiri, a tiny container engine written in Rust."),
  dict(id="intro", scene="title", title="Kiri on Linux", subtitle="Install it, then run MQTT publish/subscribe in Rust", chapter=None,
-   say="Hey everyone, welcome back! In this one we'll install Kiri on Linux step by step, check that it works, then write the publisher and subscriber in Rust, test them, put everything in containers with Docker Compose, and run it on Kiri. All the code and commands are in the description, so feel free to follow along."),
+   say="Hey everyone, welcome back! In this one we'll install Kiri on Linux step by step, check that it works, then write the publisher and subscriber in Rust, test them, put everything in containers with Docker Compose, run it on Kiri, and finally check how little memory and CPU it all uses with htop. All the code and commands are in the description, so feel free to follow along."),
  dict(id="what_is_kiri", scene="diagram", diagram="kiri", chapter="What is Kiri?",
    say="So what is Kiri? It's an open source replacement for Docker Desktop, written in Rust and licensed Apache 2.0. It speaks the Docker Engine API, so the docker command, Compose and buildx all just work. On Mac and Windows it runs a small Linux VM, but on Linux there's no VM at all. The Kiri engine runs your containers directly on your own kernel. At the time I'm recording, the latest release is 0.2.1."),
  dict(id="plan", scene="diagram", diagram="plan", chapter="What we'll build",
@@ -173,12 +174,15 @@ SHOTS = [
    dict(T("docker exec mqtt-demo-broker-1 mosquitto_sub -t 'sensors/#' -v -C 3", cap2("docker exec mqtt-demo-broker-1 mosquitto_sub -t 'sensors/#' -v -C 3")["out"].strip(), term=2),
         bg=dict(term=1, lines=compose_parts()[1], sync=["published #4", "published #5", "published #6"]))],
    say="While that's running, let's peek inside from a second terminal. docker compose ps shows our three services up. And we can even use the mosquitto sub tool that comes inside the broker image, through docker exec, to listen in. Dash C three means stop after three messages. And there they are, straight from the broker."),
+ dict(id="htop", scene="terminal", chapter="Step 11 · Resource usage (htop)", actions=[
+   T("htop -F 'kiri|mosquitto|publisher|subscriber'", term=4, htop=dict(snaps=HTOP, start=1, keys=[(3, "H"), (5, "F5")]))],
+   say="Now let's see what this actually costs. I'll open a new terminal and run htop with dash capital F, a filter: kiri, pipe, mosquitto, pipe, publisher, pipe, subscriber, so we only see the processes we care about. Right now it lists every single thread of the Kiri daemon, so I'll press capital H to hide threads, and F5 for the tree view. And now look at this tree. The kiri daemon, under it kiri init, and under that our three containers: the Mosquitto broker, the subscriber, and the publisher. Check the RES column, that's the real memory, in kilobytes. The Kiri daemon uses about seven and a half megabytes. The broker about six, and our Rust subscriber and publisher only about three megabytes each. Don't worry about the big VIRT numbers, that's reserved address space, not real memory. And the CPU is basically zero. So the container engine plus all three containers fit in roughly twenty three megabytes of RAM. That's the kind of thing I love about Rust. Press q to quit."),
  dict(id="down", scene="terminal", actions=[
    dict(kind="keys", term=1, keys="Ctrl+C", text="^C\n" + "\n".join(compose_parts()[2])),
    T("docker compose down", cap2("docker compose down")["out"].strip(), speed=12)],
    say="When you're done, Ctrl plus C to stop, and docker compose down removes the containers and the network."),
  dict(id="outro", scene="title", title="That's it!", subtitle="Kiri  ·  Mosquitto  ·  Rust publisher & subscriber", outro=True,
-   say="And that's it! We installed Kiri on Linux, ran our first container, wrote an MQTT publisher and subscriber in Rust, tested them locally, and ran the whole thing with Docker Compose on Kiri. All the code is in the description. If this helped, a like and a subscribe really helps the channel, and tell me in the comments what you want me to build next. See you in the next one!"),
+   say="And that's it! We installed Kiri on Linux, ran our first container, wrote an MQTT publisher and subscriber in Rust, tested them locally, ran the whole thing with Docker Compose on Kiri, and saw that the engine plus all three containers use only about twenty three megabytes of RAM. All the code is in the description. If this helped, a like and a subscribe really helps the channel, and tell me in the comments what you want me to build next. See you in the next one!"),
 ]
 
 NOTES = """Outputs not captured on a real Ubuntu install (they can't run in a sandbox without systemd/apt
