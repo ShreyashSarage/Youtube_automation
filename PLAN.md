@@ -1,6 +1,6 @@
 # Rust Zero to Pro: 90-day Shorts plan
 
-One beginner-friendly Rust lesson every day, uploaded around 11:00 IST and public at **12:00 IST**.
+One beginner-friendly Rust lesson every day, public at **10:00 IST** (the run starts 9:37 IST).
 Days 1–2 are posted; the daily automation takes the next unposted day from `state/curriculum.json` (this file is generated from it).
 Sources are The Rust Book and Rust by Example; every code example is compiled before posting.
 

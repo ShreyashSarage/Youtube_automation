@@ -1,7 +1,7 @@
 {
  "series": "Rust Zero to Pro (90 days)",
  "starts": "2026-11-16",
- "note": "Daily runs take the first lesson whose day is not in state/history.json. Day N is planned for its 'date' at 12:00 IST. Keep the order beginner -> advanced.",
+ "note": "Daily runs take the first lesson whose day is not in state/history.json. Day N is planned for its 'date' at 10:00 IST. Keep the order beginner -> advanced.",
  "lessons": [
   {
    "day": 1,

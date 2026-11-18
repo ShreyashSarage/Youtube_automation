@@ -25,6 +25,17 @@
     "https://doc.rust-lang.org/book/ch01-01-installation.html",
     "https://doc.rust-lang.org/book/ch01-02-hello-world.html"
    ]
+  },
+  {
+   "date": "2026-11-18",
+   "day": 3,
+   "topic": "Cargo: your Rust toolbox",
+   "title": "Rust Day 3: Cargo in 60 Seconds (new, run, check) 🦀",
+   "url": "https://www.youtube.com/watch?v=3iCLwcZ3dC0",
+   "publishAt": "2026-11-18T10:00:00+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch01-03-hello-cargo.html"
+   ]
   }
  ]
 }

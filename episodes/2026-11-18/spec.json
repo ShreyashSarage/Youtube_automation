@@ -1,0 +1,184 @@
+{
+ "day": 3,
+ "topic": "Cargo: your Rust toolbox",
+ "theme": "ocean",
+ "brand": "RUST  ·  DAY 3",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch01-03-hello-cargo.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "MEET",
+   "CARGO"
+  ],
+  "visual": "tree",
+  "params": {
+   "root": "hello_cargo",
+   "children": [
+    {
+     "name": "Cargo.toml"
+    },
+    {
+     "name": "src",
+     "children": [
+      "main.rs"
+     ]
+    },
+    {
+     "name": "target",
+     "children": [
+      "debug"
+     ]
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "Rust Day 3: Cargo in 60 Seconds (new, run, check) 🦀",
+  "description": "Rust Day 3: Cargo, Rust's build tool and package manager, in 60 seconds. Create, build, run and check a project.\n\n📌 In this short:\n✅ cargo new creates a project: Cargo.toml + src/main.rs (+ a Git repo)\n✅ cargo run builds and runs in one step; binaries go to target/debug\n✅ cargo check is a fast \"does it compile?\"; cargo build --release optimizes\n\n💻 Commands from the video:\ncargo new hello_cargo\ncd hello_cargo\ncargo run\ncargo check\ncargo build --release\n\n📖 Learn more: https://doc.rust-lang.org/book/ch01-03-hello-cargo.html\n⏭️ Tomorrow: Variables & mutability\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #cargo #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 3",
+   "rustlang",
+   "cargo",
+   "cargo new",
+   "cargo run",
+   "cargo check",
+   "rust cargo tutorial",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "tree",
+   "root": "hello_cargo",
+   "children": [
+    {
+     "name": "Cargo.toml"
+    },
+    {
+     "name": "src",
+     "children": [
+      "main.rs"
+     ]
+    },
+    {
+     "name": "target"
+    }
+   ],
+   "top": "Rust Day 3",
+   "big": "Meet Cargo",
+   "sub": [
+    "Build tool + package manager"
+   ],
+   "say": "Rust, day three. Meet Cargo, the tool almost every Rust project uses."
+  },
+  {
+   "type": "terminal",
+   "heading": "Create a project",
+   "sub": "cargo comes with rustup",
+   "commands": [
+    [
+     "cargo new hello_cargo",
+     "Creating binary (application) `hello_cargo` package"
+    ],
+    [
+     "cd hello_cargo && ls -A",
+     ".git  .gitignore  Cargo.toml  src"
+    ]
+   ],
+   "checks": [
+    "Cargo.toml + src/main.rs",
+    "a Git repo too"
+   ],
+   "say": "Cargo is Rust's build system and package manager, and it comes with rustup. Run cargo new hello underscore cargo. It creates a project folder, and even sets up a Git repository for you.",
+   "captions": "Cargo is Rust's build system and package manager, and it comes with rustup. Run cargo new hello_cargo. It creates a project folder, and even sets up a Git repository for you."
+  },
+  {
+   "type": "visual",
+   "visual": "tree",
+   "heading": "What Cargo made",
+   "root": "hello_cargo",
+   "children": [
+    {
+     "name": "Cargo.toml",
+     "children": [
+      "config"
+     ]
+    },
+    {
+     "name": "src",
+     "children": [
+      "main.rs"
+     ]
+    },
+    {
+     "name": ".gitignore"
+    }
+   ],
+   "caption": "your code lives in src/",
+   "say": "Cargo dot toml holds the project's name, version, edition, and dependencies. Your code lives in src, and main dot R S already has hello world in it.",
+   "captions": "Cargo.toml holds the project's name, version, edition, and dependencies. Your code lives in src, and main.rs already has hello world in it."
+  },
+  {
+   "type": "terminal",
+   "heading": "Build + run",
+   "sub": "one command",
+   "commands": [
+    [
+     "cargo run",
+     "Hello, world!"
+    ],
+    [
+     "./target/debug/hello_cargo",
+     "Hello, world!"
+    ]
+   ],
+   "checks": [
+    "builds into target/debug",
+    "then runs it"
+   ],
+   "say": "Now cargo run. It compiles your code into the target slash debug folder, then runs it. Hello, world! One command instead of two.",
+   "captions": "Now cargo run. It compiles your code into the target/debug folder, then runs it. Hello, world! One command instead of two."
+  },
+  {
+   "type": "visual",
+   "visual": "compiler",
+   "heading": "Three commands",
+   "sub": "build · check · release",
+   "file": "main.rs",
+   "output": "target/release",
+   "badge": "--release",
+   "say": "cargo build only builds. cargo check just checks that your code compiles, without making a program, so it's much faster while you write code. And cargo build dash dash release makes an optimized build in target slash release.",
+   "captions": "cargo build only builds. cargo check just checks that your code compiles, without making a program, so it's much faster while you write code. And cargo build --release makes an optimized build in target/release."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "cargo new: new project",
+    "cargo run: build + run",
+    "cargo check: fast check",
+    "--release: optimized"
+   ],
+   "say": "Recap: cargo new starts a project, cargo run builds and runs, cargo check is a fast check, and dash dash release gives you an optimized build.",
+   "captions": "Recap: cargo new starts a project, cargo run builds and runs, cargo check is a fast check, and --release gives you an optimized build."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 3 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Variables"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: variables and mutability. Follow to learn Rust every day!"
+  }
+ ]
+}
