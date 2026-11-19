@@ -25,7 +25,7 @@ Open `state/curriculum.json` and take the **first lesson whose `day` is not in `
 
 ## 3. Write `episodes/TODAY/spec.json`
 Look at **`samples/kiri-ocean`** and **`samples/ownership-matrix`**: these are the owner's reference
-styles (theme + motion graphics). Day parity picks the theme: **odd day → `"ocean"`, even day → `"matrix"`**.
+styles (theme + motion graphics). **`episodes/2026-11-20/spec.json` (Day 5) is the model for the level of detail.** Day parity picks the theme: **odd day → `"ocean"`, even day → `"matrix"`**.
 
 Required top level:
 ```jsonc
@@ -40,19 +40,30 @@ Required top level:
 }
 ```
 
-### Scene structure (6-7 scenes, **45-58 s total: it must be a Short, under 60 s**)
-1. `hook` with a `visual` from the lesson's `visuals`: `top` = "Rust Day N", `big` = a 2-5 word
-   curiosity hook ("Why can't I change x?"), `sub` = [one short line].
-2. `visual`: show the concept (e.g. `vars`, `ownership`, `flow`, `pipeline`, `layers`, `tree`).
-3. `code`: the minimal real example. Add `expect` with the exact output when it prints something.
-4. `visual`: what happens when the code runs (the "aha" moment).
-5. `code` with `expect_error` (a common beginner mistake + the compiler error code), **or** a
-   `visual` tip such as `shield`. Say the fix in the narration.
-6. `bullets` heading "Recap": 3 items, each ≤ 32 chars.
-7. `cta`: `heading` "Day N ✓", `link` = short docs link (no https://), `question` = ["Tomorrow: <next lesson>"],
-   `sub` "Follow to learn Rust daily".
+### Scene structure: detailed and flawless (8-10 scenes, 60-79 s, still a Short)
+The owner wants every lesson **very detailed**. Target **140-185 words** of narration and **60-79 s**
+(`voice.py` refuses anything over 1:19; the title still ends with `#Shorts`). Use this structure:
+1. `hook` with a `visual` from the lesson's list: `top` "Rust Day N", `big` a 2-5 word question (≤ 26 chars).
+2. `code`: the main example with **`steps`**: a line-by-line walkthrough. Each step = `{"lines": [n], "note": "≤ 34 chars", "at": "<exact phrase from this scene's say>"}`;
+   the highlight switches when that phrase is spoken, so pick the words that introduce each line.
+3. `visual`: the concept animated (what the code does in memory / in flow).
+4. `run` with `"from_code": <index of the code scene>`: a terminal running `cargo run` with the **real output**
+   (captured by `check_code.py`; never type outputs by hand). Set top-level `"crate"` to a short project name.
+5. `code` + `expect_error`: the classic beginner mistake.
+6. `run` from that mistake scene: the **real compiler error**, then say the fix.
+7. Optional: a second `code` / `visual` for the next nuance (e.g. how it differs from what came before).
+8. `bullets` "Recap": 3-4 items (≤ 30 chars each).
+9. `cta`: "Day N ✓", `question` ["Tomorrow: <next lesson>"].
 
-At least 2 `visual` scenes (the spec check enforces it). The hook must have a `visual`.
+Rules the spec check enforces: ≥ 1 `run` scene, ≥ 1 `code` scene with `steps`, each visual at most twice,
+heading ≤ 30 chars, sub ≤ 40, caption ≤ 34, big ≤ 26, ≥ 2 `visual` scenes, hook has a `visual`.
+
+### Flawless review (do this every day before the full render)
+Open `build/preview.png` and check **every** tile: no text touching or overlapping other text or animations,
+nothing cut at the edges, terminal text readable, highlighted code lines match what the narration says at that
+moment, captions show code spelled correctly (add `captions` to a scene whenever `say` spells code out loud),
+numbers in narration equal the real output. Fix and re-preview until there is nothing left to fix.
+For a closer look at a scene, render single frames: `python3 pipeline/render.py EP --preview 0.2,0.5,0.8`.
 
 ### Visuals (pick what *shows* the narration)
 | visual | shows | params |

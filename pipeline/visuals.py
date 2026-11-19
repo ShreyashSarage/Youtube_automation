@@ -347,30 +347,39 @@ def padlock(d, x, y, sz, col, open_=False):
     if not open_: d.line((x - sz * 0.7, y - sz * 0.2, x - sz * 0.7, y + 4), fill=col, width=int(sz * 0.3)); d.line((x + sz * 0.7, y - sz * 0.2, x + sz * 0.7, y + 4), fill=col, width=int(sz * 0.3))
 
 def vars(d, t, dur, s):
-    items = s.get("items", [{"name": "x", "value": "5"}, {"name": "y", "value": "10", "mut": True, "change": "11"}])[:3]
-    k = tscale(dur); n = len(items); gap = 260
-    y0 = 960 - (n - 1) * gap / 2 - 80
+    """Variable boxes. item: name, value, mut, change, kw (e.g. "const"), type, shadows (dims earlier boxes of the same name)."""
+    items = s.get("items", [{"name": "x", "value": "5"}])[:4]
+    k = tscale(dur); n = len(items); gap = 250 if n > 2 else 300
+    y0 = 960 - (n - 1) * gap / 2 - 90
+    sts = [0.3 + i * (0.9 * k if any(it.get("shadows") for it in items) else 0.4) for i in range(n)]
     for i, it in enumerate(items):
-        y = y0 + i * gap; st = 0.3 + i * 0.35; a = backout((t - st) / 0.5)
+        y = y0 + i * gap; st = sts[i]; a = backout((t - st) / 0.5)
         if a <= 0: continue
-        mut = it.get("mut"); kw = "let mut " if mut else "let "
-        d.text((110, y + 40), kw, font=MB(46), fill=C("A2" if mut else "DIM", clamp(a)))
-        d.text((110 + d.textlength(kw, font=MB(46)), y + 40), it["name"], font=MB(46), fill=C("WH", clamp(a)))
-        bx0, bx1 = 560, 900
+        later = [j for j in range(i + 1, n) if items[j].get("shadows") and items[j]["name"] == it["name"] and t > sts[j]]
+        old = ease((t - sts[later[0]]) / 0.5) if later else 0.0
+        fade = 1 - 0.6 * old
+        mut = it.get("mut"); kw = it.get("kw") or ("let mut" if mut else "let")
+        kcol = "A" if kw == "const" else ("A2" if mut else "DIM")
+        d.text((80, y + 22), kw, font=MB(44), fill=C(kcol, clamp(a) * fade))
+        lab = it["name"] + (f": {it['type']}" if it.get("type") else "")
+        d.text((80, y + 82), lab, font=fit(d, lab, MB, 54, 430), fill=C("WH", clamp(a) * fade))
+        bx0, bx1 = 540, 960
         tc = 1.6 * k + i * 0.5; ch = it.get("change"); e = ease((t - tc) / 0.5) if ch else 0
-        shake = 0
-        if ch and not mut and 0 < t - tc < 0.6: shake = 14 * math.sin((t - tc) * 60) * (1 - (t - tc) / 0.6)
+        shake = 14 * math.sin((t - tc) * 60) * (1 - (t - tc) / 0.6) if (ch and not mut and 0 < t - tc < 0.6) else 0
         col = PAL["BAD"] if (ch and not mut and t > tc) else PAL["A"]
-        d.rounded_rectangle((bx0 + shake, y, bx1 + shake, y + 150), 24, fill=C("PANEL", 1.7 * a), outline=mix(col, clamp(a)), width=5)
-        cx = (bx0 + bx1) / 2 + shake
+        d.rounded_rectangle((bx0 + shake, y, bx1 + shake, y + 170), 28, fill=C("PANEL", 1.7 * a * fade), outline=mix(col, clamp(a) * fade), width=6)
+        cx = (bx0 + bx1) / 2 + shake; fv = lambda v_: fit(d, v_, MB, 84, 380)
         if ch and mut:
-            if e < 1: text_c(d, cx, y + 38 - 60 * e, it["value"], fit(d, it["value"], MB, 64, 300), C("WH", clamp(a) * (1 - e)))
-            if e > 0: text_c(d, cx, y + 38 + 60 * (1 - e), ch, fit(d, ch, MB, 64, 300), C("A", e))
+            if e < 1: text_c(d, cx, y + 38 - 70 * e, it["value"], fv(it["value"]), C("WH", clamp(a) * (1 - e)))
+            if e > 0: text_c(d, cx, y + 38 + 70 * (1 - e), ch, fv(ch), C("A", e))
         else:
-            text_c(d, cx, y + 38, it["value"], fit(d, it["value"], MB, 64, 300), C("WH", clamp(a)))
-        padlock(d, 970 + shake, y + 50, 26, C("A2" if mut else ("BAD" if ch and t > tc else "DIM"), clamp(a)), open_=bool(mut))
+            text_c(d, cx, y + 38, it["value"], fv(it["value"]), C("WH", clamp(a) * fade))
+        if kw != "const": padlock(d, 1010 + shake, y + 56, 28, C("A2" if mut else ("BAD" if ch and t > tc else "DIM"), clamp(a) * fade), open_=bool(mut))
         if ch and not mut and t > tc + 0.2:
-            d.text((bx0, y + 165), "cannot assign twice ✗", font=B(36), fill=C("BAD", ease((t - tc - 0.2) / 0.4)))
+            d.text((bx0, y + 182), "cannot assign twice", font=B(38), fill=C("BAD", ease((t - tc - 0.2) / 0.4)))
+        if old > 0: d.text((bx0, y + 182), "shadowed", font=B(38), fill=C("DIM", old))
+        if it.get("shadows") and i > 0 and a > 0.5:
+            arrow(d, [(750, y - gap + 182 + 40), (750, y - 12)], ease((t - st) / 0.4), C("A", 0.8), 6, 22)
 
 # ------------------------------------------------------------------ flow (match / if branching)
 def flow(d, t, dur, s):

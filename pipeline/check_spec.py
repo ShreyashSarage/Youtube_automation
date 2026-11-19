@@ -3,7 +3,7 @@ import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from visuals import VISUALS as VIS
 EP = sys.argv[1]; s = json.load(open(os.path.join(EP, "spec.json"))); errs = []
-REQ = dict(hook=["big"], title=["title"], bullets=["heading", "items"], terminal=["heading", "commands"], code=["heading", "code"],
+REQ = dict(run=["heading", "from_code"], hook=["big"], title=["title"], bullets=["heading", "items"], terminal=["heading", "commands"], code=["heading", "code"],
            bars=["heading", "bars"], cards=["heading", "cards"], timeline=["heading", "points"], cta=[], visual=["visual"])
 for k in ("topic", "sources", "youtube", "scenes"):
     if k not in s: errs.append(f"missing top-level '{k}'")
@@ -15,7 +15,7 @@ if tl > 480: errs.append(f"youtube.tags too long ({tl} > 480)")
 if yt.get("description", "").count("#") > 15: errs.append("more than 15 hashtags: YouTube would ignore all of them")
 if not s.get("sources"): errs.append("no sources listed: every claim needs a source")
 sc = s.get("scenes", [])
-if not 5 <= len(sc) <= 9: errs.append(f"{len(sc)} scenes; use 5-9")
+if not 5 <= len(sc) <= 10: errs.append(f"{len(sc)} scenes; use 5-10")
 if sc and sc[0].get("type") != "hook": errs.append("first scene should be type 'hook'")
 if sc and sc[-1].get("type") != "cta": errs.append("last scene should be type 'cta'")
 for i, x in enumerate(sc):
@@ -39,8 +39,25 @@ if not th or not th.get("lines"): errs.append("missing thumbnail.lines (1-2 punc
 elif any(len(l) > 14 for l in th["lines"]): errs.append("thumbnail lines must be 14 chars or fewer each")
 if th and th.get("visual") and th["visual"] not in VIS: errs.append(f"thumbnail.visual {th['visual']} unknown")
 words = sum(len(x.get("say", "").split()) for x in sc)
-if words > 125: errs.append(f"narration is {words} words; keep it <= 125 so the Short stays under 60 s")
+if words > 190: errs.append(f"narration is {words} words; keep it <= 185 so the Short stays under 1:20")
+if words < 120: errs.append(f"narration is only {words} words; explain the topic in detail (140-185 words)")
 if "#shorts" not in yt.get("title", "").lower(): errs.append("youtube.title must end with #Shorts")
-if len(sc) > 7: errs.append("use at most 7 scenes so the Short stays under 60 s")
+if len(sc) > 10: errs.append("use at most 10 scenes so the Short stays under 1:20")
+from collections import Counter
+for vname, cnt in Counter(x.get("visual") for x in sc if x.get("visual")).items():
+    if cnt > 2: errs.append(f"visual '{vname}' is used {cnt} times; use each at most twice")
+if not any(x.get("type") == "run" for x in sc): errs.append("add a 'run' scene (from_code) so viewers see the real program output or compiler error")
+if not any(x.get("type") == "code" and x.get("steps") for x in sc): errs.append("at least one code scene needs 'steps' (line-by-line walkthrough)")
+LIM = {"heading": 30, "sub": 40, "caption": 34, "top": 22}
+for i, x in enumerate(sc):
+    for f_, n_ in LIM.items():
+        if isinstance(x.get(f_), str) and len(x[f_]) > n_: errs.append(f"scene {i}: {f_} is {len(x[f_])} chars (max {n_})")
+    if isinstance(x.get("big"), str) and len(x["big"]) > 26: errs.append(f"scene {i}: big is {len(x['big'])} chars (max 26)")
+    for it in x.get("items", []) if x.get("type") == "bullets" else []:
+        if len(it) > 30: errs.append(f"scene {i}: bullet '{it}' > 30 chars")
+    for st in x.get("steps", []):
+        if len(st.get("note", "")) > 34: errs.append(f"scene {i}: step note '{st.get('note')}' > 34 chars")
+        if not st.get("at") or st["at"].lower() not in x.get("say", "").lower(): errs.append(f"scene {i}: step 'at' must be a phrase from this scene's say, so the highlight moves with the voice ({st.get('at')!r})")
+        if any(ln < 1 or ln > len(x.get("code", "").split("\n")) for ln in st.get("lines", [])): errs.append(f"scene {i}: step line out of range")
 if errs: print("SPEC ERRORS:\n  " + "\n  ".join(errs)); sys.exit(1)
 print("spec ok:", len(sc), "scenes")

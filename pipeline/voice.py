@@ -8,7 +8,7 @@ EP = os.path.abspath(sys.argv[1]); BUILD = os.path.join(EP, "build"); os.makedir
 spec = json.load(open(os.path.join(EP, "spec.json")))
 KD = os.environ.get("KOKORO_DIR", os.path.expanduser("~/.cache/kokoro"))
 VOICE = spec.get("voice", "am_michael"); SPEED = spec.get("speed", 1.12)
-MIN = dict(hook=3.5, title=4.0, terminal=6.0, code=6.5, bars=6.0, cards=4.5, bullets=4.5, timeline=4.5, cta=3.5, visual=4.5)
+MIN = dict(run=6.0, hook=3.5, title=4.0, terminal=6.0, code=6.5, bars=6.0, cards=4.5, bullets=4.5, timeline=4.5, cta=3.5, visual=4.5)
 LEAD, TAIL = 0.2, 0.4
 
 k = Kokoro(os.path.join(KD, "kokoro-v1.0.onnx"), os.path.join(KD, "voices-v1.0.bin"))
@@ -23,4 +23,4 @@ sf.write(os.path.join(BUILD, "voice.wav"), np.concatenate(parts), sr0)
 json.dump(durs, open(os.path.join(BUILD, "durs.json"), "w"))
 json.dump(cues, open(os.path.join(BUILD, "cues.json"), "w"))
 print("voice", round(sum(durs), 2), "s", [round(d, 2) for d in durs])
-if sum(durs) > 58: sys.exit(f"TOO LONG ({sum(durs):.1f}s): a YouTube Short must stay under 60 s. Trim the narration (aim for <= 125 words) or drop a scene.")
+if sum(durs) > 79: sys.exit(f"TOO LONG ({sum(durs):.1f}s): keep the Short at or under 1:20. Trim the narration (aim for <= 185 words) or drop a scene.")

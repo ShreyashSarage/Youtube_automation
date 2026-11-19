@@ -82,6 +82,7 @@ def stagger(n, dur, start=0.6, end_frac=0.72):
 def dimmed_visual(d, name, t, dur, s, k=0.5):
     from PIL import ImageChops
     tmp = Image.new("RGB", (W, H)); VIS.VISUALS[name](ImageDraw.Draw(tmp), t, dur, s)
+    tmp = tmp.transform((W, H), Image.AFFINE, (1, 0, 0, 0, 1, -70))
     base = d._image; base.paste(ImageChops.add(base, tmp.point(lambda v: int(v * k))))
 
 def sc_visual(d, t, s, dur):
@@ -94,7 +95,7 @@ def sc_visual(d, t, s, dur):
 
 def sc_hook(d, t, s, dur):
     if s.get("visual"):
-        dimmed_visual(d, s["visual"], t, dur, s, 0.42)
+        dimmed_visual(d, s["visual"], t, dur, s, 0.3)
         a, dy = appear(t, 0.1); ybig = 470
         if s.get("top"):
             lines, f, sz = wrap(d, s["top"], MB, 90, 960, 1, 40)
@@ -223,25 +224,103 @@ def sc_code(d, t, s, dur):
     if s.get("sub"): a, dy = appear(t, 0.3); y = cblock(d, y + 10, s["sub"], R, 44, DIM, a, dy, maxlines=2)
     lines = s["code"].rstrip("\n").split("\n")[:16]
     longest = max(len(l) for l in lines) or 1
-    fs = int(min(40, (W - 260) / (longest * 0.602)))
-    f = M(fs); lh = fs * 1.45
-    e = ease((t - 0.4) / 0.6); x0, x1 = 70, W - 70
-    top = max(y + 60, 600); hgt = 120 + lh * len(lines)
+    fs = int(min(46, (W - 230) / (longest * 0.602)))
+    f = M(fs); lh = fs * 1.5
+    e = ease((t - 0.4) / 0.6); x0, x1 = 60, W - 60
+    top = max(y + 50, 560); hgt = 120 + lh * len(lines)
+    steps = s.get("steps", [])
+    reveal = min(1.6, dur * 0.25) if steps else dur * 0.6
     if e > 0.02:
         d.rounded_rectangle((x0, top, x1, top + hgt * e), 26, fill=PANEL, outline=(70, 80, 95), width=3)
         d.text((x0 + 40, top + 25), s.get("file", "main.rs"), font=MB(32), fill=mix(DIM, e))
+    # which step is active: steps share the time after the code is revealed
+    cur = None
+    if steps:
+        k = -1
+        for j, st_t in enumerate(step_times(s, dur)):
+            if t >= st_t: k = j
+        if k >= 0: cur = steps[k]
     if e > 0.95:
-        per = max(0.12, (dur * 0.6) / len(lines))
+        per = max(0.08, reveal / len(lines))
         for i, l in enumerate(lines):
             la = ease((t - 1.0 - i * per) / 0.3)
             if la <= 0: break
-            x = x0 + 50; yy = top + 90 + i * lh
-            hi = i + 1 in s.get("highlight", [])
+            x = x0 + 46; yy = top + 90 + i * lh
+            hi = (i + 1 in cur["lines"]) if cur else (i + 1 in s.get("highlight", []))
+            dim = 0.45 if (cur and not hi) else 1.0
             if hi: d.rectangle((x0 + 6, yy - 6, x1 - 6, yy + lh - 8), fill=mix((70, 35, 15), la))
             for tok, col in hl_line(l):
-                d.text((x, yy), tok, font=f, fill=mix(col, la)); x += d.textlength(tok, font=f)
-    if s.get("caption"):
-        a, dy = appear(t, dur * 0.7); cblock(d, min(top + hgt + 50, 1380), s["caption"], B, 52, RUST, a, dy, maxlines=1)
+                d.text((x, yy), tok, font=f, fill=mix(col, la * dim)); x += d.textlength(tok, font=f)
+    note = cur.get("note") if cur else s.get("caption")
+    if note:
+        a2 = 1.0 if cur else appear(t, dur * 0.7)[0]
+        ny = min(top + hgt + 50, 1380)
+        lines_, f2, sz = wrap(d, note, B, 54, W - 200, 1, 34); tw = d.textlength(lines_[0], font=f2)
+        d.rounded_rectangle((W / 2 - tw / 2 - 30, ny - 14, W / 2 + tw / 2 + 30, ny + sz + 18), 26, fill=mix((30, 34, 44), a2), outline=mix(RUST, a2), width=3)
+        ctext(d, ny, lines_[0], f2, RUST, a2)
+
+CUES = []
+_cp2 = os.path.join(BUILD, "cues.json")
+if os.path.exists(_cp2): CUES = json.load(open(_cp2))
+def step_times(s, dur):
+    """When each code step starts (scene-relative): at the moment its 'at' phrase is spoken."""
+    steps = s["steps"]; i = SCENES.index(s); say = s.get("say", "").lower()
+    if CUES and i < len(CUES) and say:
+        a, b = CUES[i][0] - STARTS[i], CUES[i][1] - STARTS[i]
+    else:
+        a, b = 0.3, dur - 0.3
+    out = []
+    for k, st in enumerate(steps):
+        ph = st.get("at", "").lower(); pos = say.find(ph) if ph else -1
+        frac = pos / max(1, len(say)) if pos >= 0 else k / len(steps)
+        out.append(max(0.9, a + frac * (b - a) - 0.15))
+    return out
+
+RUNS = {}
+_rp = os.path.join(BUILD, "code_runs.json")
+if os.path.exists(_rp): RUNS = json.load(open(_rp))
+def sc_run(d, t, s, dur):
+    """Terminal running the real program (or the real compiler error) captured by check_code.py."""
+    a, dy = appear(t, 0.0); y = cblock(d, 300, s["heading"], B, 80, WHITE, a, dy, maxlines=2)
+    if s.get("sub"): a, dy = appear(t, 0.3); y = cblock(d, y + 10, s["sub"], R, 44, DIM, a, dy, maxlines=2)
+    run = RUNS.get(str(SCENES.index(s)), {"cmd": "cargo run", "lines": ["(run check_code.py first)"]})
+    # readable on a phone: font >= 31 px, long lines soft-wrap like a real terminal
+    fs = 33; cols = int((W - 130) / (fs * 0.602)); out = []
+    for l in run["lines"][:14]:
+        while len(l) > cols:
+            cut = l.rfind(" ", 0, cols); cut = cut if cut > cols * 0.6 else cols
+            out.append(l[:cut]); l = "    " + l[cut:].lstrip()
+        out.append(l)
+    out = out[:18]; f = M(fs); lh = fs * 1.42
+    e = ease((t - 0.4) / 0.6); x0, x1 = 40, W - 40; top = max(y + 40, 520); hgt = 110 + lh * (len(out) + 1)
+    if e > 0.02:
+        d.rounded_rectangle((x0, top, x1, top + hgt * e), 26, fill=(14, 16, 22), outline=(70, 80, 95), width=3)
+        for i, c in enumerate([(255, 95, 86), (255, 189, 46), (39, 201, 63)]):
+            d.ellipse((x0 + 30 + i * 46, top + 26, x0 + 58 + i * 46, top + 54), fill=mix(c, e))
+    if e < 0.95: return
+    yy = top + 80; tt = t - 1.0; n = int(max(0, min(len(run["cmd"]), tt * 18)))
+    d.text((x0 + 36, yy), "$ ", font=MB(fs), fill=GREEN); cx = x0 + 36 + d.textlength("$ ", font=MB(fs))
+    d.text((cx, yy), run["cmd"][:n], font=f, fill=WHITE)
+    if n < len(run["cmd"]):
+        if int(t * 3) % 2 == 0: d.rectangle((cx + d.textlength(run["cmd"][:n], font=f) + 3, yy + 3, cx + d.textlength(run["cmd"][:n], font=f) + fs * 0.55, yy + fs * 1.1), fill=WHITE)
+        return
+    t_out = tt - len(run["cmd"]) / 18 - 0.3; span = max(0.6, dur * 0.35)
+    for i, l in enumerate(out):
+        if t_out < i * span / len(out): break
+        yy = top + 80 + (i + 1) * lh; col = (220, 222, 228)
+        if yy > 1450: break
+        m = re.match(r"^(\s*)(Compiling|Finished|Running|Checking)(.*)$", l)
+        if m:
+            d.text((x0 + 28, yy), m.group(1), font=f, fill=col); xx = x0 + 28 + d.textlength(m.group(1), font=f)
+            d.text((xx, yy), m.group(2), font=MB(fs), fill=GREEN); xx += d.textlength(m.group(2), font=MB(fs)); d.text((xx, yy), m.group(3), font=f, fill=col); continue
+        if l.startswith("error"): col = (255, 95, 86)
+        elif l.startswith("warning"): col = YELLOW
+        elif l.lstrip().startswith("-->") or l.lstrip().startswith("|") or re.match(r"^\s*\d+ \|", l): col = (110, 160, 255)
+        elif l.startswith("help"): col = (90, 220, 200)
+        bold = l.startswith(("error", "help", "warning"))
+        d.text((x0 + 28, yy), l, font=(MB if bold else M)(fs), fill=col)
+    if s.get("caption") and t > dur * 0.7:
+        a2 = appear(t, dur * 0.7)[0]; cblock(d, min(top + hgt + 50, 1380), s["caption"], B, 52, RUST, a2, 0, maxlines=1)
 
 def sc_bars(d, t, s, dur):
     a, dy = appear(t, 0.0); y = cblock(d, 300, s["heading"], B, 80, WHITE, a, dy, maxlines=2)
@@ -309,7 +388,7 @@ def sc_cta(d, t, s, dur):
     if s.get("sub"): a, dy = appear(t, dur * 0.6); cblock(d, y + 80, s["sub"], R, 50, DIM, a, dy, maxlines=2)
 
 TYPES = dict(hook=sc_hook, title=sc_title, bullets=sc_bullets, terminal=sc_terminal, code=sc_code,
-             bars=sc_bars, cards=sc_cards, timeline=sc_timeline, cta=sc_cta, visual=sc_visual)
+             bars=sc_bars, cards=sc_cards, timeline=sc_timeline, cta=sc_cta, visual=sc_visual, run=sc_run)
 
 # ---------------- background, camera, post FX ----------------
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)

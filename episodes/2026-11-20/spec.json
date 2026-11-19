@@ -1,0 +1,230 @@
+{
+ "day": 5,
+ "topic": "Constants & shadowing",
+ "theme": "ocean",
+ "brand": "RUST  ·  DAY 5",
+ "crate": "shadowing",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "CONST &",
+   "SHADOWING"
+  ],
+  "visual": "layers",
+  "params": {
+   "layers": [
+    "let x = 5",
+    "let x = x + 1",
+    "{ let x = x * 2 }"
+   ],
+   "highlight": 2
+  }
+ },
+ "youtube": {
+  "title": "Rust Day 5: Constants & Shadowing Explained 🦀 #Shorts",
+  "description": "Rust Day 5: Constants & shadowing, explained line by line. Same name, new value, and why mut can't do what shadowing does.\n\n📌 In this short:\n✅ const: always immutable, type required, UPPER_SNAKE_CASE, value known at compile time\n✅ Shadowing: let x = x + 1 makes a NEW x; inner scopes shadow until the block ends\n✅ Shadowing can change the type; mut can't (error E0308: mismatched types)\n\n💻 Code from the video:\nconst MAX_SCORE: u32 = 100_000;\n\nfn main() {\n    let x = 5;\n    let x = x + 1;\n    {\n        let x = x * 2;\n        println!(\"inner: {x}\"); // 12\n    }\n    println!(\"outer: {x}\"); // 6\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html\n⏭️ Tomorrow: Integers & floats\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 5",
+   "rustlang",
+   "rust constants",
+   "rust shadowing",
+   "const vs let",
+   "rust variables",
+   "E0308",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "vars",
+   "items": [
+    {
+     "name": "x",
+     "value": "5"
+    },
+    {
+     "name": "x",
+     "value": "6",
+     "shadows": true
+    }
+   ],
+   "top": "Rust Day 5",
+   "big": "Same name, new value?",
+   "sub": [
+    "Constants & shadowing"
+   ],
+   "say": "Rust, day five. Constants, and shadowing: same name, brand new value."
+  },
+  {
+   "type": "code",
+   "heading": "Constants",
+   "file": "main.rs",
+   "code": "const MAX_SCORE: u32 = 100_000;\n\nfn main() {\n    println!(\"{MAX_SCORE}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      1
+     ],
+     "note": "const instead of let",
+     "at": "Constants use const"
+    },
+    {
+     "lines": [
+      1
+     ],
+     "note": "the type is required: u32",
+     "at": "the type is required"
+    },
+    {
+     "lines": [
+      1
+     ],
+     "note": "names in UPPER_SNAKE_CASE",
+     "at": "Names are all caps"
+    },
+    {
+     "lines": [
+      3,
+      4
+     ],
+     "note": "usable anywhere in scope",
+     "at": "constants can live outside"
+    }
+   ],
+   "say": "Constants use const, not let. They're always immutable, so no mut, and the type is required, here u32. Names are all caps, and constants can live outside functions.",
+   "captions": "Constants use const, not let. They're always immutable, so no mut, and the type is required, here u32. Names are all caps, and constants can live outside functions."
+  },
+  {
+   "type": "visual",
+   "visual": "vars",
+   "heading": "const vs let",
+   "items": [
+    {
+     "kw": "const",
+     "name": "MAX_SCORE",
+     "type": "u32",
+     "value": "100_000"
+    },
+    {
+     "name": "x",
+     "value": "5"
+    },
+    {
+     "name": "y",
+     "value": "5",
+     "mut": true,
+     "change": "6"
+    }
+   ],
+   "say": "Use constants for shared values, like a maximum score. Their value must be known at compile time."
+  },
+  {
+   "type": "code",
+   "heading": "Shadowing",
+   "file": "main.rs",
+   "code": "fn main() {\n    let x = 5;\n    let x = x + 1;\n    {\n        let x = x * 2;\n        println!(\"inner: {x}\");\n    }\n    println!(\"outer: {x}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      2
+     ],
+     "note": "x is 5",
+     "at": "let x equals five"
+    },
+    {
+     "lines": [
+      3
+     ],
+     "note": "a NEW x: 5 + 1 = 6",
+     "at": "let x equals x plus one"
+    },
+    {
+     "lines": [
+      5,
+      6
+     ],
+     "note": "inner x: 6 * 2 = 12",
+     "at": "Inside the braces"
+    },
+    {
+     "lines": [
+      8
+     ],
+     "note": "block ends: x is 6 again",
+     "at": "After the block"
+    }
+   ],
+   "say": "Now shadowing. let x equals five. let x equals x plus one makes a brand new x: six. Inside the braces, another x shadows it: twelve. After the block, x is six again.",
+   "captions": "Now shadowing. let x = 5. let x = x + 1 makes a brand new x: 6. Inside the braces, another x shadows it: 12. After the block, x is 6 again."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 3,
+   "caption": "inner 12, outer 6",
+   "say": "Run it: twelve inside the block, six outside. Exactly as traced."
+  },
+  {
+   "type": "visual",
+   "visual": "layers",
+   "heading": "Each let = a new x",
+   "layers": [
+    "let x = 5",
+    "let x = x + 1",
+    "{ let x = x * 2 }"
+   ],
+   "highlight": 2,
+   "say": "Each let stacks a new variable. The old one is hidden, not changed."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "mut can't change the type",
+   "file": "main.rs",
+   "code": "fn main() {\n    let mut spaces = \"   \";\n    spaces = spaces.len();\n}",
+   "highlight": [
+    3
+   ],
+   "expect_error": "E0308",
+   "say": "Shadowing can even change the type. But with mut, putting a number into a text variable fails."
+  },
+  {
+   "type": "run",
+   "heading": "The real error",
+   "from_code": 6,
+   "caption": "E0308: mismatched types",
+   "say": "Error E0308, mismatched types: expected a string slice, found a number. Shadow it with let instead.",
+   "captions": "Error E0308, mismatched types: expected a &str, found a number. Shadow it with let instead."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "const: always immutable",
+    "const needs a type",
+    "let again = shadowing",
+    "mut keeps the same type"
+   ],
+   "say": "Recap: constants are always immutable and need a type. Shadowing makes a new variable and can change its type. mut can't."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 5 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Integers & floats"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: integers and floats. Follow for daily Rust!"
+  }
+ ]
+}
