@@ -1,0 +1,145 @@
+{
+ "day": 4,
+ "topic": "Variables & mutability",
+ "theme": "matrix",
+ "brand": "RUST  ·  DAY 4",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "LET vs",
+   "LET MUT"
+  ],
+  "visual": "vars",
+  "params": {
+   "items": [
+    {
+     "name": "x",
+     "value": "5",
+     "change": "6"
+    },
+    {
+     "name": "y",
+     "value": "5",
+     "mut": true,
+     "change": "6"
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "Rust Day 4: Why Can't I Change x? (let vs mut) 🦀 #Shorts",
+  "description": "Rust Day 4: Variables & mutability. Why Rust won't let you change x, and how mut fixes it.\n\n📌 In this short:\n✅ Variables are immutable by default: let x = 5;\n✅ Changing it gives error E0384: cannot assign twice to immutable variable\n✅ let mut x = 5; makes it changeable, and tells readers it will change\n\n💻 Code from the video:\nfn main() {\n    let mut x = 5;\n    println!(\"{x}\");\n    x = 6;\n    println!(\"{x}\");\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html\n⏭️ Tomorrow: Constants & shadowing\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 4",
+   "rustlang",
+   "rust variables",
+   "let mut",
+   "rust mutability",
+   "E0384",
+   "immutable variables",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "vars",
+   "items": [
+    {
+     "name": "x",
+     "value": "5",
+     "change": "6"
+    }
+   ],
+   "top": "Rust Day 4",
+   "big": "Why can't I change x?",
+   "sub": [
+    "Variables & mutability"
+   ],
+   "say": "Rust, day four. Why won't Rust let you change x?"
+  },
+  {
+   "type": "code",
+   "heading": "Try this",
+   "sub": "it won't compile",
+   "file": "main.rs",
+   "code": "fn main() {\n    let x = 5;\n    x = 6;\n}",
+   "highlight": [
+    3
+   ],
+   "expect_error": "E0384",
+   "caption": "E0384: cannot assign twice",
+   "say": "Write let x equals five, then x equals six. It doesn't compile: cannot assign twice to immutable variable.",
+   "captions": "Write let x = 5, then x = 6. It doesn't compile: cannot assign twice to immutable variable."
+  },
+  {
+   "type": "visual",
+   "visual": "vars",
+   "heading": "Immutable by default",
+   "items": [
+    {
+     "name": "x",
+     "value": "5",
+     "change": "6"
+    }
+   ],
+   "say": "In Rust, variables are immutable by default. Once x is set, it can't change, so code that relies on it stays correct."
+  },
+  {
+   "type": "code",
+   "heading": "Add mut",
+   "file": "main.rs",
+   "code": "fn main() {\n    let mut x = 5;\n    println!(\"{x}\");\n    x = 6;\n    println!(\"{x}\");\n}",
+   "highlight": [
+    2,
+    4
+   ],
+   "expect": "5\n6",
+   "caption": "prints 5, then 6",
+   "say": "Need to change it? Add mut. Now x goes from five to six.",
+   "captions": "Need to change it? Add mut. Now x goes from 5 to 6."
+  },
+  {
+   "type": "visual",
+   "visual": "vars",
+   "heading": "mut means: this will change",
+   "items": [
+    {
+     "name": "x",
+     "value": "5",
+     "mut": true,
+     "change": "6"
+    }
+   ],
+   "say": "mut also tells anyone reading your code that this value will change."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "let: immutable",
+    "let mut: can change",
+    "E0384: assigned twice"
+   ],
+   "say": "Recap: let is immutable, let mut can change, and E0384 means you assigned twice."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 4 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Constants"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: constants and shadowing. Follow for daily Rust!"
+  }
+ ]
+}

@@ -36,6 +36,17 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch01-03-hello-cargo.html"
    ]
+  },
+  {
+   "date": "2026-11-19",
+   "day": 4,
+   "topic": "Variables & mutability",
+   "title": "Rust Day 4: Why Can't I Change x? (let vs mut) 🦀 #Shorts",
+   "url": "https://www.youtube.com/watch?v=uOjWLxFHRjA",
+   "publishAt": "2026-11-19T10:00:00+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
+   ]
   }
  ]
 }
