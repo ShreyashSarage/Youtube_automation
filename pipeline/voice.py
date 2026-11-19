@@ -7,9 +7,9 @@ from kokoro_onnx import Kokoro
 EP = os.path.abspath(sys.argv[1]); BUILD = os.path.join(EP, "build"); os.makedirs(BUILD, exist_ok=True)
 spec = json.load(open(os.path.join(EP, "spec.json")))
 KD = os.environ.get("KOKORO_DIR", os.path.expanduser("~/.cache/kokoro"))
-VOICE = spec.get("voice", "am_michael"); SPEED = spec.get("speed", 1.08)
-MIN = dict(hook=4.0, title=4.5, terminal=7.5, code=8.0, bars=7.0, cards=5.0, bullets=5.5, timeline=5.0, cta=5.0, visual=5.0)
-LEAD, TAIL = 0.25, 0.55
+VOICE = spec.get("voice", "am_michael"); SPEED = spec.get("speed", 1.12)
+MIN = dict(hook=3.5, title=4.0, terminal=6.0, code=6.5, bars=6.0, cards=4.5, bullets=4.5, timeline=4.5, cta=3.5, visual=4.5)
+LEAD, TAIL = 0.2, 0.4
 
 k = Kokoro(os.path.join(KD, "kokoro-v1.0.onnx"), os.path.join(KD, "voices-v1.0.bin"))
 parts, durs, sr0, cues, t0 = [], [], 24000, [], 0.0
@@ -23,4 +23,4 @@ sf.write(os.path.join(BUILD, "voice.wav"), np.concatenate(parts), sr0)
 json.dump(durs, open(os.path.join(BUILD, "durs.json"), "w"))
 json.dump(cues, open(os.path.join(BUILD, "cues.json"), "w"))
 print("voice", round(sum(durs), 2), "s", [round(d, 2) for d in durs])
-if sum(durs) > 170: sys.exit("TOO LONG: Shorts must be under 3 minutes; trim the narration")
+if sum(durs) > 58: sys.exit(f"TOO LONG ({sum(durs):.1f}s): a YouTube Short must stay under 60 s. Trim the narration (aim for <= 125 words) or drop a scene.")

@@ -40,7 +40,7 @@ Required top level:
 }
 ```
 
-### Scene structure (6-7 scenes, 45-70 s total)
+### Scene structure (6-7 scenes, **45-58 s total: it must be a Short, under 60 s**)
 1. `hook` with a `visual` from the lesson's `visuals`: `top` = "Rust Day N", `big` = a 2-5 word
    curiosity hook ("Why can't I change x?"), `sub` = [one short line].
 2. `visual`: show the concept (e.g. `vars`, `ownership`, `flow`, `pipeline`, `layers`, `tree`).
@@ -72,7 +72,7 @@ At least 2 `visual` scenes (the spec check enforces it). The hook must have a `v
 
 Other scene types: `code` (`heading`, `sub`, `file`, `code` ≤ 12 lines × ≤ 34 chars, `highlight`
 [line numbers], `caption`, `check`, `expect`, `expect_error`), `bullets` (`heading`, `items`), `cta`.
-Every scene needs `say` (narration, ≤ 40 words is ideal). On-screen text must match what's said.
+Every scene needs `say`. **Whole narration ≤ 125 words** (hook ≤ 12, middle scenes ≤ 25, recap ≤ 20, cta ≤ 12); `voice.py` refuses anything over 58 s. On-screen text must match what's said.
 Spell out symbols for the voice: "let mut x", "x equals five", "ampersand s" for `&s`,
 "double colon" for `::`, "vec bang" for `vec!`, "println bang".
 
@@ -96,8 +96,8 @@ for the owner to upload by hand in YouTube Studio. Check `thumbnail.png` (it is
 also the first tile of `preview.png`) before rendering.
 
 ### Title, description, tags (trendy, searchable)
-- Title (≤ 70 chars): `Rust Day N: <Lesson> in 60 Seconds 🦀` or a hook form like
-  `Why Rust Won't Let You Change x 🦀 | Rust Day N`.
+- Title (≤ 70 chars) **ending in `#Shorts`**: `Rust Day N: <Lesson> in 60 Seconds 🦀 #Shorts` or a hook form like
+  `Why Rust Won't Let You Change x 🦀 | Rust Day N #Shorts`.
 - Description: use this template, 10-13 hashtags total (YouTube ignores all if > 15):
 ```
 Rust Day N: <lesson>. <one-sentence hook / what you'll learn>.
