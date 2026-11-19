@@ -25,7 +25,7 @@ Open `state/curriculum.json` and take the **first lesson whose `day` is not in `
 
 ## 3. Write `episodes/TODAY/spec.json`
 Look at **`samples/kiri-ocean`** and **`samples/ownership-matrix`**: these are the owner's reference
-styles (theme + motion graphics). **`episodes/2026-11-20/spec.json` (Day 5) is the model for the level of detail.** Day parity picks the theme: **odd day → `"ocean"`, even day → `"matrix"`**.
+styles (theme + motion graphics). **`episodes/2026-11-19-day5/spec.json` (Day 5) is the model for the level of detail.** Day parity picks the theme: **odd day → `"ocean"`, even day → `"matrix"`**.
 
 Required top level:
 ```jsonc

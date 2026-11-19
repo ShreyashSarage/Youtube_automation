@@ -47,6 +47,18 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
    ]
+  },
+  {
+   "date": "2026-11-19",
+   "day": 5,
+   "topic": "Constants & shadowing",
+   "title": "Rust Day 5: Constants & Shadowing Explained 🦀 #Shorts",
+   "url": "https://www.youtube.com/watch?v=khnA_ClKfkU",
+   "publishAt": "2026-11-19T12:56:00+05:30",
+   "note": "posted early (same day as Day 4) at the owner's request",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
+   ]
   }
  ]
 }
