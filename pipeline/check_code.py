@@ -45,6 +45,9 @@ for i, sc in enumerate(spec["scenes"]):
     lines = [l.rstrip() for l in text.split("\n")]
     cut = next((k for k, l in enumerate(lines) if l.startswith("error: could not compile") or l.startswith("For more information")), len(lines))
     lines = lines[:cut]
+    if r.returncode != 0:  # long compiler errors: keep the top through the first "= help"/"= note" line
+        h = next((k for k, l in enumerate(lines) if l.strip().startswith(("= help", "= note"))), None)
+        if h is not None: lines = lines[:h + 1]
     while lines and not lines[-1].strip(): lines.pop()
     if len(lines) > 14: errs.append(f"scene {i} (run): output is {len(lines)} lines; keep the example small (max 14)")
     if src_sc.get("expect_error") and r.returncode == 0: errs.append(f"scene {i} (run): expected a compile error")

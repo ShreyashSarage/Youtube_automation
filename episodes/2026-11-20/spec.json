@@ -1,0 +1,225 @@
+{
+ "day": 6,
+ "topic": "Integers & floats",
+ "theme": "matrix",
+ "brand": "RUST  ·  DAY 6",
+ "crate": "numbers",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "i32? u8?",
+   "f64?"
+  ],
+  "visual": "layers",
+  "params": {
+   "layers": [
+    "i8 / u8",
+    "i16 / u16",
+    "i32 / u32",
+    "i64 / u64",
+    "i128 / u128"
+   ],
+   "highlight": 2
+  }
+ },
+ "youtube": {
+  "title": "Rust Day 6: Integers & Floats Explained (i32, u8, f64) 🦀 #Shorts",
+  "description": "Rust Day 6: Integers & floats, explained line by line. i32 vs u8, f64 vs f32, why 7 / 2 = 3, and the error you get when you mix them.\n\n📌 In this short:\n✅ i = signed (can be negative), u = unsigned (0 and up); the number is the size in bits\n✅ Defaults: whole numbers are i32, decimals are f64; 1_000_000 is easier to read\n✅ Integer division drops the fraction (7 / 2 = 3); % is the remainder; i32 + f64 = error E0277\n\n💻 Code from the video:\nfn main() {\n    let a = 42;          // i32\n    let b: u8 = 255;     // 0..=255\n    let c = 1_000_000;\n    let d = 3.5;         // f64\n    let e: f32 = 2.0;\n    println!(\"{a} {b} {c}\");\n    println!(\"{d} {e}\");\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-02-data-types.html\n⏭️ Tomorrow: bool, char & integer overflow\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 6",
+   "rustlang",
+   "rust integers",
+   "rust floats",
+   "i32 vs u8",
+   "f64",
+   "rust data types",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "vars",
+   "items": [
+    {
+     "name": "a",
+     "type": "i32",
+     "value": "-42"
+    },
+    {
+     "name": "c",
+     "type": "f64",
+     "value": "3.5"
+    }
+   ],
+   "top": "Rust Day 6",
+   "big": "Which number type?",
+   "sub": [
+    "Integers & floats"
+   ],
+   "say": "Rust, day six. Which number type should you use?"
+  },
+  {
+   "type": "visual",
+   "visual": "layers",
+   "heading": "Integer sizes",
+   "sub": "i = signed · u = unsigned",
+   "layers": [
+    "i8 / u8",
+    "i16 / u16",
+    "i32 / u32",
+    "i64 / u64",
+    "i128 / u128"
+   ],
+   "highlight": 2,
+   "say": "Integers come in 8 to 128 bits. i is signed, so it can be negative. u is unsigned. The default is i32.",
+   "captions": "Integers come in 8 to 128 bits. i is signed, so it can be negative. u is unsigned. The default is i32."
+  },
+  {
+   "type": "code",
+   "heading": "Numbers in code",
+   "file": "main.rs",
+   "code": "fn main() {\n    let a = 42;\n    let b: u8 = 255;\n    let c = 1_000_000;\n    let d = 3.5;\n    let e: f32 = 2.0;\n    println!(\"{a} {b} {c}\");\n    println!(\"{d} {e}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      2
+     ],
+     "note": "no type? i32 by default",
+     "at": "a is forty two"
+    },
+    {
+     "lines": [
+      3
+     ],
+     "note": "u8 holds 0 to 255",
+     "at": "b is a u8"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": "_ is just for readability",
+     "at": "underscores"
+    },
+    {
+     "lines": [
+      5
+     ],
+     "note": "decimals default to f64",
+     "at": "three point five"
+    },
+    {
+     "lines": [
+      6
+     ],
+     "note": "f32 only if you ask",
+     "at": "e is an f32"
+    }
+   ],
+   "say": "a is forty two, an i32 by default. b is a u8, up to two fifty five. underscores just help reading. three point five is an f64, and e is an f32 because we asked.",
+   "captions": "a is 42, an i32 by default. b is a u8, up to 255. Underscores just help reading. 3.5 is an f64, and e is an f32 because we asked."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 2,
+   "caption": "the _ is gone in the output",
+   "say": "Run it: no underscores in the output, and two point zero prints as two.",
+   "captions": "Run it: no underscores in the output, and 2.0 prints as 2."
+  },
+  {
+   "type": "visual",
+   "visual": "gauge",
+   "heading": "u8 range",
+   "sub": "8 bits = 256 values",
+   "value": 255,
+   "max": 255,
+   "unit": "u8 max",
+   "label": "i8: -128 to 127",
+   "say": "Eight bits: u8 is zero to two fifty five, i8 is minus 128 to 127.",
+   "captions": "8 bits: u8 is 0 to 255, i8 is -128 to 127."
+  },
+  {
+   "type": "code",
+   "heading": "Division",
+   "file": "main.rs",
+   "code": "fn main() {\n    println!(\"{}\", 7 / 2);\n    println!(\"{}\", 7.0 / 2.0);\n    println!(\"{}\", 7 % 2);\n}",
+   "steps": [
+    {
+     "lines": [
+      2
+     ],
+     "note": "integers: 7 / 2 = 3",
+     "at": "seven divided by two"
+    },
+    {
+     "lines": [
+      3
+     ],
+     "note": "floats: 7.0 / 2.0 = 3.5",
+     "at": "with floats"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": "% is the remainder: 1",
+     "at": "percent"
+    }
+   ],
+   "say": "Careful: integer seven divided by two is three, the fraction is dropped. with floats it's three point five. percent gives the remainder: one.",
+   "captions": "Careful: integer 7 / 2 is 3, the fraction is dropped. With floats it's 3.5. % gives the remainder: 1."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "mixing number types",
+   "file": "main.rs",
+   "code": "fn main() {\n    let a: i32 = 5;\n    let b: f64 = 2.5;\n    let c = a + b;\n}",
+   "highlight": [
+    4
+   ],
+   "expect_error": "E0277",
+   "say": "Now the classic mistake: adding an i32 to an f64."
+  },
+  {
+   "type": "run",
+   "heading": "The real error",
+   "from_code": 6,
+   "caption": "E0277: no i32 + f64",
+   "say": "Error E0277: cannot add f64 to i32. Rust never converts silently, so write a as f64.",
+   "captions": "Error E0277: cannot add f64 to i32. Rust never converts silently, so write a as f64."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "i = signed, u = unsigned",
+    "defaults: i32 and f64",
+    "7 / 2 is 3 for integers",
+    "convert before mixing"
+   ],
+   "say": "Recap: i signed, u unsigned, defaults i32 and f64, and convert before mixing."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 6 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: bool, char",
+    "& overflow"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: bool, char, and overflow. Follow for daily Rust!"
+  }
+ ]
+}

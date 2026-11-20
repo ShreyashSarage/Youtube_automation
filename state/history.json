@@ -59,6 +59,18 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html"
    ]
+  },
+  {
+   "date": "2026-11-20",
+   "day": 6,
+   "topic": "Integers & floats",
+   "title": "Rust Day 6: Integers & Floats Explained (i32, u8, f64) 🦀 #Shorts",
+   "url": "https://www.youtube.com/watch?v=W7Sr8Ea8mDw",
+   "publishAt": "2026-11-20T10:20:00+05:30",
+   "note": "posted manually: the scheduled run had no ulika connector and no repo push access",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+   ]
   }
  ]
 }
