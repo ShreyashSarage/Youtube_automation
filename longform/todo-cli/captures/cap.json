@@ -1,0 +1,134 @@
+{
+ "new": {
+  "cmd": "cargo new todo-cli",
+  "out": "    Creating binary (application) `todo-cli` package\nnote: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html",
+  "code": 0,
+  "secs": 0.1
+ },
+ "add_clap": {
+  "cmd": "cargo add clap --features derive",
+  "out": "    Updating crates.io index\n      Adding clap v4.6.9 to dependencies\n             Features:\n             + color\n             + derive\n             + error-context\n             + help\n             + std\n             + suggestions\n             + usage\n             - cargo\n             - debug\n             - deprecated\n             - env\n             - string\n             - unicode\n             - unstable-derive-ui-tests\n             - unstable-doc\n             - unstable-ext\n             - unstable-markdown\n             - unstable-styles\n             - unstable-v5\n             - wrap_help\n    Updating crates.io index\n     Locking 21 packages to latest Rust 1.97.0 compatible versions",
+  "code": 0,
+  "secs": 0.3
+ },
+ "add_serde": {
+  "cmd": "cargo add serde --features derive",
+  "out": "    Updating crates.io index\n      Adding serde v1.0.229 to dependencies\n             Features:\n             + derive\n             + serde_derive\n             + std\n             - alloc\n             - rc\n             - unstable\n    Updating crates.io index\n     Locking 3 packages to latest Rust 1.97.0 compatible versions\n      Adding serde v1.0.229\n      Adding serde_core v1.0.229\n      Adding serde_derive v1.0.229",
+  "code": 0,
+  "secs": 0.3
+ },
+ "add_json": {
+  "cmd": "cargo add serde_json",
+  "out": "    Updating crates.io index\n      Adding serde_json v1.0.154 to dependencies\n             Features:\n             + std\n             - alloc\n             - arbitrary_precision\n             - float_roundtrip\n             - indexmap\n             - preserve_order\n             - raw_value\n             - unbounded_depth\n    Updating crates.io index\n     Locking 4 packages to latest Rust 1.97.0 compatible versions\n      Adding itoa v1.0.19\n      Adding memchr v2.8.3\n      Adding serde_json v1.0.154\n      Adding zmij v1.0.23",
+  "code": 0,
+  "secs": 0.3
+ },
+ "cat_toml": {
+  "cmd": "cat Cargo.toml",
+  "out": "[package]\nname = \"todo-cli\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[dependencies]\nclap = { version = \"4.6.9\", features = [\"derive\"] }\nserde = { version = \"1.0.229\", features = [\"derive\"] }\nserde_json = \"1.0.154\"",
+  "code": 0,
+  "secs": 0.0
+ },
+ "build": {
+  "cmd": "cargo build",
+  "out": "   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling unicode-ident v1.0.27\n   Compiling serde_core v1.0.229\n   Compiling utf8parse v0.2.2\n   Compiling anstyle-parse v1.0.0\n   Compiling is_terminal_polyfill v1.70.2\n   Compiling anstyle v1.0.14\n   Compiling zmij v1.0.23\n   Compiling anstyle-query v1.1.5\n   Compiling colorchoice v1.0.5\n   Compiling anstream v1.0.0\n   Compiling strsim v0.11.1\n   Compiling heck v0.5.0\n   Compiling clap_lex v1.1.2\n   Compiling syn v3.0.10\n   Compiling serde v1.0.229\n   Compiling serde_json v1.0.154\n   Compiling clap_builder v4.6.7\n   Compiling memchr v2.8.3\n   Compiling itoa v1.0.19\n   Compiling serde_derive v1.0.229\n   Compiling clap_derive v4.6.9\n   Compiling clap v4.6.9\n   Compiling todo-cli v0.1.0 (/home/dev/todo-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.55s",
+  "code": 0,
+  "secs": 5.6
+ },
+ "help": {
+  "cmd": "cargo run -q -- --help",
+  "out": "A tiny todo list for your terminal\n\nUsage: todo-cli <COMMAND>\n\nCommands:\n  add     Add a new task\n  list    Show all tasks\n  done    Mark a task as done\n  remove  Delete a task\n  help    Print this message or the help of the given subcommand(s)\n\nOptions:\n  -h, --help     Print help\n  -V, --version  Print version",
+  "code": 0,
+  "secs": 0.1
+ },
+ "list_empty": {
+  "cmd": "cargo run -q -- list",
+  "out": "Nothing to do!",
+  "code": 0,
+  "secs": 0.1
+ },
+ "add1": {
+  "cmd": "cargo run -q -- add \"Buy milk\"",
+  "out": "Added #1: Buy milk",
+  "code": 0,
+  "secs": 0.1
+ },
+ "add2": {
+  "cmd": "cargo run -q -- add \"Learn Rust ownership\"",
+  "out": "Added #2: Learn Rust ownership",
+  "code": 0,
+  "secs": 0.1
+ },
+ "add3": {
+  "cmd": "cargo run -q -- add \"Record a YouTube video\"",
+  "out": "Added #3: Record a YouTube video",
+  "code": 0,
+  "secs": 0.1
+ },
+ "list1": {
+  "cmd": "cargo run -q -- list",
+  "out": "[ ] 1: Buy milk\n[ ] 2: Learn Rust ownership\n[ ] 3: Record a YouTube video",
+  "code": 0,
+  "secs": 0.1
+ },
+ "done2": {
+  "cmd": "cargo run -q -- done 2",
+  "out": "Completed #2",
+  "code": 0,
+  "secs": 0.1
+ },
+ "list2": {
+  "cmd": "cargo run -q -- list",
+  "out": "[ ] 1: Buy milk\n[x] 2: Learn Rust ownership\n[ ] 3: Record a YouTube video",
+  "code": 0,
+  "secs": 0.1
+ },
+ "cat_json": {
+  "cmd": "cat todos.json",
+  "out": "[\n  {\n    \"id\": 1,\n    \"text\": \"Buy milk\",\n    \"done\": false\n  },\n  {\n    \"id\": 2,\n    \"text\": \"Learn Rust ownership\",\n    \"done\": true\n  },\n  {\n    \"id\": 3,\n    \"text\": \"Record a YouTube video\",\n    \"done\": false\n  }\n]",
+  "code": 0,
+  "secs": 0.0
+ },
+ "remove1": {
+  "cmd": "cargo run -q -- remove 1",
+  "out": "Removed #1",
+  "code": 0,
+  "secs": 0.1
+ },
+ "done9": {
+  "cmd": "cargo run -q -- done 9",
+  "out": "No task with id 9",
+  "code": 0,
+  "secs": 0.1
+ },
+ "list3": {
+  "cmd": "cargo run -q -- list",
+  "out": "[x] 2: Learn Rust ownership\n[ ] 3: Record a YouTube video",
+  "code": 0,
+  "secs": 0.1
+ },
+ "release": {
+  "cmd": "cargo build --release",
+  "out": "   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.27\n   Compiling quote v1.0.47\n   Compiling serde_core v1.0.229\n   Compiling utf8parse v0.2.2\n   Compiling anstyle-parse v1.0.0\n   Compiling zmij v1.0.23\n   Compiling anstyle v1.0.14\n   Compiling is_terminal_polyfill v1.70.2\n   Compiling colorchoice v1.0.5\n   Compiling anstyle-query v1.1.5\n   Compiling anstream v1.0.0\n   Compiling strsim v0.11.1\n   Compiling clap_lex v1.1.2\n   Compiling syn v3.0.10\n   Compiling serde_json v1.0.154\n   Compiling heck v0.5.0\n   Compiling serde v1.0.229\n   Compiling clap_builder v4.6.7\n   Compiling memchr v2.8.3\n   Compiling itoa v1.0.19\n   Compiling clap_derive v4.6.9\n   Compiling serde_derive v1.0.229\n   Compiling clap v4.6.9\n   Compiling todo-cli v0.1.0 (/home/dev/todo-cli)\n    Finished `release` profile [optimized] target(s) in 7.70s",
+  "code": 0,
+  "secs": 7.8
+ },
+ "ls_bin": {
+  "cmd": "ls -lh target/release/todo-cli",
+  "out": "1.2M target/release/todo-cli",
+  "code": 0,
+  "secs": 0.0
+ },
+ "install": {
+  "cmd": "cargo install --path .",
+  "out": "  Installing /home/dev/.cargo/bin/todo-cli\n   Installed package `todo-cli v0.1.0 (/home/dev/todo-cli)` (executable `todo-cli`)\nwarning: be sure to add `/home/dev/.cargo/bin` to your PATH to be able to run the installed binaries",
+  "code": 0,
+  "secs": 0.3
+ },
+ "global": {
+  "cmd": "todo-cli --version",
+  "out": "todo 0.1.0",
+  "code": 0,
+  "secs": 0.0
+ }
+}

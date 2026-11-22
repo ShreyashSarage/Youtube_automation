@@ -1,0 +1,98 @@
+[
+ {
+  "id": "new",
+  "project": "todo-cli",
+  "cmd": "cargo new todo-cli",
+  "cwd": "home"
+ },
+ {
+  "id": "add_clap",
+  "cmd": "cargo add clap --features derive"
+ },
+ {
+  "id": "add_serde",
+  "cmd": "cargo add serde --features derive"
+ },
+ {
+  "id": "add_json",
+  "cmd": "cargo add serde_json"
+ },
+ {
+  "id": "cat_toml",
+  "cmd": "cat Cargo.toml"
+ },
+ {
+  "id": "build",
+  "cmd": "cargo build",
+  "write": [
+   "src/main.rs"
+  ]
+ },
+ {
+  "id": "help",
+  "cmd": "cargo run -q -- --help"
+ },
+ {
+  "id": "list_empty",
+  "cmd": "cargo run -q -- list"
+ },
+ {
+  "id": "add1",
+  "cmd": "cargo run -q -- add \"Buy milk\""
+ },
+ {
+  "id": "add2",
+  "cmd": "cargo run -q -- add \"Learn Rust ownership\""
+ },
+ {
+  "id": "add3",
+  "cmd": "cargo run -q -- add \"Record a YouTube video\""
+ },
+ {
+  "id": "list1",
+  "cmd": "cargo run -q -- list"
+ },
+ {
+  "id": "done2",
+  "cmd": "cargo run -q -- done 2"
+ },
+ {
+  "id": "list2",
+  "cmd": "cargo run -q -- list"
+ },
+ {
+  "id": "cat_json",
+  "cmd": "cat todos.json"
+ },
+ {
+  "id": "remove1",
+  "cmd": "cargo run -q -- remove 1"
+ },
+ {
+  "id": "done9",
+  "cmd": "cargo run -q -- done 9"
+ },
+ {
+  "id": "list3",
+  "cmd": "cargo run -q -- list"
+ },
+ {
+  "id": "release",
+  "cmd": "cargo build --release"
+ },
+ {
+  "id": "ls_bin",
+  "cmd": "ls -lh target/release/todo-cli | awk '{print $5, $9}'",
+  "shown": "ls -lh target/release/todo-cli"
+ },
+ {
+  "id": "install",
+  "cmd": "CARGO_INSTALL_ROOT=$(cd .. && pwd)/.cargo cargo install --path . 2>&1 | tail -3",
+  "shown": "cargo install --path ."
+ },
+ {
+  "id": "global",
+  "cmd": "PATH=$(cd .. && pwd)/.cargo/bin:$PATH && cd /tmp && todo-cli --version",
+  "shown": "todo-cli --version"
+ }
+]

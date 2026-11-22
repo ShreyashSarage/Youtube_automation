@@ -1,0 +1,218 @@
+{
+ "series": "Rust Projects (long videos, every other day)",
+ "time_ist": "18:00",
+ "note": "Each project is ~10-14 min, built and run for real (longform/LONGFORM.md). Take the first project whose slug is not in state/longform_history.json.",
+ "projects": [
+  {
+   "n": 1,
+   "slug": "todo-cli",
+   "title": "Build a Todo CLI App in Rust (clap + serde)",
+   "covers": "structs, enums, match, Vec, closures, JSON files, clap subcommands, release build, cargo install",
+   "crates": [
+    "clap",
+    "serde",
+    "serde_json"
+   ]
+  },
+  {
+   "n": 2,
+   "slug": "file-organizer",
+   "title": "Build a File Organizer in Rust (sort your Downloads)",
+   "covers": "std::fs, paths, walkdir, HashMap by extension, dry-run flag, error handling with ?",
+   "crates": [
+    "walkdir",
+    "clap"
+   ]
+  },
+  {
+   "n": 3,
+   "slug": "wc-clone",
+   "title": "Rewrite `wc` in Rust (lines, words, bytes) with Tests",
+   "covers": "reading files and stdin, iterators, #[test], cargo test, comparing with the real wc",
+   "crates": [
+    "clap"
+   ]
+  },
+  {
+   "n": 4,
+   "slug": "passgen",
+   "title": "Build a Secure Password Generator in Rust",
+   "covers": "rand, character sets, CLI options, unit tests, entropy explained",
+   "crates": [
+    "rand",
+    "clap"
+   ]
+  },
+  {
+   "n": 5,
+   "slug": "md2html",
+   "title": "Markdown to HTML Converter in Rust",
+   "covers": "pulldown-cmark, reading/writing files, templates, a watch-free build step",
+   "crates": [
+    "pulldown-cmark",
+    "clap"
+   ]
+  },
+  {
+   "n": 6,
+   "slug": "log-analyzer",
+   "title": "Analyze Server Logs in Rust (fast!)",
+   "covers": "regex, BufReader, HashMap counting, top-N, timing vs a shell pipeline",
+   "crates": [
+    "regex",
+    "clap"
+   ]
+  },
+  {
+   "n": 7,
+   "slug": "expense-report",
+   "title": "CSV Expense Report Generator in Rust",
+   "covers": "csv + serde, grouping and totals, formatted tables, error handling",
+   "crates": [
+    "csv",
+    "serde",
+    "clap"
+   ]
+  },
+  {
+   "n": 8,
+   "slug": "notes-api",
+   "title": "Build a REST API in Rust with Axum",
+   "covers": "axum routes, JSON in/out, shared state with Arc<Mutex>, curl testing",
+   "crates": [
+    "axum",
+    "tokio",
+    "serde",
+    "serde_json"
+   ]
+  },
+  {
+   "n": 9,
+   "slug": "notes-sqlite",
+   "title": "Rust REST API + SQLite Database",
+   "covers": "rusqlite, migrations, CRUD endpoints, error responses",
+   "crates": [
+    "axum",
+    "tokio",
+    "rusqlite",
+    "serde"
+   ]
+  },
+  {
+   "n": 10,
+   "slug": "url-shortener",
+   "title": "Build a URL Shortener in Rust",
+   "covers": "axum, random ids, redirects (302), SQLite storage",
+   "crates": [
+    "axum",
+    "tokio",
+    "rusqlite",
+    "rand"
+   ]
+  },
+  {
+   "n": 11,
+   "slug": "tcp-chat",
+   "title": "Multi-User Chat Server in Rust (Tokio)",
+   "covers": "TcpListener, tasks per client, broadcast channels, testing with nc",
+   "crates": [
+    "tokio"
+   ]
+  },
+  {
+   "n": 12,
+   "slug": "mini-redis-kv",
+   "title": "Build a Mini Key-Value Store in Rust",
+   "covers": "a TCP protocol, HashMap, persistence to disk, concurrency with Arc<Mutex>",
+   "crates": [
+    "tokio"
+   ]
+  },
+  {
+   "n": 13,
+   "slug": "sysmon",
+   "title": "System Monitor CLI in Rust (CPU, RAM, processes)",
+   "covers": "sysinfo, refreshing, sorting processes, formatting a live table",
+   "crates": [
+    "sysinfo"
+   ]
+  },
+  {
+   "n": 14,
+   "slug": "thumbnailer",
+   "title": "Batch Image Thumbnail Generator in Rust",
+   "covers": "image crate, resizing, parallelism with rayon, before/after timing",
+   "crates": [
+    "image",
+    "rayon",
+    "walkdir"
+   ]
+  },
+  {
+   "n": 15,
+   "slug": "site-gen",
+   "title": "Static Site Generator in Rust",
+   "covers": "markdown + tera templates, front matter, building a folder of HTML",
+   "crates": [
+    "pulldown-cmark",
+    "tera",
+    "serde",
+    "walkdir"
+   ]
+  },
+  {
+   "n": 16,
+   "slug": "backup-sync",
+   "title": "File Backup Tool with Hashing in Rust",
+   "covers": "walkdir, sha2 hashes, copying only changed files, a report",
+   "crates": [
+    "walkdir",
+    "sha2",
+    "clap"
+   ]
+  },
+  {
+   "n": 17,
+   "slug": "rate-limiter",
+   "title": "Rate-Limit an API in Rust (Axum middleware)",
+   "covers": "middleware, token bucket, per-IP state, load testing with a script",
+   "crates": [
+    "axum",
+    "tokio"
+   ]
+  },
+  {
+   "n": 18,
+   "slug": "ws-dashboard",
+   "title": "Live WebSocket Dashboard in Rust",
+   "covers": "axum WebSockets, broadcasting metrics, a tiny HTML page",
+   "crates": [
+    "axum",
+    "tokio",
+    "serde_json"
+   ]
+  },
+  {
+   "n": 19,
+   "slug": "dockerize-api",
+   "title": "Dockerize a Rust API (tiny image) and Run It on Kiri",
+   "covers": "multi-stage builds, scratch/distroless images, image size, Kiri",
+   "crates": [
+    "axum",
+    "tokio"
+   ]
+  },
+  {
+   "n": 20,
+   "slug": "capstone",
+   "title": "Rust Capstone: Combine It All",
+   "covers": "a small service with an API, storage, a CLI client and tests",
+   "crates": [
+    "axum",
+    "tokio",
+    "rusqlite",
+    "clap"
+   ]
+  }
+ ]
+}

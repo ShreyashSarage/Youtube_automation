@@ -1,0 +1,10 @@
+{
+ "posted": [
+  {
+   "slug": "kiri-mqtt",
+   "date": "2026-11-17",
+   "url": "https://www.youtube.com/watch?v=16lhtq-LCgg",
+   "title": "Kiri on Linux: Install + MQTT Pub/Sub in Rust with Docker Compose (only 23 MB RAM!)"
+  }
+ ]
+}
