@@ -25,7 +25,8 @@ Open `state/curriculum.json` and take the **first lesson whose `day` is not in `
 
 ## 3. Write `episodes/TODAY/spec.json`
 Look at **`samples/kiri-ocean`** and **`samples/ownership-matrix`**: these are the owner's reference
-styles (theme + motion graphics). **`episodes/2026-11-19-day5/spec.json` (Day 5) is the model for the level of detail.** Day parity picks the theme: **odd day → `"ocean"`, even day → `"matrix"`**.
+styles (theme + motion graphics). **`episodes/2026-11-19-day5/spec.json` (Day 5) is the model for the level of detail** (its hook and title predate the
+Day 9 hook/title rules below; follow the rules, not its opening line). Day parity picks the theme: **odd day → `"ocean"`, even day → `"matrix"`**.
 
 Required top level:
 ```jsonc
@@ -44,6 +45,10 @@ Required top level:
 The owner wants every lesson **very detailed**. Target **140-185 words** of narration and **60-79 s**
 (`voice.py` refuses anything over 1:19; the title still ends with `#Shorts`). Use this structure:
 1. `hook` with a `visual` from the lesson's list: `top` "Rust Day N", `big` a 2-5 word question (≤ 26 chars).
+   **The first 2 seconds decide whether people swipe away.** The hook narration (≤ 16 words) must open with the
+   payoff, NOT "Rust, day N": a surprising result, a scary error, or a question a learner actually has.
+   Good: "This compiles in C. Rust refuses it. Here's why." / "255 plus 1 in Rust? Not 256." /
+   "Why can't I change x? Rust says no." Bad: "Rust, day seven. Today we learn bool and char."
 2. `code`: the main example with **`steps`**: a line-by-line walkthrough. Each step = `{"lines": [n], "note": "≤ 34 chars", "at": "<exact phrase from this scene's say>"}`;
    the highlight switches when that phrase is spoken, so pick the words that introduce each line.
 3. `visual`: the concept animated (what the code does in memory / in flow).
@@ -106,12 +111,22 @@ YouTube does not accept uploaded thumbnails for Shorts, so the pipeline renders 
 for the owner to upload by hand in YouTube Studio. Check `thumbnail.png` (it is
 also the first tile of `preview.png`) before rendering.
 
+### Title, description, tags (search phrase first)
+From Day 9 on (enforced by the spec check):
+- **Title = what a learner would type into YouTube search, then the series tag:**
+  `<search phrase / hook> 🦀 | Rust Day N #Shorts`, ≤ 90 chars, never starting with "Rust Day".
+  Examples: `How Functions Work in Rust (fn, return, ->) 🦀 | Rust Day 9 #Shorts`,
+  `Why Rust Won't Let You Change a Variable (let vs mut) 🦀 | Rust Day 4 #Shorts`,
+  `Rust if/else Is an Expression?! 🦀 | Rust Day 13 #Shorts`. Prefer "How to…", "What is…", "Why…",
+  "X vs Y" phrasing: Day 2 ("Install Rust & Hello World") got 4x the views because people search for it.
+- **Description line 1 repeats the search phrase** (it's what search and the Shorts feed show), then the details.
+  "Rust Day N" can appear later in the first paragraph.
+
 ### Title, description, tags (trendy, searchable)
-- Title (≤ 70 chars) **ending in `#Shorts`**: `Rust Day N: <Lesson> in 60 Seconds 🦀 #Shorts` or a hook form like
-  `Why Rust Won't Let You Change x 🦀 | Rust Day N #Shorts`.
+- Title: see "search phrase first" above (ends with `| Rust Day N #Shorts`).
 - Description: use this template, 10-13 hashtags total (YouTube ignores all if > 15):
 ```
-Rust Day N: <lesson>. <one-sentence hook / what you'll learn>.
+<search phrase>: <one-sentence hook / what you'll learn>. (Rust Day N of the Zero to Pro series)
 
 📌 In this short:
 ✅ <point 1>

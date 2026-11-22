@@ -565,7 +565,7 @@ def save_thumbs(img):
         while os.path.getsize(os.path.join(BUILD, n)) > 1_900_000 and q > 50:
             q -= 10; Image.open(os.path.join(BUILD, n)).save(os.path.join(BUILD, n), quality=q, optimize=True)
 
-THUMB_FRAMES = int(SPEC.get("thumbnail", {}).get("frames", 8))  # ~0.27 s cover at the very start
+THUMB_FRAMES = int(SPEC.get("thumbnail", {}).get("frames", 4))  # ~0.27 s cover at the very start
 
 if __name__ == "__main__":
     for sc in SCENES: assert sc["type"] in TYPES, f"unknown scene type {sc['type']}"

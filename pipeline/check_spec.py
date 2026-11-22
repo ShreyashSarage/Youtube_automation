@@ -1,5 +1,5 @@
 """Validate an episode spec before spending time on rendering.  Usage: python3 check_spec.py EPISODE_DIR"""
-import json, os, sys
+import json, os, sys, re
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from visuals import VISUALS as VIS
 EP = sys.argv[1]; s = json.load(open(os.path.join(EP, "spec.json"))); errs = []
@@ -42,6 +42,17 @@ words = sum(len(x.get("say", "").split()) for x in sc)
 if words > 190: errs.append(f"narration is {words} words; keep it <= 185 so the Short stays under 1:20")
 if words < 120: errs.append(f"narration is only {words} words; explain the topic in detail (140-185 words)")
 if "#shorts" not in yt.get("title", "").lower(): errs.append("youtube.title must end with #Shorts")
+if s.get("day", 0) >= 9:  # hook + title rules (owner, Nov 22): search phrase first, payoff in the first second
+    title = yt.get("title", "")
+    if re.match(r"\s*rust day", title, re.I): errs.append("title must START with the search phrase, not 'Rust Day N' (put '| Rust Day N' at the end)")
+    if not re.search(r"\|\s*Rust Day %d\b" % s["day"], title): errs.append(f"title must end with '| Rust Day {s['day']} #Shorts'")
+    if len(title) > 90: errs.append(f"title is {len(title)} chars; keep it <= 90 so the search phrase isn't cut off")
+    if sc:
+        hs = sc[0].get("say", "")
+        if re.search(r"\bday\s+\w+", hs.split(".")[0], re.I) or hs.lower().startswith("rust,"): errs.append("hook narration must not open with 'Rust, day N': open with the payoff (a surprising result, error or question)")
+        if len(hs.split()) > 16: errs.append(f"hook narration is {len(hs.split())} words; keep it <= 16 (the first 2 seconds decide the swipe)")
+    first = yt.get("description", "").split("\n")[0]
+    if re.match(r"\s*rust day", first, re.I): errs.append("description's first line must lead with the search phrase, not 'Rust Day N'")
 if len(sc) > 10: errs.append("use at most 10 scenes so the Short stays under 1:20")
 from collections import Counter
 for vname, cnt in Counter(x.get("visual") for x in sc if x.get("visual")).items():
