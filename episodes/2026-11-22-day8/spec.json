@@ -1,0 +1,272 @@
+{
+ "day": 8,
+ "topic": "Tuples & arrays",
+ "theme": "matrix",
+ "brand": "RUST  ·  DAY 8",
+ "crate": "compound",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "TUPLES &",
+   "ARRAYS"
+  ],
+  "visual": "pipeline",
+  "params": {
+   "stages": [
+    {
+     "name": "tuple",
+     "out": [
+      "500",
+      "6.4",
+      "'x'"
+     ]
+    },
+    {
+     "name": "array",
+     "out": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "Rust Day 8: Tuples & Arrays Explained 🦀 #Shorts",
+  "description": "Rust Day 8: Tuples & arrays, explained line by line. Group values together, destructure them, index them, and see what Rust does when you go past the end.\n\n📌 In this short:\n✅ Tuples mix types, have a fixed length, destructure with let (a, b, c) = tup, and index with .0\n✅ Arrays hold one type with a fixed length: [1, 2, 3], [0; 3], a[0], a.len()\n✅ Indexing past the end: caught at compile time, or a panic at runtime (never random memory)\n\n💻 Code from the video:\nfn main() {\n    let tup = (500, 6.4, 'x');\n    let (a, b, c) = tup;\n    let first = tup.0;\n    let arr = [1, 2, 3, 4, 5];\n    let zeros = [0; 3];\n    println!(\"{a} {b} {c} {first} {} {zeros:?}\", arr.len());\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-02-data-types.html\n⏭️ Tomorrow: Functions\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 8",
+   "rustlang",
+   "rust tuples",
+   "rust arrays",
+   "destructuring",
+   "index out of bounds",
+   "rust data types",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "pipeline",
+   "stages": [
+    {
+     "name": "tuple",
+     "out": [
+      "500",
+      "6.4",
+      "'x'"
+     ]
+    },
+    {
+     "name": "array",
+     "out": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    }
+   ],
+   "top": "Rust Day 8",
+   "big": "Group values together",
+   "sub": [
+    "Tuples & arrays"
+   ],
+   "say": "Rust, day eight. Two ways to group values together: tuples and arrays."
+  },
+  {
+   "type": "code",
+   "heading": "Tuples",
+   "file": "main.rs",
+   "code": "fn main() {\n    let tup = (500, 6.4, 'x');\n    let (a, b, c) = tup;\n    let f = tup.0;\n    println!(\"{a} {b} {c} {f}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      2
+     ],
+     "note": "mixed types, fixed length",
+     "at": "A tuple groups"
+    },
+    {
+     "lines": [
+      3
+     ],
+     "note": "destructure into a, b, c",
+     "at": "destructure"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": ".0 is the first item",
+     "at": "dot zero"
+    }
+   ],
+   "say": "A tuple groups values of different types: an integer, a float and a char, and its length is fixed. You can destructure it into a, b and c, or grab one item with dot zero.",
+   "captions": "A tuple groups values of different types: an integer, a float and a char, and its length is fixed. You can destructure it into a, b and c, or grab one item with .0"
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 1,
+   "caption": "500 6.4 x 500",
+   "say": "Run it: 500, 6.4, x, and 500 again.",
+   "captions": "Run it: 500, 6.4, x, and 500 again."
+  },
+  {
+   "type": "visual",
+   "visual": "vars",
+   "heading": "Positions start at 0",
+   "items": [
+    {
+     "name": "tup.0",
+     "value": "500",
+     "plain": true
+    },
+    {
+     "name": "tup.1",
+     "value": "6.4",
+     "plain": true
+    },
+    {
+     "name": "tup.2",
+     "value": "'x'",
+     "plain": true
+    }
+   ],
+   "say": "Positions start at zero: tup dot zero, dot one, dot two.",
+   "captions": "Positions start at zero: tup.0, .1, .2"
+  },
+  {
+   "type": "code",
+   "heading": "Arrays",
+   "file": "main.rs",
+   "code": "fn main() {\n    let a = [1, 2, 3, 4, 5];\n    let z = [0; 3];\n    let first = a[0];\n    let n = a.len();\n    println!(\"{first} {n} {z:?}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      2
+     ],
+     "note": "one type, fixed length",
+     "at": "An array"
+    },
+    {
+     "lines": [
+      3
+     ],
+     "note": "[0; 3] = three zeros",
+     "at": "zero semicolon three"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": "a[0] is the first element",
+     "at": "a of zero"
+    },
+    {
+     "lines": [
+      5,
+      6
+     ],
+     "note": "prints 1 5 [0, 0, 0]",
+     "at": "len"
+    }
+   ],
+   "say": "An array holds values of one type, with a fixed length. zero semicolon three makes three zeros. a of zero reads the first element, and len gives the length.",
+   "captions": "An array holds values of one type, with a fixed length. [0; 3] makes three zeros. a[0] reads the first element, and len() gives the length."
+  },
+  {
+   "type": "visual",
+   "visual": "pipeline",
+   "heading": "What it prints",
+   "stages": [
+    {
+     "name": "a",
+     "out": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    },
+    {
+     "name": "a[0]",
+     "out": [
+      "1"
+     ]
+    },
+    {
+     "name": "a.len()",
+     "out": [
+      "5"
+     ]
+    },
+    {
+     "name": "z",
+     "out": [
+      "0",
+      "0",
+      "0"
+     ]
+    }
+   ],
+   "say": "So it prints one, five, and three zeros.",
+   "captions": "So it prints 1, 5, and three zeros."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "index past the end",
+   "file": "main.rs",
+   "code": "fn main() {\n    let a = [1, 2, 3];\n    let x = a[5];\n    println!(\"{x}\");\n}",
+   "highlight": [
+    3
+   ],
+   "expect_error": "unconditional_panic",
+   "say": "Now the classic mistake: index five of a three element array."
+  },
+  {
+   "type": "run",
+   "heading": "Caught at compile time",
+   "from_code": 6,
+   "caption": "index out of bounds",
+   "say": "Rust stops it: index out of bounds, the length is 3 but the index is 5. If the index is only known at runtime, the program panics instead of reading random memory."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "tuple: mixed types",
+    "array: one type",
+    "both: fixed length",
+    "indexes start at 0"
+   ],
+   "say": "Recap: tuples mix types, arrays hold one type, both have a fixed length, and indexes start at zero."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 8 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Functions"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: functions. Follow for daily Rust!"
+  }
+ ]
+}

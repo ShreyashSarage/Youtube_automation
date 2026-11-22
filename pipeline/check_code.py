@@ -45,6 +45,13 @@ for i, sc in enumerate(spec["scenes"]):
     lines = [l.rstrip() for l in text.split("\n")]
     cut = next((k for k, l in enumerate(lines) if l.startswith("error: could not compile") or l.startswith("For more information")), len(lines))
     lines = lines[:cut]
+    if r.returncode != 0:  # failed build: drop warning blocks so the real error is what's shown
+        kept, skip = [], False
+        for l in lines:
+            if l.startswith("warning"): skip = True; continue
+            if skip and (l.startswith("error") or l.lstrip().startswith("Compiling")): skip = False
+            if not skip: kept.append(l)
+        lines = kept
     if r.returncode != 0:  # long compiler errors: keep the top through the first "= help"/"= note" line
         h = next((k for k, l in enumerate(lines) if l.strip().startswith(("= help", "= note"))), None)
         if h is not None: lines = lines[:h + 1]

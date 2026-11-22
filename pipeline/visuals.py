@@ -360,9 +360,9 @@ def vars(d, t, dur, s):
         fade = 1 - 0.6 * old
         mut = it.get("mut"); kw = it.get("kw") or ("let mut" if mut else "let")
         kcol = "A" if kw == "const" else ("A2" if mut else "DIM")
-        d.text((80, y + 22), kw, font=MB(44), fill=C(kcol, clamp(a) * fade))
+        if not it.get("plain"): d.text((80, y + 22), kw, font=MB(44), fill=C(kcol, clamp(a) * fade))
         lab = it["name"] + (f": {it['type']}" if it.get("type") else "")
-        d.text((80, y + 82), lab, font=fit(d, lab, MB, 54, 430), fill=C("WH", clamp(a) * fade))
+        d.text((80, y + (52 if it.get("plain") else 82)), lab, font=fit(d, lab, MB, 54, 430), fill=C("WH", clamp(a) * fade))
         bx0, bx1 = 540, 960
         tc = 1.6 * k + i * 0.5; ch = it.get("change"); e = ease((t - tc) / 0.5) if ch else 0
         shake = 14 * math.sin((t - tc) * 60) * (1 - (t - tc) / 0.6) if (ch and not mut and 0 < t - tc < 0.6) else 0
@@ -374,7 +374,7 @@ def vars(d, t, dur, s):
             if e > 0: text_c(d, cx, y + 38 + 70 * (1 - e), ch, fv(ch), C("A", e))
         else:
             text_c(d, cx, y + 38, it["value"], fv(it["value"]), C("WH", clamp(a) * fade))
-        if kw != "const": padlock(d, 1010 + shake, y + 56, 28, C("A2" if mut else ("BAD" if ch and t > tc else "DIM"), clamp(a) * fade), open_=bool(mut))
+        if kw != "const" and not it.get("plain"): padlock(d, 1010 + shake, y + 56, 28, C("A2" if mut else ("BAD" if ch and t > tc else "DIM"), clamp(a) * fade), open_=bool(mut))
         if ch and not mut and t > tc + 0.2:
             d.text((bx0, y + 182), "cannot assign twice", font=B(38), fill=C("BAD", ease((t - tc - 0.2) / 0.4)))
         if old > 0: d.text((bx0, y + 182), "shadowed", font=B(38), fill=C("DIM", old))

@@ -71,6 +71,30 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-02-data-types.html"
    ]
+  },
+  {
+   "date": "2026-11-22",
+   "day": 7,
+   "topic": "bool, char & integer overflow",
+   "title": "Rust Day 7: bool, char & What Is 255 + 1? 🦀 #Shorts",
+   "url": "https://www.youtube.com/watch?v=T13r85rAI3U",
+   "publishAt": "2026-11-22T17:52:00+05:30",
+   "note": "posted manually (scheduled run lacks connector/repo access)",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+   ]
+  },
+  {
+   "date": "2026-11-22",
+   "day": 8,
+   "topic": "Tuples & arrays",
+   "title": "Rust Day 8: Tuples & Arrays Explained 🦀 #Shorts",
+   "url": "https://www.youtube.com/watch?v=_XIeo56g7RQ",
+   "publishAt": "2026-11-22T17:52:00+05:30",
+   "note": "posted manually (scheduled run lacks connector/repo access)",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+   ]
   }
  ]
 }

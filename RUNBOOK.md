@@ -68,7 +68,7 @@ For a closer look at a scene, render single frames: `python3 pipeline/render.py 
 ### Visuals (pick what *shows* the narration)
 | visual | shows | params |
 |---|---|---|
-| `vars` | variable boxes; `mut` ones change value, immutable ones shake + "cannot assign twice" | `items` [{name, value, mut, change}] ≤ 3 |
+| `vars` | variable boxes; `mut` ones change value, immutable ones shake + "cannot assign twice" | `items` [{name, value, mut, change, kw, type, shadows, plain}] ≤ 4 (`plain`: just a label + box, for things like `tup.0` that aren't `let` bindings) |
 | `flow` | a value tests match/if arms in order, lands on the matching one | `input`, `kind` ("match"/"if"), `arms` [{pattern, result}] ≤ 4, `hit` (index) |
 | `pipeline` | iterator stages, values flow down and transform | `stages` [{name, out: [values]}] ≤ 4 (values must be correct!) |
 | `ownership` | stack vars → heap value; `mode: "move"` (default) strikes the old owner, `"borrow"` draws a dashed reference | `a`, `b`, `value`, `note`, `mode` |

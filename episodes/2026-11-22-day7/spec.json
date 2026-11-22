@@ -1,0 +1,205 @@
+{
+ "day": 7,
+ "topic": "bool, char & integer overflow",
+ "theme": "ocean",
+ "brand": "RUST  ·  DAY 7",
+ "crate": "overflow",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-02-data-types.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "255 + 1",
+   "= ???"
+  ],
+  "visual": "gauge",
+  "params": {
+   "value": 255,
+   "max": 255,
+   "unit": "u8 max",
+   "label": "what comes next?"
+  }
+ },
+ "youtube": {
+  "title": "Rust Day 7: bool, char & What Is 255 + 1? 🦀 #Shorts",
+  "description": "Rust Day 7: bool, char and integer overflow, explained line by line. What really happens when a u8 hits 255 + 1?\n\n📌 In this short:\n✅ bool is true or false; char uses single quotes, holds any Unicode character and is 4 bytes\n✅ 255 + 1 on a u8: Rust refuses to compile it; at runtime debug builds panic and release builds wrap\n✅ Choose the behaviour: checked_add (None), wrapping_add (0), saturating_add (255)\n\n💻 Code from the video:\nfn main() {\n    let x: u8 = 255;\n    let a = x.checked_add(1);    // None\n    let b = x.wrapping_add(1);   // 0\n    let c = x.saturating_add(1); // 255\n    println!(\"{a:?} {b} {c}\");\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-02-data-types.html\n⏭️ Tomorrow: Tuples & arrays\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 7",
+   "rustlang",
+   "rust bool",
+   "rust char",
+   "integer overflow",
+   "checked_add",
+   "wrapping_add",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "vars",
+   "items": [
+    {
+     "name": "ok",
+     "type": "bool",
+     "value": "true"
+    },
+    {
+     "name": "c",
+     "type": "char",
+     "value": "'z'"
+    }
+   ],
+   "top": "Rust Day 7",
+   "big": "What is 255 + 1?",
+   "sub": [
+    "bool, char & overflow"
+   ],
+   "say": "Rust, day seven. True or false, characters, and a big question: what is 255 plus 1?",
+   "captions": "Rust, day seven. True or false, characters, and a big question: what is 255 + 1?"
+  },
+  {
+   "type": "code",
+   "heading": "bool & char",
+   "file": "main.rs",
+   "code": "use std::mem::size_of;\n\nfn main() {\n    let ok = true;\n    let c = 'z';\n    let z = 'ℤ';\n    let n = size_of::<char>();\n    println!(\"{ok} {c} {z} {n}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      4
+     ],
+     "note": "bool: true or false",
+     "at": "ok is a bool"
+    },
+    {
+     "lines": [
+      5
+     ],
+     "note": "char: single quotes",
+     "at": "single quotes"
+    },
+    {
+     "lines": [
+      6
+     ],
+     "note": "any Unicode character",
+     "at": "any Unicode"
+    },
+    {
+     "lines": [
+      7,
+      8
+     ],
+     "note": "every char is 4 bytes",
+     "at": "four bytes"
+    }
+   ],
+   "say": "ok is a bool: just true or false. c is a char, written in single quotes. A char can be any Unicode character, like this math symbol, and every char takes four bytes.",
+   "captions": "ok is a bool: just true or false. c is a char, written in single quotes. A char can be any Unicode character, like this math symbol, and every char takes 4 bytes."
+  },
+  {
+   "type": "visual",
+   "visual": "gauge",
+   "heading": "A full u8",
+   "sub": "the biggest u8 is 255",
+   "value": 255,
+   "max": 255,
+   "unit": "u8 max",
+   "label": "255 + 1 = ?",
+   "say": "A u8 tops out at 255. Adding one more is called integer overflow.",
+   "captions": "A u8 tops out at 255. Adding one more is called integer overflow."
+  },
+  {
+   "type": "code",
+   "heading": "Try 255 + 1",
+   "file": "main.rs",
+   "code": "fn main() {\n    let x: u8 = 255;\n    let y = x + 1;\n    println!(\"{y}\");\n}",
+   "highlight": [
+    3
+   ],
+   "expect_error": "arithmetic_overflow",
+   "say": "So let's try it: x is 255, then x plus 1.",
+   "captions": "So let's try it: x is 255, then x + 1."
+  },
+  {
+   "type": "run",
+   "heading": "Caught at compile time",
+   "from_code": 3,
+   "caption": "this would overflow",
+   "say": "Rust refuses to compile it: this arithmetic operation will overflow. When it can't spot it early, a debug build panics at runtime, and a release build wraps around to zero."
+  },
+  {
+   "type": "visual",
+   "visual": "shield",
+   "heading": "No silent bugs",
+   "label": "overflow caught",
+   "say": "Either way, the bug never sneaks through silently."
+  },
+  {
+   "type": "code",
+   "heading": "Choose what happens",
+   "file": "main.rs",
+   "code": "fn main() {\n    let x: u8 = 255;\n    let a = x.checked_add(1);\n    let b = x.wrapping_add(1);\n    let c = x.saturating_add(1);\n    println!(\"{a:?} {b} {c}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      3
+     ],
+     "note": "checked: None on overflow",
+     "at": "checked add"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": "wrapping: back to 0",
+     "at": "wrapping add"
+    },
+    {
+     "lines": [
+      5
+     ],
+     "note": "saturating: stays at 255",
+     "at": "saturating add"
+    }
+   ],
+   "say": "When overflow is possible, say what you want. checked add gives None. wrapping add goes back to zero. saturating add stays at 255.",
+   "captions": "When overflow is possible, say what you want. checked_add gives None. wrapping_add goes back to 0. saturating_add stays at 255."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 6,
+   "caption": "None, 0, 255",
+   "say": "Run it: None, zero, 255.",
+   "captions": "Run it: None, 0, 255."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "bool: true or false",
+    "char: 4-byte Unicode",
+    "u8 overflow is caught",
+    "checked_add & friends"
+   ],
+   "say": "Recap: bool is true or false, char is four byte Unicode, Rust catches overflow, and you pick checked, wrapping or saturating."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 7 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Tuples & arrays"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: tuples and arrays. Follow for daily Rust!"
+  }
+ ]
+}
