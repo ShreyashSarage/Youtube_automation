@@ -5,6 +5,12 @@
    "date": "2026-11-17",
    "url": "https://www.youtube.com/watch?v=16lhtq-LCgg",
    "title": "Kiri on Linux: Install + MQTT Pub/Sub in Rust with Docker Compose (only 23 MB RAM!)"
+  },
+  {
+   "slug": "todo-cli",
+   "date": "2026-11-22",
+   "url": "https://www.youtube.com/watch?v=0zTTX_rqksE",
+   "title": "Build a Todo CLI App in Rust (clap + serde) | Rust Projects #1"
   }
  ]
 }
