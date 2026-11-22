@@ -395,7 +395,7 @@ def draw_editor(img, t, hl_now):
     sx = bx + 54; sw = 290
     d.rectangle((sx, by, sx + sw, y + h - 30), fill=(37, 37, 38))
     d.text((sx + 20, by + 14), "EXPLORER", font=SANSB(14), fill=(190, 190, 190))
-    d.text((sx + 14, by + 46), "⌄ MQTT-DEMO", font=SANSB(15), fill=(220, 220, 220))
+    d.text((sx + 14, by + 46), "⌄ " + PROJECT.upper(), font=SANSB(15), fill=(220, 220, 220))
     rowpos = {}
     for i, (p, depth, name, is_dir) in enumerate(tree_rows(t)):
         ry = by + 76 + i * 28; sel = p == f
