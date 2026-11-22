@@ -35,6 +35,8 @@ python3 longform/engine/capture.py longform/<slug>      # runs every command in 
 Fix the project until every step succeeds and the outputs show what you want to teach
 (happy path, a helpful error, a release build). Re-run the capture after every change.
 For servers: a step with `"background": true` then `{"kill": "<id>"}` after the client commands.
+When the capture is final, save the real `Cargo.toml` it produced (a `cat Cargo.toml` step) as
+`longform/<slug>/project/Cargo.toml` and add a `.gitignore` with `/target`, so the code link in the description builds as-is.
 
 ## 4. Write `longform/<slug>/script.py`
 Copy the structure of **`longform/todo-cli/script.py`** (the reference): PROJECT, PROMPT_DIR, TREE,
