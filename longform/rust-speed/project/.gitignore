@@ -1,0 +1,6 @@
+words.txt
+target/
+*.class
+*_go
+collatz_clang
+collatz_gcc

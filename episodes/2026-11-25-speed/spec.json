@@ -1,0 +1,180 @@
+{
+ "topic": "Rust vs Python speed",
+ "theme": "rust",
+ "brand": "RUST  ·  BENCHMARK",
+ "crate": "collatz",
+ "sources": [
+  "https://github.com/ShreyashSarage/Youtube_automation/tree/main/longform/rust-speed/project"
+ ],
+ "thumbnail": {
+  "lines": [
+   "RUST VS",
+   "PYTHON"
+  ],
+  "visual": "gauge",
+  "params": {
+   "value": 86,
+   "max": 100,
+   "unit": "x faster",
+   "label": "same code, same machine"
+  }
+ },
+ "youtube": {
+  "title": "Rust vs Python: Same Code, 86x Faster? 🦀 #Shorts",
+  "description": "Rust vs Python, same code: Rust finished in 0.19 s, Python took 16.4 s, 86x slower. Real benchmark, same machine, median of 5 runs.\n\n📌 In this short:\n✅ The same Collatz loop in Rust, JavaScript and Python\n✅ Why: Rust compiles to machine code ahead of time, Python interprets every step\n✅ Memory too: counting words in a 96 MB file, Rust used 100 MB, Java 1438 MB\n\n🎬 Full video (Rust vs C, Go, Java, JavaScript & Python, 4 rounds): LINK_LONG\n💻 All the code: https://github.com/ShreyashSarage/Youtube_automation/tree/main/longform/rust-speed/project\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 What should I benchmark next? Tell me in the comments 👇\n\n#rust #rustlang #python #programming #coding #benchmark #rustvspython #performance #learnrust #developer #shorts",
+  "tags": [
+   "rust",
+   "rust vs python",
+   "python",
+   "rust programming",
+   "benchmark",
+   "rust performance",
+   "programming",
+   "coding",
+   "rustlang",
+   "speed test",
+   "javascript",
+   "learn rust"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "race",
+   "lanes": [
+    {
+     "label": "Rust",
+     "value": 0.19
+    },
+    {
+     "label": "JavaScript",
+     "value": 1.79
+    },
+    {
+     "label": "Python",
+     "value": 16.42
+    }
+   ],
+   "unit": " s",
+   "top": "Same code",
+   "big": "86x faster?",
+   "sub": [
+    "Rust vs JavaScript vs Python"
+   ],
+   "say": "Same loop, same machine. Python: 16 seconds. Rust: 0.19."
+  },
+  {
+   "type": "code",
+   "heading": "The test: Collatz",
+   "file": "main.rs",
+   "code": "let mut best = (0, 0);\nfor i in 1..1_000_000u64 {\n  let (mut n, mut s) = (i, 1);\n  while n != 1 {\n    n = if n % 2 == 0 { n / 2 }\n        else { 3 * n + 1 };\n    s += 1;\n  }\n  best = best.max((s, i));\n}\nprintln!(\"{best:?}\");",
+   "check": "fn main() {\n    let mut best = (0, 0);\n    for i in 1..1_000_000u64 {\n      let (mut n, mut s) = (i, 1);\n      while n != 1 {\n        n = if n % 2 == 0 { n / 2 }\n            else { 3 * n + 1 };\n        s += 1;\n      }\n      best = best.max((s, i));\n    }\n    println!(\"{best:?}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      2
+     ],
+     "note": "every number below 1 million",
+     "at": "every number"
+    },
+    {
+     "lines": [
+      5,
+      6
+     ],
+     "note": "even: halve it · odd: 3n + 1",
+     "at": "halve it"
+    },
+    {
+     "lines": [
+      4,
+      7
+     ],
+     "note": "repeat until 1, count steps",
+     "at": "until it reaches one"
+    },
+    {
+     "lines": [
+      9
+     ],
+     "note": "keep the longest chain",
+     "at": "longest"
+    }
+   ],
+   "say": "The test: for every number below a million, halve it if it's even, or triple it and add one if it's odd, until it reaches one. Keep the longest chain. About a hundred and thirty million steps.",
+   "captions": "The test: for every number below a million, halve it if it's even, or 3n + 1 if it's odd, until it reaches 1. Keep the longest chain. About 130 million steps."
+  },
+  {
+   "type": "run",
+   "heading": "Same answer everywhere",
+   "from_code": 1,
+   "caption": "837799 · 525 steps",
+   "say": "Every language finds the same answer: eight three seven seven nine nine, with five hundred twenty five steps.",
+   "captions": "Every language finds the same answer: 837799, with 525 steps."
+  },
+  {
+   "type": "visual",
+   "visual": "gauge",
+   "heading": "Median of 5 runs",
+   "value": 86,
+   "max": 100,
+   "unit": "x faster",
+   "label": "Rust 0.19 s vs Python 16.4 s",
+   "say": "Median of five runs: Rust 0.19 seconds, Python 16.4. 86 times faster. And Rust tied C."
+  },
+  {
+   "type": "visual",
+   "visual": "compiler",
+   "heading": "Why?",
+   "sub": "compiled before it runs",
+   "file": "main.rs",
+   "output": "machine code",
+   "badge": "0.19 s",
+   "say": "Why? Rust compiles your loop to machine code before it runs. Python's interpreter works through every step at run time, checking types on every plus and modulo."
+  },
+  {
+   "type": "visual",
+   "visual": "race",
+   "heading": "Memory: 96 MB file",
+   "sub": "peak RAM, counting words",
+   "lanes": [
+    {
+     "label": "Rust",
+     "value": 100
+    },
+    {
+     "label": "Go",
+     "value": 409
+    },
+    {
+     "label": "Java",
+     "value": 1438
+    }
+   ],
+   "unit": " MB",
+   "say": "Memory too. Counting words in a ninety six megabyte file: Rust used 100 megabytes, Go 409, Java about one point four gigabytes.",
+   "captions": "Memory too. Counting words in a 96 MB file: Rust used 100 MB, Go 409, Java about 1.4 GB."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "Rust ≈ C: 0.19 s",
+    "Python: 86x slower",
+    "Java: 14x more memory",
+    "Same code everywhere"
+   ],
+   "say": "Recap: Rust matches C, beats Python by 86 times, and uses a fraction of the memory."
+  },
+  {
+   "type": "cta",
+   "heading": "Full test ▶",
+   "link": "4 rounds · 6 languages",
+   "question": [
+    "Rust vs 5 languages"
+   ],
+   "sub": "Link in the description",
+   "say": "The full video tests five languages in four rounds. Link in the description!"
+  }
+ ]
+}

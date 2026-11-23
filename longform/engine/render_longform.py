@@ -118,6 +118,8 @@ def schedule():
                         out = act.get("out", "")
                         lines = out.split("\n") if out else []
                         sp = act.get("speed"); tt = cur + rng.uniform(0.12, 0.35); times = []
+                        if act.get("wait"):  # a long real run, shown compressed: say so on screen
+                            EV["badge"].append((cur + 0.1, cur + act["wait"], act.get("wait_badge", "▶▶ sped up"))); tt = cur + act["wait"]
                         for l in lines:
                             EV[key].append((tt, "line", l)); times.append(tt)
                             tt += (1.0 / sp) if sp else 0.0
@@ -159,6 +161,8 @@ def schedule():
                     EV["ed"].append((tt, "set", (f, li, col))); EV["keys"].append(tt)
                 cur = (ts[-1] if ts else cur) + 0.6
                 EV["ed"].append((cur, "set", (f, b0, 0)))
+        elif scene == "chart" and sh["chart"].get("mode") == "race":
+            cur = start + 1.0 + max(b["value"] for b in sh["chart"]["bars"]) + 1.6
         else:
             cur = start + 1.0
         dur = max(vdur + 1.4, cur - start + 0.8)
@@ -248,6 +252,9 @@ def out_segments(l):
     if m: return [(m.group(1), (220, 220, 220), False), (m.group(2), (120, 220, 90), True), (m.group(3), (220, 220, 220), False)]
     m = re.match(r"^(\w+)-1(\s*\|)(.*)$", l)
     if m: return [(m.group(1) + "-1" + m.group(2), SERVICE_COL.get(m.group(1), (200, 200, 200)), False), (m.group(3), (225, 225, 225), False)]
+    if re.match(r"^error(\[E\d+\])?:", l): return [(l.split(":")[0], (240, 80, 80), True), (l[len(l.split(":")[0]):], (235, 235, 235), True)]
+    if re.match(r"^real\s", l): return [(l, (250, 210, 90), True)]
+    if re.match(r"^(user|sys)\s", l): return [(l, (140, 140, 150), False)]
     if l.startswith("note:"): return [("note", (110, 190, 255), True), (l[4:], (220, 220, 220), False)]
     if re.match(r"^\s+\+ ", l): return [(l, (150, 210, 150), False)]
     if re.match(r"^\s+- ", l): return [(l, (150, 150, 150), False)]
@@ -367,7 +374,37 @@ def hl_conf(line, lang):
     if lang == "conf":
         p = line.split(" ", 1); return [(p[0], (156, 220, 254))] + ([(" " + p[1], (206, 145, 120))] if len(p) > 1 else [])
     return [(line, (206, 145, 120) if lang == "yaml" else (212, 212, 212))]
+GEN_KW = {
+ "python": set("def for in while if else elif return import from with as not and or True False None lambda class".split()),
+ "js": set("const let var for of in if else return new function require class true false null".split()),
+ "go": set("package import func for range if else return var type struct map go defer true false nil".split()),
+ "java": set("public private class static void final long int for while if else return new import throws var true false null".split()),
+ "c": set("int for while if else return void const static char unsigned".split()),
+}
+GEN_TY = set("uint64_t int64_t String Map HashMap Integer Path Files Counter sync WaitGroup".split())
+def hl_generic(line, lang):
+    out = []; com = "#" if lang == "python" else "//"
+    for m in re.finditer(r'(%s.*$)|(^\s*#\w+.*$)|(f?"(?:[^"\\]|\\.)*"|`[^`]*`|\'(?:[^\'\\]|\\.)*\')|(@\w+)|([A-Za-z_][A-Za-z0-9_]*)|(\d[\d_\.]*)|(\s+)|(.)' % re.escape(com), line):
+        tok = m.group(0)
+        if m.group(1): out.append((tok, (106, 153, 85)))
+        elif m.group(2): out.append((tok, (197, 134, 192)))
+        elif m.group(3): out.append((tok, (206, 145, 120)))
+        elif m.group(4): out.append((tok, (190, 190, 120)))
+        elif m.group(5):
+            if tok in GEN_KW.get(lang, ()): out.append((tok, (197, 134, 192)))
+            elif tok in GEN_TY or (tok[0].isupper() and lang in ("java", "go")): out.append((tok, (78, 201, 176)))
+            else: out.append((tok, (156, 220, 254)))
+        elif m.group(6): out.append((tok, (181, 206, 168)))
+        else: out.append((tok, (212, 212, 212)))
+    return out
+def hl_any(line, lang):
+    if lang == "rust": return hl_rust(line)
+    if lang in GEN_KW: return hl_generic(line, lang)
+    return hl_conf(line, lang)
 def lang_of(f):
+    ext = {".py": "python", ".js": "js", ".go": "go", ".java": "java", ".c": "c", ".sh": "python"}
+    for e, l in ext.items():
+        if f.endswith(e): return l
     return "rust" if f.endswith(".rs") else "toml" if f.endswith(".toml") else "yaml" if f.endswith((".yaml", ".yml")) else "dockerfile" if f.endswith("Dockerfile") else "plain" if f.endswith((".md", ".txt", ".json", ".csv", ".html", ".sql")) else "conf"
 
 ED_RECT = (40, 64, 1840, 980)
@@ -423,13 +460,13 @@ def draw_editor(img, t, hl_now):
             i = top + r; yy = oy + r * ELH
             d.text((ex + 54 - d.textlength(str(i + 1), font=MONO(18)), yy + 3), str(i + 1), font=MONO(18), fill=(200, 200, 200) if i + 1 == ln_cur else (110, 110, 110))
             xx = ox
-            for tok, c in (hl_rust(line) if lang == "rust" else hl_conf(line, lang)):
+            for tok, c in hl_any(line, lang):
                 d.text((xx, yy), tok, font=MONO(EFS), fill=c); xx += ECW * len(tok)
         cl = (lines[-1] if lines else "") if col else ""
         cr = (ln_cur - 1 - top); cxp = ox + ECW * (len(cl) if col else len(full[nl]) - len(full[nl].lstrip(" ")) if nl < len(full) else 0)
         if int(t * 2) % 2 == 0 or col: d.rectangle((cxp, oy + cr * ELH, cxp + 2, oy + cr * ELH + ELH - 6), fill=(230, 230, 230))
         focus = (cxp, oy + cr * ELH)
-        d.text((x + w - 330, y + h - 25), f"Ln {ln_cur}, Col {(len(cl) if col else 0) + 1}   UTF-8   {dict(rust='Rust', toml='TOML', yaml='YAML', dockerfile='Dockerfile', conf='Properties', plain='Plain Text')[lang]}", font=SANS(15), fill=(255, 255, 255))
+        d.text((x + w - 330, y + h - 25), f"Ln {ln_cur}, Col {(len(cl) if col else 0) + 1}   UTF-8   {dict(rust='Rust', toml='TOML', yaml='YAML', dockerfile='Dockerfile', conf='Properties', plain='Plain Text', python='Python', js='JavaScript', go='Go', java='Java', c='C')[lang]}", font=SANS(15), fill=(255, 255, 255))
     else:
         d.text((ex + 300, by + 380), PROJECT, font=SANSB(40), fill=(70, 70, 75))
     return focus, rowpos
@@ -497,6 +534,80 @@ def draw_diagram(img, which, lt, dur):
         else:
             if p > 0.5: text_c(d, x + 40 + it.get("x", 800), by + 80 + it.get("y", 700), it["text"], (MONO if it.get("mono") else SANSB)(it.get("size", 28)), COL.get(it.get("color", "gray"), COL["gray"])[0])
 
+# ------------------------------------------------------------------ code grid (several files side by side)
+def draw_codes(img, sh, lt, dur):
+    """sh["files"]: list of FILES keys (or {"file", "title", "hl": [line numbers]}), shown in a grid, appearing one by one."""
+    items = [f if isinstance(f, dict) else {"file": f} for f in sh["files"]]; n = len(items)
+    cols = sh.get("cols", 3 if n > 4 else (2 if n > 1 else 1)); rows_ = math.ceil(n / cols)
+    gx, gy, gw, gh, gap = 40, 64, 1840, 960, 22
+    pw = (gw - gap * (cols - 1)) / cols; ph = (gh - gap * (rows_ - 1)) / rows_
+    lines_all = [S.FILES[it["file"]] for it in items]
+    def fit_fs(L):
+        fs_ = sh.get("max_font", 26)
+        while fs_ > 11 and not (max(len(l) for l in L) * MONO(fs_).getlength("M") <= pw - 50 and len(L) * fs_ * 1.38 <= ph - 46 - 24): fs_ -= 1
+        return fs_
+    for k, it in enumerate(items):
+        fs = fit_fs(lines_all[k]); cw = MONO(fs).getlength("M"); lh = fs * 1.38
+        a = eout((lt - 0.4 - k * min(0.5, dur * 0.4 / n)) / 0.5)
+        if a <= 0: continue
+        c, r = k % cols, k // cols; x = int(gx + c * (pw + gap)); y = int(gy + r * (ph + gap) + (1 - a) * 30)
+        bx, by = win_frame(img, x, y, int(pw), int(ph), it.get("title", it["file"]), True)
+        d = ImageDraw.Draw(img); lang = lang_of(it["file"])
+        for hi in it.get("hl", []):
+            yy = by + 12 + (hi - 1) * lh; d.rectangle((bx, yy - 2, x + pw, yy + lh - 2), fill=(70, 62, 30))
+        for i, line in enumerate(lines_all[k]):
+            xx = bx + 20; yy = by + 12 + i * lh
+            for tok, col in hl_any(line, lang):
+                d.text((xx, yy), tok, font=MONO(fs), fill=col); xx += cw * len(tok)
+
+# ------------------------------------------------------------------ results chart (bars, or a live race)
+CHART_COL = {"Rust": (222, 105, 50), "C (clang)": (110, 140, 190), "C (gcc)": (90, 115, 160), "C": (110, 140, 190), "Go": (60, 175, 200),
+             "Java": (220, 70, 70), "JavaScript": (230, 200, 60), "Python": (70, 120, 200)}
+def draw_chart(img, sh, lt, dur):
+    """sh["chart"] = {title, sub, bars: [{label, value, note}], fmt, mode: "bar"|"race", base: label to compare against, unit_note}."""
+    c = sh["chart"]; bars = c["bars"]; n = len(bars); d = ImageDraw.Draw(img)
+    x, y, w, h = 90, 70, 1740, 940
+    card = Image.new("RGBA", (w, h), (16, 16, 22, 235)); img.paste(card, (x, y), card)
+    d.rounded_rectangle((x, y, x + w, y + h), 18, outline=(70, 70, 85), width=2)
+    text_c(d, x + w / 2, y + 34, c["title"], SANSB(44), (255, 255, 255))
+    if c.get("sub"): text_c(d, x + w / 2, y + 96, c["sub"], SANS(26), (175, 175, 190))
+    vmax = max(b["value"] for b in bars); fmt = c.get("fmt", "{:.2f} s")
+    lx = x + 60; bx0 = x + 330; bw_max = w - 330 - 330; top = y + 165; lh = min(110, (h - 200) / n); bh = lh * 0.62
+    race = c.get("mode") == "race"; T0 = 1.0
+    base = next((b["value"] for b in bars if b["label"] == c.get("base")), None)
+    done_order = sorted(range(n), key=lambda i: bars[i]["value"])
+    for i, b in enumerate(bars):
+        yy = top + i * lh; col = tuple(b["color"]) if b.get("color") else CHART_COL.get(b["label"], (150, 150, 160))
+        f = SANSB(34) if b["label"] == "Rust" else SANS(32)
+        d.text((lx, yy + bh / 2 - 20), b["label"], font=f, fill=(255, 255, 255) if b["label"] == "Rust" else (215, 215, 225))
+        d.rounded_rectangle((bx0, yy, bx0 + bw_max, yy + bh), 10, fill=(34, 34, 44))
+        if race:
+            el = max(0.0, lt - T0); v = min(el, b["value"]); fin = el >= b["value"]
+        else:
+            p = eout((lt - 0.6 - i * 0.25) / 1.1); v = b["value"] * p; fin = p >= 0.999
+        L = max(8, bw_max * v / vmax) if v > 0 else 0
+        if L: d.rounded_rectangle((bx0, yy, bx0 + L, yy + bh), 10, fill=col)
+        if race and not fin and v > 0:  # running: a pulsing tip
+            pr = 0.5 + 0.5 * math.sin(lt * 10); d.ellipse((bx0 + L - 9 - 4 * pr, yy + bh / 2 - 9 - 4 * pr, bx0 + L + 9 + 4 * pr, yy + bh / 2 + 9 + 4 * pr), fill=(255, 255, 255))
+        txt = fmt.format(v) if (race or v > 0) else ""
+        tf = MONOB(32) if fin else MONO(32)
+        d.text((bx0 + bw_max + 30, yy + bh / 2 - 20), txt, font=tf, fill=(255, 255, 255) if fin else (190, 190, 200))
+        if fin and race:
+            rank = done_order.index(i) + 1; d.text((x + w - 80, yy + bh / 2 - 22), f"#{rank}", font=SANSB(32), fill=col)
+        if fin and not race and base and b.get("note") is None and b["label"] != c.get("base"):
+            k = b["value"] / base
+            note = (f"{k:.1f}x slower" if k >= 1.1 else (f"{1 / k:.1f}x faster" if k <= 0.9 else "≈ same"))
+            if L + 30 + d.textlength(note, font=SANSB(26)) < bw_max: d.text((bx0 + L + 20, yy + bh / 2 - 16), note, font=SANSB(26), fill=(230, 230, 235))
+            else: d.text((bx0 + L - d.textlength(note, font=SANSB(26)) - 20, yy + bh / 2 - 16), note, font=SANSB(26), fill=(20, 20, 24))
+        if fin and b.get("note"):
+            note = b["note"]; nf = SANSB(26)
+            if L + 30 + d.textlength(note, font=nf) < bw_max: d.text((bx0 + L + 20, yy + bh / 2 - 16), note, font=nf, fill=(230, 230, 235))
+            else: d.text((bx0 + L - d.textlength(note, font=nf) - 20, yy + bh / 2 - 16), note, font=nf, fill=(20, 20, 24))
+    if race:
+        el = max(0.0, lt - T0); text_c(d, x + w / 2, y + h - 70, "time  " + fmt.format(min(el, vmax)) + ("" if el < vmax else "  ·  all done"), MONOB(34), (250, 210, 90))
+    elif c.get("foot"):
+        text_c(d, x + w / 2, y + h - 66, c["foot"], SANS(26), (175, 175, 190))
+
 # ------------------------------------------------------------------ title cards, overlays, cursor
 def draw_title(img, sh, lt):
     d = ImageDraw.Draw(img); a = eout(lt / 0.7)
@@ -531,7 +642,7 @@ def lower_third(d, t):
 def badges(d, t):
     for (a0, a1, text) in EV["badge"]:
         if a0 <= t <= a1:
-            f = SANSB(34) if "speed" in text else MONOB(34); tw = d.textlength(text, font=f)
+            f = SANSB(34) if ("speed" in text or "sped" in text) else MONOB(34); tw = d.textlength(text, font=f)
             x0, y0 = W - tw - 110, 70
             d.rounded_rectangle((x0, y0, x0 + tw + 50, y0 + 64), 14, fill=(20, 20, 24)); d.rounded_rectangle((x0, y0, x0 + tw + 50, y0 + 64), 14, outline=(255, 255, 255), width=2)
             d.text((x0 + 25, y0 + 12), text, font=f, fill=(255, 255, 255))
@@ -586,6 +697,10 @@ def compose_base(t):
         draw_diagram(img, sh["diagram"], lt, s["dur"])
     elif sh["scene"] == "title":
         draw_title(img, sh, lt)
+    elif sh["scene"] == "codes":
+        draw_codes(img, sh, lt, s["dur"])
+    elif sh["scene"] == "chart":
+        draw_chart(img, sh, lt, s["dur"])
     return img, focus
 
 def render_frame(i):
@@ -594,7 +709,7 @@ def render_frame(i):
     mx, my = MOUSE[i]
     n = bisect.bisect_right(EV["clicks"], t); click = 0.0
     if n and t - EV["clicks"][n - 1] < 0.35: click = 1 - (t - EV["clicks"][n - 1]) / 0.35
-    if s["shot"]["scene"] != "title": draw_cursor(d, mx, my, click)
+    if s["shot"]["scene"] not in ("title", "chart", "codes"): draw_cursor(d, mx, my, click)
     zx, zy, zs = CAM[i]
     if zs > 1.001:
         cw, ch = W / zs, H / zs; x0 = clamp(zx - cw / 2, 0, W - cw); y0 = clamp(zy - ch / 2, 0, H - ch)

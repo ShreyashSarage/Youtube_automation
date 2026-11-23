@@ -1,0 +1,7 @@
+[workspace]
+members = ["collatz", "wordfreq", "hello", "collatz_loop", "collatz_iter", "collatz_par"]
+exclude = ["race"]
+resolver = "3"
+
+[profile.release]
+# defaults: opt-level = 3, no debug info

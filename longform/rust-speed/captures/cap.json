@@ -1,0 +1,194 @@
+{
+ "ls": {
+  "cmd": "ls",
+  "out": "Collatz.java\nHello.java\nWordFreq.java\nbench.py\nbuild.sh\ncollatz.c\ncollatz.go\ncollatz.js\ncollatz.py\ngen_text.py\nhello.go\nhello.js\nhello.py\nrace.go\nrust\nwordfreq.go\nwordfreq.js\nwordfreq.py",
+  "code": 0,
+  "secs": 0.0
+ },
+ "specs": {
+  "cmd": "nproc && grep -m1 'model name' /proc/cpuinfo",
+  "out": "4\nmodel name\t: Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "code": 0,
+  "secs": 0.0
+ },
+ "versions": {
+  "cmd": "rustc --version && go version && java --version | head -1 && node --version && python3 --version && clang --version | head -1",
+  "out": "rustc 1.97.0 (2d8144b78 2026-07-07)\ngo version go1.24.7 linux/amd64\nopenjdk 21.0.12.1 2026-08-18\nv22.23.4\nPython 3.13.18\nUbuntu clang version 18.1.3 (1ubuntu1)",
+  "code": 0,
+  "secs": 0.1
+ },
+ "gen": {
+  "cmd": "python3 gen_text.py && du -h --apparent-size words.txt && head -c 120 words.txt",
+  "out": "96M\twords.txt\nyetitija hrnbhtseo mpjiatei nienpte iprffnee dhdxaon hialtrom toreabts rnupya besges othfsrefh tnetnrkt\nbesges afmdrad s",
+  "code": 0,
+  "secs": 5.9
+ },
+ "build": {
+  "cmd": "./build.sh",
+  "out": "all built",
+  "code": 0,
+  "secs": 6.0
+ },
+ "r1_rust": {
+  "cmd": "time ./rust/target/release/collatz",
+  "out": "837799 (525 steps)\n\nreal\t0m0.190s\nuser\t0m0.188s\nsys\t0m0.000s",
+  "code": 0,
+  "secs": 0.2
+ },
+ "r1_clang": {
+  "cmd": "time ./collatz_clang",
+  "out": "837799 (525 steps)\n\nreal\t0m0.182s\nuser\t0m0.181s\nsys\t0m0.000s",
+  "code": 0,
+  "secs": 0.2
+ },
+ "r1_gcc": {
+  "cmd": "time ./collatz_gcc",
+  "out": "837799 (525 steps)\n\nreal\t0m0.278s\nuser\t0m0.277s\nsys\t0m0.000s",
+  "code": 0,
+  "secs": 0.3
+ },
+ "r1_go": {
+  "cmd": "time ./collatz_go",
+  "out": "837799 (525 steps)\n\nreal\t0m0.297s\nuser\t0m0.298s\nsys\t0m0.000s",
+  "code": 0,
+  "secs": 0.3
+ },
+ "r1_java": {
+  "cmd": "time java Collatz",
+  "out": "837799 (525 steps)\n\nreal\t0m0.404s\nuser\t0m0.408s\nsys\t0m0.015s",
+  "code": 0,
+  "secs": 0.4
+ },
+ "r1_js": {
+  "cmd": "time node collatz.js",
+  "out": "837799 (525 steps)\n\nreal\t0m1.856s\nuser\t0m1.821s\nsys\t0m0.012s",
+  "code": 0,
+  "secs": 1.9
+ },
+ "r1_py": {
+  "cmd": "time python3 collatz.py",
+  "out": "837799 (525 steps)\n\nreal\t0m16.478s\nuser\t0m16.334s\nsys\t0m0.008s",
+  "code": 0,
+  "secs": 16.5
+ },
+ "r2_rust_out": {
+  "cmd": "./rust/target/release/wordfreq",
+  "out": "besges 1237228\ndhdxaon 616303\ndhiee 411708\nehno 307867\naedtoat 247246\nabsep 206369\nsitctee 175999\nttsynsry 154366\nothfsrefh 137501\ntgmaii 123373",
+  "code": 0,
+  "secs": 1.0
+ },
+ "r2_rust": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./rust/target/release/wordfreq > /dev/null",
+  "out": "0.72 s  102636 KB",
+  "code": 0,
+  "secs": 0.7
+ },
+ "r2_go": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./wordfreq_go > /dev/null",
+  "out": "1.54 s  418584 KB",
+  "code": 0,
+  "secs": 1.5
+ },
+ "r2_java": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" java WordFreq > /dev/null",
+  "out": "3.66 s  1347744 KB",
+  "code": 0,
+  "secs": 3.7
+ },
+ "r2_js": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" node wordfreq.js > /dev/null",
+  "out": "5.72 s  1021720 KB",
+  "code": 0,
+  "secs": 5.7
+ },
+ "r2_py": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" python3 wordfreq.py > /dev/null",
+  "out": "3.09 s  932388 KB",
+  "code": 0,
+  "secs": 3.1
+ },
+ "r3_rust": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./rust/target/release/hello",
+  "out": "0.00 s  2256 KB\nhello",
+  "code": 0,
+  "secs": 0.0
+ },
+ "r3_go": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./hello_go",
+  "out": "0.00 s  1812 KB\nhello",
+  "code": 0,
+  "secs": 0.0
+ },
+ "r3_java": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" java Hello",
+  "out": "0.04 s  39820 KB\nhello",
+  "code": 0,
+  "secs": 0.0
+ },
+ "r3_js": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" node hello.js",
+  "out": "0.03 s  43288 KB\nhello",
+  "code": 0,
+  "secs": 0.0
+ },
+ "r3_py": {
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" python3 hello.py",
+  "out": "0.01 s  10896 KB\nhello",
+  "code": 0,
+  "secs": 0.0
+ },
+ "r3_size": {
+  "cmd": "du -h --apparent-size rust/target/release/hello hello_go",
+  "out": "435K\trust/target/release/hello\n2.2M\thello_go",
+  "code": 0,
+  "secs": 0.0
+ },
+ "bench": {
+  "cmd": "python3 bench.py collatz wordfreq hello",
+  "out": "--- collatz (median of 5 runs) ---\nRust          0.19 s       2.2 MB\nC (clang)     0.18 s       1.6 MB\nC (gcc)       0.27 s       1.6 MB\nGo            0.31 s       1.8 MB\nJava          0.42 s      42.1 MB\nJavaScript    1.79 s      47.9 MB\nPython       16.42 s      10.7 MB\n--- wordfreq (median of 5 runs) ---\nRust          0.78 s     100.2 MB\nGo            1.40 s     408.9 MB\nJava          3.43 s    1438.0 MB\nJavaScript    5.78 s    1048.4 MB\nPython        2.83 s     910.6 MB\n--- hello (median of 5 runs) ---\nRust          0.00 s       2.2 MB\nGo            0.00 s       1.6 MB\nJava          0.03 s      39.0 MB\nJavaScript    0.03 s      42.3 MB\nPython        0.01 s      10.7 MB",
+  "code": 0,
+  "secs": 171.1
+ },
+ "r4_loop": {
+  "cmd": "time ./rust/target/release/collatz_loop",
+  "out": "8400511 (686 steps)\n\nreal\t0m2.311s\nuser\t0m2.279s\nsys\t0m0.000s",
+  "code": 0,
+  "secs": 2.3
+ },
+ "r4_iter": {
+  "cmd": "time ./rust/target/release/collatz_iter",
+  "out": "8400511 (686 steps)\n\nreal\t0m2.262s\nuser\t0m2.245s\nsys\t0m0.004s",
+  "code": 0,
+  "secs": 2.3
+ },
+ "r4_par": {
+  "cmd": "time ./rust/target/release/collatz_par",
+  "out": "8400511 (686 steps)\n\nreal\t0m0.580s\nuser\t0m2.305s\nsys\t0m0.000s",
+  "code": 0,
+  "secs": 0.6
+ },
+ "r4_race_rs": {
+  "cmd": "(cd rust/race && cargo build --release)",
+  "out": "    Updating crates.io index\n     Locking 6 packages to latest Rust 1.97.0 compatible versions\n   Compiling crossbeam-utils v0.8.23\n   Compiling crossbeam-epoch v0.9.21\n   Compiling crossbeam-deque v0.8.8\n   Compiling rayon-core v1.13.0\n   Compiling either v1.19.0\n   Compiling rayon v1.12.0\n   Compiling race v0.1.0 (/home/dev/speed-test/rust/race)\nerror[E0594]: cannot assign to `count`, as it is a captured variable in a `Fn` closure\n  --> src/main.rs:8:13\n   |\n 5 |       let mut count = 0;\n   |           --------- `count` declared here, outside the closure\n 6 |       (1..10_000_000u64).into_par_iter().for_each(|n| {\n   |                                          -        --- in this closure\n   |  ________________________________________|\n   | |\n 7 | |         if n % 7 == 0 {\n 8 | |             count += 1;\n   | |             ^^^^^^^^^^ cannot assign\n 9 | |         }\n10 | |     });\n   | |______- expects `Fn` instead of `FnMut`\n\nFor more information about this error, try `rustc --explain E0594`.\nerror: could not compile `race` (bin \"race\") due to 1 previous error",
+  "code": 101,
+  "secs": 3.5
+ },
+ "r4_race_go1": {
+  "cmd": "./race_go",
+  "out": "754995 (expected 1428572)",
+  "code": 0,
+  "secs": 0.0
+ },
+ "r4_race_go2": {
+  "cmd": "./race_go",
+  "out": "762544 (expected 1428572)",
+  "code": 0,
+  "secs": 0.0
+ },
+ "r4_race_go3": {
+  "cmd": "./race_go",
+  "out": "733463 (expected 1428572)",
+  "code": 0,
+  "secs": 0.0
+ }
+}

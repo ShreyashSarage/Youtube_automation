@@ -1,5 +1,4 @@
-// Longest Collatz chain below N, on every CPU core
-
+// Longest Collatz chain below N, on one core (iterator version)
 
 const N: u64 = 10_000_000;
 

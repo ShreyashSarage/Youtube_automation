@@ -1,0 +1,183 @@
+[
+ {
+  "id": "ls",
+  "cmd": "ls",
+  "cwd": "proj",
+  "project": "speed-test",
+  "write": [
+   "Collatz.java",
+   "Hello.java",
+   "WordFreq.java",
+   "bench.py",
+   "build.sh",
+   "collatz.c",
+   "collatz.go",
+   "collatz.js",
+   "collatz.py",
+   "gen_text.py",
+   "hello.go",
+   "hello.js",
+   "hello.py",
+   "race.go",
+   "rust/Cargo.toml",
+   "rust/collatz/Cargo.toml",
+   "rust/collatz/src/main.rs",
+   "rust/collatz_iter/Cargo.toml",
+   "rust/collatz_iter/src/main.rs",
+   "rust/collatz_loop/Cargo.toml",
+   "rust/collatz_loop/src/main.rs",
+   "rust/collatz_par/Cargo.toml",
+   "rust/collatz_par/src/main.rs",
+   "rust/hello/Cargo.toml",
+   "rust/hello/src/main.rs",
+   "rust/race/Cargo.toml",
+   "rust/race/src/main.rs",
+   "rust/wordfreq/Cargo.toml",
+   "rust/wordfreq/src/main.rs",
+   "wordfreq.go",
+   "wordfreq.js",
+   "wordfreq.py"
+  ]
+ },
+ {
+  "id": "specs",
+  "cmd": "nproc && grep -m1 'model name' /proc/cpuinfo",
+  "cwd": "proj"
+ },
+ {
+  "id": "versions",
+  "cmd": "rustc --version && go version && java --version | head -1 && node --version && python3 --version && clang --version | head -1",
+  "cwd": "proj"
+ },
+ {
+  "id": "gen",
+  "cmd": "python3 gen_text.py && du -h --apparent-size words.txt && head -c 120 words.txt",
+  "cwd": "proj"
+ },
+ {
+  "id": "build",
+  "cmd": "./build.sh",
+  "cwd": "proj",
+  "timeout": 900
+ },
+ {
+  "id": "r1_rust",
+  "cmd": "time ./rust/target/release/collatz",
+  "stderr_first": false
+ },
+ {
+  "id": "r1_clang",
+  "cmd": "time ./collatz_clang",
+  "stderr_first": false
+ },
+ {
+  "id": "r1_gcc",
+  "cmd": "time ./collatz_gcc",
+  "stderr_first": false
+ },
+ {
+  "id": "r1_go",
+  "cmd": "time ./collatz_go",
+  "stderr_first": false
+ },
+ {
+  "id": "r1_java",
+  "cmd": "time java Collatz",
+  "stderr_first": false
+ },
+ {
+  "id": "r1_js",
+  "cmd": "time node collatz.js",
+  "stderr_first": false
+ },
+ {
+  "id": "r1_py",
+  "cmd": "time python3 collatz.py",
+  "stderr_first": false
+ },
+ {
+  "id": "r2_rust_out",
+  "cmd": "./rust/target/release/wordfreq"
+ },
+ {
+  "id": "r2_rust",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./rust/target/release/wordfreq > /dev/null"
+ },
+ {
+  "id": "r2_go",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./wordfreq_go > /dev/null"
+ },
+ {
+  "id": "r2_java",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" java WordFreq > /dev/null"
+ },
+ {
+  "id": "r2_js",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" node wordfreq.js > /dev/null"
+ },
+ {
+  "id": "r2_py",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" python3 wordfreq.py > /dev/null"
+ },
+ {
+  "id": "r3_rust",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./rust/target/release/hello"
+ },
+ {
+  "id": "r3_go",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" ./hello_go"
+ },
+ {
+  "id": "r3_java",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" java Hello"
+ },
+ {
+  "id": "r3_js",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" node hello.js"
+ },
+ {
+  "id": "r3_py",
+  "cmd": "/usr/bin/time -f \"%e s  %M KB\" python3 hello.py"
+ },
+ {
+  "id": "r3_size",
+  "cmd": "du -h --apparent-size rust/target/release/hello hello_go"
+ },
+ {
+  "id": "bench",
+  "cmd": "python3 bench.py collatz wordfreq hello",
+  "timeout": 900
+ },
+ {
+  "id": "r4_loop",
+  "cmd": "time ./rust/target/release/collatz_loop",
+  "stderr_first": false
+ },
+ {
+  "id": "r4_iter",
+  "cmd": "time ./rust/target/release/collatz_iter",
+  "stderr_first": false
+ },
+ {
+  "id": "r4_par",
+  "cmd": "time ./rust/target/release/collatz_par",
+  "stderr_first": false
+ },
+ {
+  "id": "r4_race_rs",
+  "cmd": "(cd rust/race && cargo build --release)",
+  "may_fail": true
+ },
+ {
+  "id": "r4_race_go1",
+  "cmd": "./race_go"
+ },
+ {
+  "id": "r4_race_go2",
+  "cmd": "./race_go"
+ },
+ {
+  "id": "r4_race_go3",
+  "cmd": "./race_go"
+ }
+]

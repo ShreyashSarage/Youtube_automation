@@ -14,7 +14,7 @@ import json, os, shutil, signal, subprocess, sys, tempfile, time
 PD = os.path.abspath(sys.argv[1]); steps = json.load(open(os.path.join(PD, "capture.json")))
 proj = next((s["project"] for s in steps if "project" in s), "project")
 root = tempfile.mkdtemp(prefix="lf-"); home = os.path.join(root, "dev"); os.makedirs(home)
-env = dict(os.environ, CARGO_TERM_COLOR="never", NO_COLOR="1", COLUMNS="100")
+env = dict(os.environ, CARGO_TERM_COLOR="never", NO_COLOR="1", COLUMNS="100"); env.pop("JAVA_TOOL_OPTIONS", None)  # sandbox-only JVM noise
 out, bg = {}, {}
 def clean(t): return t.replace(home, "/home/dev").replace(root, "/tmp")
 for st in steps:

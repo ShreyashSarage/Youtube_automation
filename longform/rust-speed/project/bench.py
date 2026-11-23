@@ -2,12 +2,12 @@
 import statistics, subprocess, sys
 
 ROUNDS = {
-    "collatz": [("Rust", "./collatz_rs/target/release/collatz"), ("C (clang)", "./collatz_clang"),
-                ("C (gcc)", "./collatz_c"), ("Go", "./collatz_go"), ("Java", "java Collatz"),
+    "collatz": [("Rust", "./rust/target/release/collatz"), ("C (clang)", "./collatz_clang"),
+                ("C (gcc)", "./collatz_gcc"), ("Go", "./collatz_go"), ("Java", "java Collatz"),
                 ("JavaScript", "node collatz.js"), ("Python", "python3 collatz.py")],
-    "wordfreq": [("Rust", "./wordfreq_rs/target/release/wordfreq"), ("Go", "./wordfreq_go"),
+    "wordfreq": [("Rust", "./rust/target/release/wordfreq"), ("Go", "./wordfreq_go"),
                  ("Java", "java WordFreq"), ("JavaScript", "node wordfreq.js"), ("Python", "python3 wordfreq.py")],
-    "hello": [("Rust", "./hello_rs/target/release/hello"), ("Go", "./hello_go"), ("Java", "java Hello"),
+    "hello": [("Rust", "./rust/target/release/hello"), ("Go", "./hello_go"), ("Java", "java Hello"),
               ("JavaScript", "node hello.js"), ("Python", "python3 hello.py")],
 }
 
