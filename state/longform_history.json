@@ -11,6 +11,19 @@
    "date": "2026-11-22",
    "url": "https://www.youtube.com/watch?v=0zTTX_rqksE",
    "title": "Build a Todo CLI App in Rust (clap + serde) | Rust Projects #1"
+  },
+  {
+   "slug": "rust-speed",
+   "date": "2026-11-23",
+   "url": "https://www.youtube.com/watch?v=fmdfgTWni7k",
+   "title": "I Benchmarked Rust vs 5 Languages: 86x Faster, 14x Less Memory",
+   "publishAt": "2026-11-23T17:00:00+05:30",
+   "special": true,
+   "short": {
+    "url": "https://www.youtube.com/watch?v=T5TuS_sbjVc",
+    "title": "Rust vs Python: Same Code, 86x Faster? 🦀 #Shorts",
+    "spec": "episodes/2026-11-25-speed/spec.json"
+   }
   }
  ]
 }
