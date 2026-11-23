@@ -88,7 +88,7 @@ For a closer look at a scene, render single frames: `python3 pipeline/render.py 
 
 Other scene types: `code` (`heading`, `sub`, `file`, `code` ≤ 12 lines × ≤ 34 chars, `highlight`
 [line numbers], `caption`, `check`, `expect`, `expect_error`), `bullets` (`heading`, `items`), `cta`.
-Every scene needs `say`. **Whole narration ≤ 125 words** (hook ≤ 12, middle scenes ≤ 25, recap ≤ 20, cta ≤ 12); `voice.py` refuses anything over 58 s. On-screen text must match what's said.
+Every scene needs `say`. Narration length follows the scene-structure section above: **140-185 words** in total (hook ≤ 16, any scene ≤ 55); `voice.py` refuses anything over 79 s. On-screen text must match what's said.
 Spell out symbols for the voice: "let mut x", "x equals five", "ampersand s" for `&s`,
 "double colon" for `::`, "vec bang" for `vec!`, "println bang".
 
@@ -149,6 +149,10 @@ Follow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀
   `rust for beginners`, `rust day N`, `rustlang`, `<lesson keywords x3-5>`, `programming`, `coding`.
 
 ## 4. Build
+First run the preflight check. Every `FAIL` blocks the run; if it says today or this day is already posted, stop and report:
+```bash
+python3 .claude/skills/rust-short-preflight/preflight.py episodes/TODAY
+```
 ```bash
 pipeline/build.sh episodes/TODAY --preview   # spec + code checks, then build/preview.png
 ```
@@ -158,6 +162,7 @@ pipeline/build.sh episodes/TODAY             # about 3-5 min → build/video.mp4
 ```
 
 ## 5. Upload and schedule (Uplika connector)
+Run the preflight check again (`python3 .claude/skills/rust-short-preflight/preflight.py episodes/TODAY`) and only continue on exit 0.
 1. `select_channels` scope `["youtube"]` → account id (handle `shreyashsarage`). Missing/unhealthy →
    stop and report: reconnect at https://uplika.com/dashboard/connections.
 2. `media_presign` (fileName `rust-day-N.mp4`, `video/mp4`, bytes, width 1080, height 1920, durationMs, aiGenerated false).
