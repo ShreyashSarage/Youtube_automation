@@ -95,6 +95,17 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-02-data-types.html"
    ]
+  },
+  {
+   "date": "2026-11-23",
+   "day": 9,
+   "topic": "Functions",
+   "title": "How Functions Work in Rust (fn, parameters, return) 🦀 | Rust Day 9 #Shorts",
+   "url": "https://www.youtube.com/watch?v=wvWMP82ZVpQ",
+   "publishAt": "2026-11-23T10:00:00+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
+   ]
   }
  ]
 }

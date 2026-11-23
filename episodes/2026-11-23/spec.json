@@ -1,0 +1,220 @@
+{
+ "day": 9,
+ "topic": "Functions",
+ "theme": "ocean",
+ "brand": "RUST  ·  DAY 9",
+ "crate": "functions",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "FUNCTIONS",
+   "IN RUST"
+  ],
+  "visual": "pipeline",
+  "params": {
+   "stages": [
+    {
+     "name": "add(2, 3)",
+     "out": [
+      "2",
+      "3"
+     ]
+    },
+    {
+     "name": "a + b",
+     "out": [
+      "5"
+     ]
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "How Functions Work in Rust (fn, parameters, return) 🦀 | Rust Day 9 #Shorts",
+  "description": "How functions work in Rust: fn, parameters with types, and the → return type, explained line by line. (Rust Day 9 of the Zero to Pro series)\n\n📌 In this short:\n✅ fn name(a: i32, b: i32) → i32: every parameter needs a type, the arrow gives the return type\n✅ The last expression without a semicolon is the return value (no return keyword needed)\n✅ Forget the → return type and the compiler tells you exactly how to fix it (E0308)\n\n💻 Code from the video (YouTube won't show the real arrow: type → as a minus sign then a greater-than sign):\nfn main() {\n    let sum = add(2, 3);\n    println!(\"sum = {sum}\");\n}\n\nfn add(a: i32, b: i32) → i32 {\n    a + b\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-03-how-functions-work.html\n⏭️ Tomorrow: Statements vs expressions\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #rustfunctions #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 9",
+   "rustlang",
+   "rust functions",
+   "rust fn",
+   "function parameters",
+   "return value",
+   "snake case",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "pipeline",
+   "stages": [
+    {
+     "name": "add(2, 3)",
+     "out": [
+      "2",
+      "3"
+     ]
+    },
+    {
+     "name": "a + b",
+     "out": [
+      "5"
+     ]
+    }
+   ],
+   "top": "Rust Day 9",
+   "big": "How do functions work?",
+   "sub": [
+    "fn · parameters · ->"
+   ],
+   "say": "No return keyword, yet this function returns five. Here's how Rust functions work."
+  },
+  {
+   "type": "code",
+   "heading": "Your first function",
+   "file": "main.rs",
+   "code": "fn main() {\n    let sum = add(2, 3);\n    println!(\"sum = {sum}\");\n}\n\nfn add(a: i32, b: i32) -> i32 {\n    a + b\n}",
+   "steps": [
+    {
+     "lines": [
+      6
+     ],
+     "note": "fn + a snake_case name",
+     "at": "F N starts"
+    },
+    {
+     "lines": [
+      6
+     ],
+     "note": "every parameter needs a type",
+     "at": "Each parameter"
+    },
+    {
+     "lines": [
+      6
+     ],
+     "note": "-> i32 is the return type",
+     "at": "The arrow"
+    },
+    {
+     "lines": [
+      7
+     ],
+     "note": "no ; means: return this",
+     "at": "The last line"
+    },
+    {
+     "lines": [
+      2
+     ],
+     "note": "call it: add(2, 3)",
+     "at": "In main"
+    }
+   ],
+   "say": "F N starts a function, named in snake case. Each parameter needs a type: a and b are i32. The arrow i32 means it gives back an i32. The last line, a plus b, has no semicolon, so it's the return value. In main, we call add with two and three.",
+   "captions": "fn starts a function, named in snake_case. Each parameter needs a type: a and b are i32. The arrow -> i32 means it gives back an i32. The last line, a + b, has no semicolon, so it's the return value. In main, we call add(2, 3)."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 1,
+   "caption": "sum = 5",
+   "say": "Run it: sum equals five."
+  },
+  {
+   "type": "visual",
+   "visual": "pipeline",
+   "heading": "What happens",
+   "stages": [
+    {
+     "name": "add(2, 3)",
+     "out": [
+      "2",
+      "3"
+     ]
+    },
+    {
+     "name": "a, b",
+     "out": [
+      "2",
+      "3"
+     ]
+    },
+    {
+     "name": "a + b",
+     "out": [
+      "5"
+     ]
+    },
+    {
+     "name": "sum",
+     "out": [
+      "5"
+     ]
+    }
+   ],
+   "say": "Two and three go in as a and b. a plus b makes five, which comes back out into sum. And add sits below main: Rust doesn't mind.",
+   "captions": "2 and 3 go in as a and b. a + b makes 5, which comes back out into sum. And add sits below main: Rust doesn't mind."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "forgot the return type",
+   "file": "main.rs",
+   "code": "fn main() {\n    double(4);\n}\n\nfn double(x: i32) {\n    x * 2\n}",
+   "highlight": [
+    5
+   ],
+   "expect_error": "E0308",
+   "say": "Now the classic beginner mistake: forgetting the return type."
+  },
+  {
+   "type": "run",
+   "heading": "The compiler helps",
+   "from_code": 4,
+   "caption": "try adding -> i32",
+   "say": "Mismatched types: expected empty parentheses, which means nothing, but found an i32. And the fix is right there: add arrow i32.",
+   "captions": "Mismatched types: expected (), which means nothing, but found an i32. And the fix is right there: add -> i32."
+  },
+  {
+   "type": "visual",
+   "visual": "compiler",
+   "heading": "Why types are required",
+   "file": "main.rs",
+   "output": "add(2, 3)",
+   "badge": "types ✓",
+   "say": "Why so strict? With types in the signature, the compiler checks every call, and you almost never need type labels anywhere else."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "fn name(a: i32) -> i32",
+    "params need types",
+    "no ; on last line = result",
+    "names in snake_case"
+   ],
+   "say": "Recap: F N, a name, typed parameters, an arrow for the return type, and the last expression is the result.",
+   "captions": "Recap: fn, a name, typed parameters, an arrow for the return type, and the last expression is the result."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 9 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Statements",
+    "vs expressions"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: statements versus expressions. Follow for daily Rust!"
+  }
+ ]
+}

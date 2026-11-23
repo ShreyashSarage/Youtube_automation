@@ -119,6 +119,7 @@ From Day 9 on (enforced by the spec check):
   `Why Rust Won't Let You Change a Variable (let vs mut) 🦀 | Rust Day 4 #Shorts`,
   `Rust if/else Is an Expression?! 🦀 | Rust Day 13 #Shorts`. Prefer "How to…", "What is…", "Why…",
   "X vs Y" phrasing: Day 2 ("Install Rust & Hello World") got 4x the views because people search for it.
+- **No `<` or `>` anywhere in the title or description** (YouTube rejects them): write `->` as `→` and say so next to the code.
 - **Description line 1 repeats the search phrase** (it's what search and the Shorts feed show), then the details.
   "Rust Day N" can appear later in the first paragraph.
 
