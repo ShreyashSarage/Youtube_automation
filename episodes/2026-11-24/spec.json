@@ -1,0 +1,228 @@
+{
+ "day": 10,
+ "topic": "Statements vs expressions",
+ "theme": "matrix",
+ "brand": "RUST  ·  DAY 10",
+ "crate": "expressions",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "ONE ;",
+   "BREAKS IT"
+  ],
+  "visual": "pipeline",
+  "params": {
+   "stages": [
+    {
+     "name": "{ x + 1 }",
+     "out": [
+      "6"
+     ]
+    },
+    {
+     "name": "{ x + 1; }",
+     "out": [
+      "()"
+     ]
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "Why One Semicolon Breaks Rust Code (Statements vs Expressions) 🦀 | Rust Day 10 #Shorts",
+  "description": "Statements vs expressions in Rust: why one extra semicolon breaks your function. Rust Day 10 of the Zero to Pro series.\n\n📌 In this short:\n✅ Statements do something (let y = 6;), expressions produce a value (5 + 6, a block, a function call)\n✅ A block { } is an expression: its last line WITHOUT a semicolon is its value\n✅ Add ; to that last line and the function returns () instead: error E0308, \"remove this semicolon\"\n\n💻 Code from the video:\nfn plus_one(x: i32) → i32 {\n    x + 1\n}\n(YouTube won't show the real arrow: type → as a minus sign then a greater-than sign)\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-03-how-functions-work.html\n⏭️ Tomorrow: if / else\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 10",
+   "rustlang",
+   "statements vs expressions",
+   "rust expressions",
+   "rust semicolon",
+   "E0308",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "pipeline",
+   "top": "Rust Day 10",
+   "big": "One ; breaks it?",
+   "sub": [
+    "Statements vs expressions"
+   ],
+   "say": "Add one semicolon, and this Rust function stops compiling. Here's why.",
+   "stages": [
+    {
+     "name": "{ x + 1 }",
+     "out": [
+      "6"
+     ]
+    },
+    {
+     "name": "{ x + 1; }",
+     "out": [
+      "()"
+     ]
+    }
+   ]
+  },
+  {
+   "type": "code",
+   "heading": "A block has a value",
+   "file": "main.rs",
+   "code": "fn main() {\n    let y = {\n        let x = 3;\n        x + 1\n    };\n    println!(\"y = {y}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      3
+     ],
+     "note": "let ... ; is a statement",
+     "at": "A statement"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": "no ; = the block's value",
+     "at": "x plus one"
+    },
+    {
+     "lines": [
+      2,
+      5
+     ],
+     "note": "the whole { } is an expression",
+     "at": "whole block"
+    },
+    {
+     "lines": [
+      6
+     ],
+     "note": "so y is 4",
+     "at": "So y"
+    }
+   ],
+   "say": "A statement does something but gives no value, like let x equals three. An expression gives a value. Here, x plus one has no semicolon, so it's the value of the whole block. So y becomes four.",
+   "captions": "A statement does something but gives no value, like let x = 3; An expression gives a value. Here, x + 1 has no semicolon, so it's the value of the whole block. So y becomes 4."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 1,
+   "caption": "y = 4",
+   "say": "Run it: y equals four.",
+   "captions": "Run it: y = 4."
+  },
+  {
+   "type": "visual",
+   "visual": "tree",
+   "heading": "Two kinds of code",
+   "root": "Rust code",
+   "children": [
+    {
+     "name": "Statements",
+     "children": [
+      "let",
+      "fn"
+     ]
+    },
+    {
+     "name": "Expressions",
+     "children": [
+      "5 + 6",
+      "{ }"
+     ]
+    }
+   ],
+   "say": "So Rust code has two kinds of pieces. Statements, like let, or a function definition. And expressions: math, function calls, and even whole blocks.",
+   "captions": "So Rust code has two kinds of pieces. Statements, like let, or a function definition. And expressions: math, function calls, and even whole blocks."
+  },
+  {
+   "type": "code",
+   "heading": "Functions work the same",
+   "file": "main.rs",
+   "code": "fn plus_one(x: i32) -> i32 {\n    x + 1\n}\n\nfn main() {\n    let y = plus_one(5);\n    println!(\"y = {y}\");\n}",
+   "expect": "y = 6",
+   "steps": [
+    {
+     "lines": [
+      2
+     ],
+     "note": "last expression = return value",
+     "at": "no semicolon"
+    },
+    {
+     "lines": [
+      6,
+      7
+     ],
+     "note": "plus_one(5) gives 6",
+     "at": "plus one of five"
+    }
+   ],
+   "say": "A function body is a block too. x plus one, with no semicolon, is what plus one returns. So plus one of five gives six.",
+   "captions": "A function body is a block too. x + 1, with no semicolon, is what plus_one returns. So plus_one(5) gives 6."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "a semicolon on the last line",
+   "file": "main.rs",
+   "code": "fn plus_one(x: i32) -> i32 {\n    x + 1;\n}\n\nfn main() {\n    let y = plus_one(5);\n    println!(\"y = {y}\");\n}",
+   "highlight": [
+    2
+   ],
+   "expect_error": "E0308",
+   "say": "Now the classic mistake: a semicolon after x plus one.",
+   "captions": "Now the classic mistake: a semicolon after x + 1."
+  },
+  {
+   "type": "run",
+   "heading": "Mismatched types",
+   "from_code": 5,
+   "caption": "remove this semicolon",
+   "say": "The semicolon turns it into a statement, so the function returns nothing, written as empty parentheses, instead of an i32. Rust even says: remove this semicolon.",
+   "captions": "The semicolon turns it into a statement, so the function returns nothing, written as (), instead of an i32. Rust even says: remove this semicolon."
+  },
+  {
+   "type": "visual",
+   "visual": "compiler",
+   "heading": "Fixed",
+   "sub": "x + 1  →  returns 6",
+   "file": "main.rs",
+   "output": "y = 6",
+   "badge": "no ;",
+   "say": "Delete it, and it compiles again: y equals six.",
+   "captions": "Delete it, and it compiles again: y = 6."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "statement: no value",
+    "expression: a value",
+    "a block's last line = value",
+    "; on it returns ()"
+   ],
+   "say": "Recap: statements give no value, expressions do, and a block's last line without a semicolon is its value."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 10 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: if / else"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: if and else. Follow for daily Rust!"
+  }
+ ]
+}

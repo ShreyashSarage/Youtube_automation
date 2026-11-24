@@ -106,6 +106,17 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
    ]
+  },
+  {
+   "date": "2026-11-24",
+   "day": 10,
+   "topic": "Statements vs expressions",
+   "title": "Why One Semicolon Breaks Rust Code (Statements vs Expressions) 🦀 | Rust Day 10 #Shorts",
+   "url": "https://www.youtube.com/watch?v=ObvLmhX2XVk",
+   "publishAt": "2026-11-24T10:44:25+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
+   ]
   }
  ]
 }
