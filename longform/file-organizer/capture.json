@@ -1,0 +1,104 @@
+[
+ {
+  "id": "new",
+  "project": "file-organizer",
+  "cmd": "cargo new file-organizer",
+  "cwd": "home"
+ },
+ {
+  "id": "add_clap",
+  "cmd": "cargo add clap --features derive"
+ },
+ {
+  "id": "add_walkdir",
+  "cmd": "cargo add walkdir"
+ },
+ {
+  "id": "cat_toml",
+  "cmd": "cat Cargo.toml"
+ },
+ {
+  "id": "mess",
+  "cmd": "bash make_mess.sh $(cd .. && pwd)/Downloads",
+  "shown": "bash make_mess.sh ~/Downloads",
+  "write": [
+   "make_mess.sh"
+  ]
+ },
+ {
+  "id": "find1",
+  "cmd": "cd .. && find Downloads -type f | sort",
+  "shown": "cd ~ && find Downloads -type f | sort",
+  "cwd": "proj"
+ },
+ {
+  "id": "build",
+  "cmd": "cargo build",
+  "write": [
+   "src/main.rs"
+  ]
+ },
+ {
+  "id": "help",
+  "cmd": "cargo run -q -- --help"
+ },
+ {
+  "id": "dry",
+  "cmd": "cargo run -q -- $(cd .. && pwd)/Downloads --dry-run",
+  "shown": "cargo run -q -- ~/Downloads --dry-run"
+ },
+ {
+  "id": "find_dry",
+  "cmd": "cd .. && find Downloads -maxdepth 1 | sort | head -5",
+  "shown": "cd ~ && find Downloads -maxdepth 1 | sort | head -5"
+ },
+ {
+  "id": "real",
+  "cmd": "cargo run -q -- $(cd .. && pwd)/Downloads",
+  "shown": "cargo run -q -- ~/Downloads"
+ },
+ {
+  "id": "find2",
+  "cmd": "cd .. && find Downloads -type f | sort",
+  "shown": "cd ~ && find Downloads -type f | sort"
+ },
+ {
+  "id": "again",
+  "cmd": "cargo run -q -- $(cd .. && pwd)/Downloads",
+  "shown": "cargo run -q -- ~/Downloads"
+ },
+ {
+  "id": "rec",
+  "cmd": "cargo run -q -- $(cd .. && pwd)/Downloads --recursive",
+  "shown": "cargo run -q -- ~/Downloads --recursive"
+ },
+ {
+  "id": "docs",
+  "cmd": "cd .. && ls Downloads/Documents",
+  "shown": "ls ~/Downloads/Documents"
+ },
+ {
+  "id": "typo",
+  "cmd": "cargo run -q -- $(cd .. && pwd)/Downlaods",
+  "shown": "cargo run -q -- ~/Downlaods",
+  "may_fail": true
+ },
+ {
+  "id": "release",
+  "cmd": "cargo build --release"
+ },
+ {
+  "id": "size",
+  "cmd": "du -h --apparent-size target/release/file-organizer"
+ },
+ {
+  "id": "install",
+  "cmd": "CARGO_INSTALL_ROOT=$(cd .. && pwd)/.cargo cargo install --path . 2>&1 | tail -3",
+  "shown": "cargo install --path ."
+ },
+ {
+  "id": "global",
+  "cmd": "PATH=$(cd .. && pwd)/.cargo/bin:$PATH && cd /tmp && file-organizer --version",
+  "shown": "file-organizer --version"
+ }
+]

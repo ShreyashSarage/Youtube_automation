@@ -1,0 +1,8 @@
+[package]
+name = "file-organizer"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.6.9", features = ["derive"] }
+walkdir = "2.5.1"

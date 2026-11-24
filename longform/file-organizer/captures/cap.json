@@ -1,0 +1,122 @@
+{
+ "new": {
+  "cmd": "cargo new file-organizer",
+  "out": "    Creating binary (application) `file-organizer` package\nnote: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html",
+  "code": 0,
+  "secs": 0.1
+ },
+ "add_clap": {
+  "cmd": "cargo add clap --features derive",
+  "out": "    Updating crates.io index\n      Adding clap v4.6.9 to dependencies\n             Features:\n             + color\n             + derive\n             + error-context\n             + help\n             + std\n             + suggestions\n             + usage\n             - cargo\n             - debug\n             - deprecated\n             - env\n             - string\n             - unicode\n             - unstable-derive-ui-tests\n             - unstable-doc\n             - unstable-ext\n             - unstable-markdown\n             - unstable-styles\n             - unstable-v5\n             - wrap_help\n    Updating crates.io index\n     Locking 21 packages to latest Rust 1.97.0 compatible versions",
+  "code": 0,
+  "secs": 0.3
+ },
+ "add_walkdir": {
+  "cmd": "cargo add walkdir",
+  "out": "    Updating crates.io index\n      Adding walkdir v2.5.1 to dependencies\n    Updating crates.io index\n     Locking 3 packages to latest Rust 1.97.0 compatible versions\n      Adding same-file v1.0.6\n      Adding walkdir v2.5.1\n      Adding winapi-util v0.1.11",
+  "code": 0,
+  "secs": 0.3
+ },
+ "cat_toml": {
+  "cmd": "cat Cargo.toml",
+  "out": "[package]\nname = \"file-organizer\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[dependencies]\nclap = { version = \"4.6.9\", features = [\"derive\"] }\nwalkdir = \"2.5.1\"",
+  "code": 0,
+  "secs": 0.0
+ },
+ "mess": {
+  "cmd": "bash make_mess.sh ~/Downloads",
+  "out": "made 17 files in /home/dev/Downloads",
+  "code": 0,
+  "secs": 0.0
+ },
+ "find1": {
+  "cmd": "cd ~ && find Downloads -type f | sort",
+  "out": "Downloads/README\nDownloads/backup.tar.gz\nDownloads/budget.csv\nDownloads/cat.gif\nDownloads/holiday.JPG\nDownloads/index.html\nDownloads/invoice-0042.pdf\nDownloads/main.rs\nDownloads/notes.txt\nDownloads/old-stuff/data.json\nDownloads/old-stuff/notes.txt\nDownloads/old-stuff/photo.png\nDownloads/podcast-ep12.mp3\nDownloads/resume.docx\nDownloads/rust-book.zip\nDownloads/screenshot-2026-11-20.png\nDownloads/trip.mp4",
+  "code": 0,
+  "secs": 0.0
+ },
+ "build": {
+  "cmd": "cargo build",
+  "out": "   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.27\n   Compiling quote v1.0.47\n   Compiling utf8parse v0.2.2\n   Compiling anstyle-parse v1.0.0\n   Compiling anstyle v1.0.14\n   Compiling anstyle-query v1.1.5\n   Compiling is_terminal_polyfill v1.70.2\n   Compiling colorchoice v1.0.5\n   Compiling clap_lex v1.1.2\n   Compiling heck v0.5.0\n   Compiling anstream v1.0.0\n   Compiling strsim v0.11.1\n   Compiling same-file v1.0.6\n   Compiling clap_builder v4.6.7\n   Compiling walkdir v2.5.1\n   Compiling syn v3.0.10\n   Compiling clap_derive v4.6.9\n   Compiling clap v4.6.9\n   Compiling file-organizer v0.1.0 (/home/dev/file-organizer)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.17s",
+  "code": 0,
+  "secs": 4.2
+ },
+ "help": {
+  "cmd": "cargo run -q -- --help",
+  "out": "Sort the files in a folder into subfolders by type\n\nUsage: file-organizer [OPTIONS] <DIR>\n\nArguments:\n  <DIR>  The folder to clean up, e.g. ~/Downloads\n\nOptions:\n      --dry-run    Only show what would happen, don't move anything\n  -r, --recursive  Also sort the files inside subfolders\n  -h, --help       Print help\n  -V, --version    Print version",
+  "code": 0,
+  "secs": 0.1
+ },
+ "dry": {
+  "cmd": "cargo run -q -- ~/Downloads --dry-run",
+  "out": "  README -> Other/README\n  backup.tar.gz -> Archives/backup.tar.gz\n  budget.csv -> Documents/budget.csv\n  cat.gif -> Images/cat.gif\n  holiday.JPG -> Images/holiday.JPG\n  index.html -> Code/index.html\n  invoice-0042.pdf -> Documents/invoice-0042.pdf\n  main.rs -> Code/main.rs\n  notes.txt -> Documents/notes.txt\n  podcast-ep12.mp3 -> Audio/podcast-ep12.mp3\n  resume.docx -> Documents/resume.docx\n  rust-book.zip -> Archives/rust-book.zip\n  screenshot-2026-11-20.png -> Images/screenshot-2026-11-20.png\n  trip.mp4 -> Videos/trip.mp4\nWould move 14 files:\n  Images     3\n  Documents  4\n  Videos     1\n  Audio      1\n  Archives   2\n  Code       2\n  Other      1",
+  "code": 0,
+  "secs": 0.1
+ },
+ "find_dry": {
+  "cmd": "cd ~ && find Downloads -maxdepth 1 | sort | head -5",
+  "out": "Downloads\nDownloads/README\nDownloads/backup.tar.gz\nDownloads/budget.csv\nDownloads/cat.gif",
+  "code": 0,
+  "secs": 0.0
+ },
+ "real": {
+  "cmd": "cargo run -q -- ~/Downloads",
+  "out": "  README -> Other/README\n  backup.tar.gz -> Archives/backup.tar.gz\n  budget.csv -> Documents/budget.csv\n  cat.gif -> Images/cat.gif\n  holiday.JPG -> Images/holiday.JPG\n  index.html -> Code/index.html\n  invoice-0042.pdf -> Documents/invoice-0042.pdf\n  main.rs -> Code/main.rs\n  notes.txt -> Documents/notes.txt\n  podcast-ep12.mp3 -> Audio/podcast-ep12.mp3\n  resume.docx -> Documents/resume.docx\n  rust-book.zip -> Archives/rust-book.zip\n  screenshot-2026-11-20.png -> Images/screenshot-2026-11-20.png\n  trip.mp4 -> Videos/trip.mp4\nMoved 14 files:\n  Images     3\n  Documents  4\n  Videos     1\n  Audio      1\n  Archives   2\n  Code       2\n  Other      1",
+  "code": 0,
+  "secs": 0.1
+ },
+ "find2": {
+  "cmd": "cd ~ && find Downloads -type f | sort",
+  "out": "Downloads/Archives/backup.tar.gz\nDownloads/Archives/rust-book.zip\nDownloads/Audio/podcast-ep12.mp3\nDownloads/Code/index.html\nDownloads/Code/main.rs\nDownloads/Documents/budget.csv\nDownloads/Documents/invoice-0042.pdf\nDownloads/Documents/notes.txt\nDownloads/Documents/resume.docx\nDownloads/Images/cat.gif\nDownloads/Images/holiday.JPG\nDownloads/Images/screenshot-2026-11-20.png\nDownloads/Other/README\nDownloads/Videos/trip.mp4\nDownloads/old-stuff/data.json\nDownloads/old-stuff/notes.txt\nDownloads/old-stuff/photo.png",
+  "code": 0,
+  "secs": 0.0
+ },
+ "again": {
+  "cmd": "cargo run -q -- ~/Downloads",
+  "out": "Nothing to sort in /home/dev/Downloads",
+  "code": 0,
+  "secs": 0.1
+ },
+ "rec": {
+  "cmd": "cargo run -q -- ~/Downloads --recursive",
+  "out": "  old-stuff/data.json -> Code/data.json\n  old-stuff/notes.txt -> Documents/notes (1).txt\n  old-stuff/photo.png -> Images/photo.png\nMoved 3 files:\n  Images     1\n  Documents  1\n  Code       1",
+  "code": 0,
+  "secs": 0.1
+ },
+ "docs": {
+  "cmd": "ls ~/Downloads/Documents",
+  "out": "budget.csv\ninvoice-0042.pdf\nnotes (1).txt\nnotes.txt\nresume.docx",
+  "code": 0,
+  "secs": 0.0
+ },
+ "typo": {
+  "cmd": "cargo run -q -- ~/Downlaods",
+  "out": "error: IO error for operation on /home/dev/Downlaods: No such file or directory (os error 2)",
+  "code": 1,
+  "secs": 0.1
+ },
+ "release": {
+  "cmd": "cargo build --release",
+  "out": "   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.27\n   Compiling quote v1.0.47\n   Compiling utf8parse v0.2.2\n   Compiling anstyle-parse v1.0.0\n   Compiling anstyle v1.0.14\n   Compiling colorchoice v1.0.5\n   Compiling anstyle-query v1.1.5\n   Compiling is_terminal_polyfill v1.70.2\n   Compiling anstream v1.0.0\n   Compiling clap_lex v1.1.2\n   Compiling heck v0.5.0\n   Compiling strsim v0.11.1\n   Compiling syn v3.0.10\n   Compiling clap_builder v4.6.7\n   Compiling same-file v1.0.6\n   Compiling walkdir v2.5.1\n   Compiling clap_derive v4.6.9\n   Compiling clap v4.6.9\n   Compiling file-organizer v0.1.0 (/home/dev/file-organizer)\n    Finished `release` profile [optimized] target(s) in 5.72s",
+  "code": 0,
+  "secs": 5.8
+ },
+ "size": {
+  "cmd": "du -h --apparent-size target/release/file-organizer",
+  "out": "1.2M\ttarget/release/file-organizer",
+  "code": 0,
+  "secs": 0.0
+ },
+ "install": {
+  "cmd": "cargo install --path .",
+  "out": "  Installing /home/dev/.cargo/bin/file-organizer\n   Installed package `file-organizer v0.1.0 (/home/dev/file-organizer)` (executable `file-organizer`)\nwarning: be sure to add `/home/dev/.cargo/bin` to your PATH to be able to run the installed binaries",
+  "code": 0,
+  "secs": 0.3
+ },
+ "global": {
+  "cmd": "file-organizer --version",
+  "out": "file-organizer 0.1.0",
+  "code": 0,
+  "secs": 0.0
+ }
+}
