@@ -24,6 +24,13 @@
     "title": "Rust vs Python: Same Code, 86x Faster? 🦀 #Shorts",
     "spec": "episodes/2026-11-25-speed/spec.json"
    }
+  },
+  {
+   "slug": "file-organizer",
+   "date": "2026-11-24",
+   "url": "https://www.youtube.com/watch?v=m-C7Me6R_Pw",
+   "title": "Build a File Organizer in Rust (Sort Your Downloads Folder) | Rust Projects #2",
+   "publishAt": "2026-11-24T18:00:00+05:30"
   }
  ]
 }
