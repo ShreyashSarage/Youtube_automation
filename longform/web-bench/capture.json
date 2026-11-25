@@ -1,0 +1,187 @@
+[
+ {
+  "id": "ls",
+  "project": "web-bench",
+  "cmd": "ls -R rust/src go node/server.js python",
+  "write": [
+   "post.lua",
+   "bench.py",
+   "node/package-lock.json",
+   "node/package.json",
+   "node/server.js",
+   "go/go.mod",
+   "go/main.go",
+   "python/app_sync.py",
+   "python/app.py",
+   "rust/Cargo.toml",
+   "rust/Cargo.lock",
+   "rust/src/main.rs"
+  ]
+ },
+ {
+  "id": "specs",
+  "cmd": "nproc && wrk --version | head -1"
+ },
+ {
+  "id": "versions",
+  "cmd": "rustc --version && go version && node --version && python3 -c 'import fastapi, uvicorn; print(\"FastAPI\", fastapi.__version__, \"uvicorn\", uvicorn.__version__)'"
+ },
+ {
+  "id": "build_rust",
+  "cmd": "cd rust && cargo build --release 2>&1 | tail -3",
+  "shown": "cd rust && cargo build --release && cd ..",
+  "timeout": 900
+ },
+ {
+  "id": "build_go",
+  "cmd": "cd go && go build -o server . && ls -lh server | awk '{print $5, $9}'",
+  "shown": "cd go && go build -o server . && cd .."
+ },
+ {
+  "id": "build_node",
+  "cmd": "cd node && npm install --silent && npm ls express",
+  "shown": "cd node && npm install && npm ls express && cd .."
+ },
+ {
+  "id": "rust_start",
+  "cmd": "exec taskset -c 0,1 ./rust/target/release/server",
+  "shown": "taskset -c 0,1 ./rust/target/release/server &",
+  "background": true,
+  "wait": 3
+ },
+ {
+  "id": "rust_curl",
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo"
+ },
+ {
+  "id": "rust_warm",
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null; echo warmed up",
+  "shown": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up"
+ },
+ {
+  "id": "rust_get",
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "id": "rust_c1000",
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "kill": "rust_start"
+ },
+ {
+  "id": "rust_cleanup",
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true"
+ },
+ {
+  "id": "go_start",
+  "cmd": "exec taskset -c 0,1 ./go/server",
+  "shown": "taskset -c 0,1 ./go/server &",
+  "background": true,
+  "wait": 3
+ },
+ {
+  "id": "go_curl",
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo"
+ },
+ {
+  "id": "go_warm",
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null; echo warmed up",
+  "shown": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up"
+ },
+ {
+  "id": "go_get",
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "id": "go_c1000",
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "kill": "go_start"
+ },
+ {
+  "id": "go_cleanup",
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true"
+ },
+ {
+  "id": "node_start",
+  "cmd": "exec taskset -c 0,1 node node/server.js",
+  "shown": "taskset -c 0,1 node node/server.js &",
+  "background": true,
+  "wait": 3
+ },
+ {
+  "id": "node_curl",
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo"
+ },
+ {
+  "id": "node_warm",
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null; echo warmed up",
+  "shown": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up"
+ },
+ {
+  "id": "node_get",
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "id": "node_c1000",
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "kill": "node_start"
+ },
+ {
+  "id": "node_cleanup",
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true"
+ },
+ {
+  "id": "python_start",
+  "cmd": "exec taskset -c 0,1 uvicorn --app-dir python app:app --host 127.0.0.1 --port 8080 --workers 2 --log-level warning --no-access-log",
+  "shown": "taskset -c 0,1 uvicorn --app-dir python app:app --host 127.0.0.1 --port 8080 --workers 2 --log-level warning --no-access-log &",
+  "background": true,
+  "wait": 3
+ },
+ {
+  "id": "python_curl",
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo"
+ },
+ {
+  "id": "python_warm",
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null; echo warmed up",
+  "shown": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up"
+ },
+ {
+  "id": "python_get",
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "id": "python_c1000",
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "kill": "python_start"
+ },
+ {
+  "id": "python_cleanup",
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true"
+ },
+ {
+  "id": "slow_start",
+  "cmd": "exec taskset -c 0,1 uvicorn --app-dir python app_sync:app --host 127.0.0.1 --port 8080 --workers 2 --loop asyncio --http h11 --log-level warning --no-access-log",
+  "shown": "taskset -c 0,1 uvicorn --app-dir python app_sync:app --workers 2 --loop asyncio --http h11 &",
+  "background": true,
+  "wait": 3
+ },
+ {
+  "id": "slow_get",
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42"
+ },
+ {
+  "kill": "slow_start"
+ },
+ {
+  "id": "slow_cleanup",
+  "cmd": "pkill -f '[u]vicorn'; sleep 1; true"
+ }
+]

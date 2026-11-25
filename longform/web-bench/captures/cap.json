@@ -1,0 +1,195 @@
+{
+ "ls": {
+  "cmd": "ls -R rust/src go node/server.js python",
+  "out": "node/server.js\n\ngo:\ngo.mod\nmain.go\n\npython:\napp.py\napp_sync.py\n\nrust/src:\nmain.rs",
+  "code": 0,
+  "secs": 0.0
+ },
+ "specs": {
+  "cmd": "nproc && wrk --version | head -1",
+  "out": "4\nwrk debian/4.1.0-4build2 [epoll] Copyright (C) 2012 Will Glozer",
+  "code": 0,
+  "secs": 0.0
+ },
+ "versions": {
+  "cmd": "rustc --version && go version && node --version && python3 -c 'import fastapi, uvicorn; print(\"FastAPI\", fastapi.__version__, \"uvicorn\", uvicorn.__version__)'",
+  "out": "rustc 1.97.0 (2d8144b78 2026-07-07)\ngo version go1.24.7 linux/amd64\nv22.23.4\nFastAPI 0.165.0 uvicorn 0.54.0",
+  "code": 0,
+  "secs": 0.4
+ },
+ "build_rust": {
+  "cmd": "cd rust && cargo build --release && cd ..",
+  "out": "   Compiling axum v0.8.9\n   Compiling server v0.1.0 (/home/dev/web-bench/rust)\n    Finished `release` profile [optimized] target(s) in 14.20s",
+  "code": 0,
+  "secs": 14.2
+ },
+ "build_go": {
+  "cmd": "cd go && go build -o server . && cd ..",
+  "out": "8.3M server",
+  "code": 0,
+  "secs": 0.4
+ },
+ "build_node": {
+  "cmd": "cd node && npm install && npm ls express && cd ..",
+  "out": "node@1.0.0 /home/dev/web-bench/node\n\u2514\u2500\u2500 express@5.3.0",
+  "code": 0,
+  "secs": 0.8
+ },
+ "rust_start": {
+  "cmd": "taskset -c 0,1 ./rust/target/release/server &",
+  "out": "",
+  "code": -2
+ },
+ "rust_curl": {
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo",
+  "out": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}",
+  "code": 0,
+  "secs": 0.0
+ },
+ "rust_warm": {
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up",
+  "out": "warmed up",
+  "code": 0,
+  "secs": 5.1
+ },
+ "rust_get": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency   606.25us  442.17us  20.92ms   95.03%\n    Req/Sec    85.17k     8.14k  121.88k    71.00%\n  Latency Distribution\n     50%  570.00us\n     75%  707.00us\n     90%  832.00us\n     99%    1.39ms\n  2541375 requests in 15.03s, 460.49MB read\nRequests/sec: 169103.33\nTransfer/sec:     30.64MB",
+  "code": 0,
+  "secs": 15.0
+ },
+ "rust_c1000": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     8.11ms    9.08ms 233.40ms   83.95%\n    Req/Sec    87.43k    11.57k  137.32k    69.00%\n  Latency Distribution\n     50%    2.63ms\n     75%   13.12ms\n     90%   21.00ms\n     99%   37.71ms\n  2607792 requests in 15.10s, 472.53MB read\nRequests/sec: 172726.51\nTransfer/sec:     31.30MB",
+  "code": 0,
+  "secs": 15.1
+ },
+ "rust_cleanup": {
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true",
+  "out": "",
+  "code": 0,
+  "secs": 1.0
+ },
+ "go_start": {
+  "cmd": "taskset -c 0,1 ./go/server &",
+  "out": "",
+  "code": -2
+ },
+ "go_curl": {
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo",
+  "out": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}",
+  "code": 0,
+  "secs": 0.0
+ },
+ "go_warm": {
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up",
+  "out": "warmed up",
+  "code": 0,
+  "secs": 5.1
+ },
+ "go_get": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     0.99ms    0.85ms  19.24ms   79.98%\n    Req/Sec    56.12k     4.22k   67.93k    69.00%\n  Latency Distribution\n     50%    0.86ms\n     75%    1.36ms\n     90%    1.92ms\n     99%    3.88ms\n  1675069 requests in 15.02s, 305.12MB read\nRequests/sec: 111515.49\nTransfer/sec:     20.31MB",
+  "code": 0,
+  "secs": 15.0
+ },
+ "go_c1000": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     9.29ms    3.43ms  39.65ms   83.66%\n    Req/Sec    54.50k     4.41k   71.48k    75.00%\n  Latency Distribution\n     50%    8.72ms\n     75%   10.34ms\n     90%   12.91ms\n     99%   20.96ms\n  1626729 requests in 15.07s, 296.31MB read\nRequests/sec: 107944.43\nTransfer/sec:     19.66MB",
+  "code": 0,
+  "secs": 15.1
+ },
+ "go_cleanup": {
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true",
+  "out": "",
+  "code": 0,
+  "secs": 1.0
+ },
+ "node_start": {
+  "cmd": "taskset -c 0,1 node node/server.js &",
+  "out": "",
+  "code": -2
+ },
+ "node_curl": {
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo",
+  "out": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}",
+  "code": 0,
+  "secs": 0.0
+ },
+ "node_warm": {
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up",
+  "out": "warmed up",
+  "code": 0,
+  "secs": 5.1
+ },
+ "node_get": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     5.92ms    4.78ms 157.98ms   94.34%\n    Req/Sec     8.98k     1.07k   11.60k    68.33%\n  Latency Distribution\n     50%    4.83ms\n     75%    6.55ms\n     90%    9.33ms\n     99%   16.61ms\n  268057 requests in 15.03s, 81.04MB read\nRequests/sec:  17830.28\nTransfer/sec:      5.39MB",
+  "code": 0,
+  "secs": 15.0
+ },
+ "node_c1000": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency   122.01ms  429.49ms   4.99s    96.05%\n    Req/Sec     8.11k     1.24k   11.19k    67.00%\n  Latency Distribution\n     50%   43.20ms\n     75%   55.00ms\n     90%   73.34ms\n     99%    2.67s \n  242356 requests in 15.07s, 73.27MB read\n  Socket errors: connect 0, read 0, write 0, timeout 402\nRequests/sec:  16084.38\nTransfer/sec:      4.86MB",
+  "code": 0,
+  "secs": 15.1
+ },
+ "node_cleanup": {
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true",
+  "out": "",
+  "code": 0,
+  "secs": 1.0
+ },
+ "python_start": {
+  "cmd": "taskset -c 0,1 uvicorn --app-dir python app:app --host 127.0.0.1 --port 8080 --workers 2 --log-level warning --no-access-log &",
+  "out": "",
+  "code": 0
+ },
+ "python_curl": {
+  "cmd": "curl -s http://127.0.0.1:8080/api/user/42; echo",
+  "out": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}",
+  "code": 0,
+  "secs": 0.0
+ },
+ "python_warm": {
+  "cmd": "wrk -t2 -c50 -d5s http://127.0.0.1:8080/api/user/1 > /dev/null   # warm-up",
+  "out": "warmed up",
+  "code": 0,
+  "secs": 5.1
+ },
+ "python_get": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     5.92ms    1.55ms  93.88ms   93.91%\n    Req/Sec     8.53k   677.94     9.55k    78.00%\n  Latency Distribution\n     50%    5.62ms\n     75%    6.05ms\n     90%    6.79ms\n     99%    9.98ms\n  254643 requests in 15.01s, 50.27MB read\nRequests/sec:  16960.48\nTransfer/sec:      3.35MB",
+  "code": 0,
+  "secs": 15.0
+ },
+ "python_c1000": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c1000 -d15s --latency --timeout 5s http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency   116.99ms  397.17ms   5.00s    96.67%\n    Req/Sec     8.05k     0.96k   10.62k    68.67%\n  Latency Distribution\n     50%   54.17ms\n     75%   60.49ms\n     90%   68.31ms\n     99%    2.50s \n  240281 requests in 15.07s, 47.43MB read\n  Socket errors: connect 0, read 0, write 0, timeout 252\nRequests/sec:  15945.01\nTransfer/sec:      3.15MB",
+  "code": 0,
+  "secs": 15.1
+ },
+ "python_cleanup": {
+  "cmd": "pkill -f '[s]erver.js'; pkill -f '[u]vicorn'; sleep 1; true",
+  "out": "",
+  "code": 0,
+  "secs": 1.0
+ },
+ "slow_start": {
+  "cmd": "taskset -c 0,1 uvicorn --app-dir python app_sync:app --workers 2 --loop asyncio --http h11 &",
+  "out": "",
+  "code": 0
+ },
+ "slow_get": {
+  "cmd": "taskset -c 2,3 wrk -t2 -c100 -d15s --latency http://127.0.0.1:8080/api/user/42",
+  "out": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency    47.94ms    4.16ms  92.69ms   91.48%\n    Req/Sec     1.05k    83.99     1.23k    80.67%\n  Latency Distribution\n     50%   47.94ms\n     75%   48.17ms\n     90%   52.03ms\n     99%   60.01ms\n  31245 requests in 15.03s, 6.18MB read\nRequests/sec:   2078.61\nTransfer/sec:    420.80KB",
+  "code": 0,
+  "secs": 15.0
+ },
+ "slow_cleanup": {
+  "cmd": "pkill -f '[u]vicorn'; sleep 1; true",
+  "out": "",
+  "code": 0,
+  "secs": 1.0
+ }
+}

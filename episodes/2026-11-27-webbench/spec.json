@@ -1,0 +1,163 @@
+{
+ "topic": "Rust vs Node web server load test",
+ "theme": "neon",
+ "brand": "RUST  ·  LOAD TEST",
+ "crate": "orders",
+ "sources": [
+  "https://github.com/ShreyashSarage/Youtube_automation/tree/main/longform/web-bench/project"
+ ],
+ "thumbnail": {
+  "lines": [
+   "RUST VS",
+   "NODE"
+  ],
+  "visual": "gauge",
+  "params": {
+   "value": 9.4,
+   "max": 12,
+   "unit": "x more",
+   "label": "same API, same 2 cores"
+  }
+ },
+ "youtube": {
+  "title": "Rust vs Node Web Server: 9x More Requests? (Real Load Test) 🦀 #Shorts",
+  "description": "Rust vs Node vs Python web server load test: the same JSON API on the same 2 CPU cores. Rust handled 162,047 requests per second, Go 103,346, Node 17,284 and Python (FastAPI) 16,229. Median of 3 runs with wrk.\n\n📌 In this short:\n✅ Rust (Axum) served about 9x more requests per second than Node (Express)\n✅ Peak memory: Rust 26 MB, Go 40 MB, Python 151 MB, Node 390 MB\n✅ Go had the lowest tail latency at 1000 connections (full video)\n\n🎬 Full load test (4 rounds, all the code): LINK_LONG\n💻 Code: https://github.com/ShreyashSarage/Youtube_automation/tree/main/longform/web-bench/project\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 What should I load test next? Tell me in the comments 👇\n\n#rust #rustlang #nodejs #python #golang #webdev #backend #benchmark #programming #coding #shorts",
+  "tags": [
+   "rust",
+   "rust vs node",
+   "rust vs go",
+   "nodejs",
+   "python fastapi",
+   "axum",
+   "express",
+   "web server benchmark",
+   "load test",
+   "backend",
+   "rust web",
+   "programming"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "race",
+   "lanes": [
+    {
+     "label": "Rust",
+     "value": 6.2
+    },
+    {
+     "label": "Go",
+     "value": 9.7
+    },
+    {
+     "label": "Node",
+     "value": 57.9
+    }
+   ],
+   "unit": " s",
+   "top": "1M requests",
+   "big": "9x more?",
+   "say": "Same API, two CPU cores. Node: 17 thousand requests a second. Rust: 162 thousand.",
+   "captions": "Same API, two CPU cores. Node: 17K requests a second. Rust: 162K."
+  },
+  {
+   "type": "code",
+   "heading": "The work per request",
+   "file": "main.rs",
+   "code": "fn main() {\n    // (price, quantity) per item\n    let items = [(1.99, 1.0),\n        (2.99, 2.0), (3.99, 3.0)];\n    let total: f64 = items\n        .iter()\n        .map(|(p, q)| p * q)\n        .sum();\n    println!(\"total {total:.2}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      3,
+      4
+     ],
+     "note": "(price, quantity) items",
+     "at": "Each order"
+    },
+    {
+     "lines": [
+      7,
+      8
+     ],
+     "note": "price × qty, summed",
+     "at": "adds up"
+    },
+    {
+     "lines": [
+      9
+     ],
+     "note": "send back the total",
+     "at": "sends back"
+    }
+   ],
+   "say": "Each order has items with a price and a quantity. The server parses the JSON, adds up price times quantity with an iterator, and sends back the total. Four servers, same job.",
+   "captions": "Each order has items with a price and a quantity. The server parses the JSON, adds up price × quantity with an iterator, and sends back the total. Four servers, same job."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 1,
+   "caption": "total 19.94",
+   "say": "The total: nineteen ninety four. Now hit it with a hundred users at once.",
+   "captions": "The total: 19.94. Now hit it with 100 users at once."
+  },
+  {
+   "type": "visual",
+   "visual": "gauge",
+   "heading": "Requests per second",
+   "value": 162,
+   "max": 200,
+   "unit": "K req/s",
+   "label": "Go 103K · Node 17K · Python 16K",
+   "say": "Rust with Axum: 162 thousand requests per second. Go: 103 thousand. Node and Python: about seventeen thousand.",
+   "captions": "Rust with Axum: 162K requests per second. Go: 103K. Node and Python: about 17K."
+  },
+  {
+   "type": "visual",
+   "visual": "race",
+   "heading": "Peak memory",
+   "sub": "lower is better",
+   "lanes": [
+    {
+     "label": "Rust",
+     "value": 26
+    },
+    {
+     "label": "Go",
+     "value": 40
+    },
+    {
+     "label": "Node",
+     "value": 390
+    }
+   ],
+   "unit": " MB",
+   "say": "Memory under load: Rust 26 megabytes, Go 40, Node almost 390.",
+   "captions": "Memory under load: Rust 26 MB, Go 40 MB, Node almost 390 MB."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "Rust: 162K req/s",
+    "Go: 103K, best p99",
+    "Node & Python: ~17K",
+    "Rust peak RAM: 26 MB"
+   ],
+   "say": "Rust handled the most, Go came second and actually won on tail latency, and Node and Python tied.",
+   "captions": "Rust handled the most, Go came second and actually won on tail latency, and Node and Python tied."
+  },
+  {
+   "type": "cta",
+   "heading": "Full test ▶",
+   "link": "4 rounds · all the code",
+   "question": [
+    "Full video:",
+    "Rust vs Go vs Node"
+   ],
+   "sub": "Link in the description",
+   "say": "The full video has all four rounds, including the Python fix. Link in the description!"
+  }
+ ]
+}

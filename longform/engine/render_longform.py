@@ -161,13 +161,19 @@ def schedule():
                     EV["ed"].append((tt, "set", (f, li, col))); EV["keys"].append(tt)
                 cur = (ts[-1] if ts else cur) + 0.6
                 EV["ed"].append((cur, "set", (f, b0, 0)))
+        elif scene == "chart" and sh["chart"].get("mode") == "rate":
+            cur = start + 1.0 + sh["chart"].get("seconds", 10) + 1.6
         elif scene == "chart" and sh["chart"].get("mode") == "race":
             cur = start + 1.0 + max(b["value"] for b in sh["chart"]["bars"]) + 1.6
         else:
             cur = start + 1.0
         dur = max(vdur + 1.4, cur - start + 0.8)
+        voice2 = None; voff2 = 0.0
+        if sh.get("say2"):
+            a2, sr2 = voice_for(sh["say2"], sh["id"] + "_2"); voff2 = max(cur - start + 0.3, vdur + 0.8)
+            voice2 = (a2, sr2); dur = max(dur, voff2 + len(a2) / sr2 + 1.4)
         if scene == "title" and sh.get("outro"): dur += 2.0
-        SHOTS.append(dict(start=start, dur=dur, shot=sh, voice=(a, sr)))
+        SHOTS.append(dict(start=start, dur=dur, shot=sh, voice=(a, sr), voice2=voice2, voff2=voff2))
         t = start + dur
     return t
 
@@ -253,7 +259,8 @@ def out_segments(l):
     m = re.match(r"^(\w+)-1(\s*\|)(.*)$", l)
     if m: return [(m.group(1) + "-1" + m.group(2), SERVICE_COL.get(m.group(1), (200, 200, 200)), False), (m.group(3), (225, 225, 225), False)]
     if re.match(r"^error(\[E\d+\])?:", l): return [(l.split(":")[0], (240, 80, 80), True), (l[len(l.split(":")[0]):], (235, 235, 235), True)]
-    if re.match(r"^real\s", l): return [(l, (250, 210, 90), True)]
+    if re.match(r"^real\s", l) or l.startswith("Requests/sec:"): return [(l, (250, 210, 90), True)]
+    if "Socket errors:" in l and "timeout 0" not in l: return [(l, (240, 90, 90), True)]
     if re.match(r"^(user|sys)\s", l): return [(l, (140, 140, 150), False)]
     if l.startswith("note:"): return [("note", (110, 190, 255), True), (l[4:], (220, 220, 220), False)]
     if re.match(r"^\s+\+ ", l): return [(l, (150, 210, 150), False)]
@@ -573,26 +580,31 @@ def draw_chart(img, sh, lt, dur):
     if c.get("sub"): text_c(d, x + w / 2, y + 96, c["sub"], SANS(26), (175, 175, 190))
     vmax = max(b["value"] for b in bars); fmt = c.get("fmt", "{:.2f} s")
     lx = x + 60; bx0 = x + 330; bw_max = w - 330 - 330; top = y + 165; lh = min(110, (h - 200) / n); bh = lh * 0.62
-    race = c.get("mode") == "race"; T0 = 1.0
+    race = c.get("mode") == "race"; rate = c.get("mode") == "rate"; secs = c.get("seconds", 10); T0 = 1.0
+    if rate: vmax = vmax * secs
     base = next((b["value"] for b in bars if b["label"] == c.get("base")), None)
-    done_order = sorted(range(n), key=lambda i: bars[i]["value"])
+    done_order = sorted(range(n), key=lambda i: bars[i]["value"], reverse=c.get("mode") == "rate")
     for i, b in enumerate(bars):
         yy = top + i * lh; col = tuple(b["color"]) if b.get("color") else CHART_COL.get(b["label"], (150, 150, 160))
         f = SANSB(34) if b["label"] == "Rust" else SANS(32)
         d.text((lx, yy + bh / 2 - 20), b["label"], font=f, fill=(255, 255, 255) if b["label"] == "Rust" else (215, 215, 225))
         d.rounded_rectangle((bx0, yy, bx0 + bw_max, yy + bh), 10, fill=(34, 34, 44))
-        if race:
+        if rate:
+            el = clamp(lt - T0, 0, secs); v = b["value"] * el; fin = el >= secs
+        elif race:
             el = max(0.0, lt - T0); v = min(el, b["value"]); fin = el >= b["value"]
         else:
             p = eout((lt - 0.6 - i * 0.25) / 1.1); v = b["value"] * p; fin = p >= 0.999
         L = max(8, bw_max * v / vmax) if v > 0 else 0
-        if L: d.rounded_rectangle((bx0, yy, bx0 + L, yy + bh), 10, fill=col)
-        if race and not fin and v > 0:  # running: a pulsing tip
+        if rate and v > 0 and not fin:
             pr = 0.5 + 0.5 * math.sin(lt * 10); d.ellipse((bx0 + L - 9 - 4 * pr, yy + bh / 2 - 9 - 4 * pr, bx0 + L + 9 + 4 * pr, yy + bh / 2 + 9 + 4 * pr), fill=(255, 255, 255))
-        txt = fmt.format(v) if (race or v > 0) else ""
+        if L: d.rounded_rectangle((bx0, yy, bx0 + L, yy + bh), 10, fill=col)
+        if race and not rate and not fin and v > 0:  # running: a pulsing tip
+            pr = 0.5 + 0.5 * math.sin(lt * 10); d.ellipse((bx0 + L - 9 - 4 * pr, yy + bh / 2 - 9 - 4 * pr, bx0 + L + 9 + 4 * pr, yy + bh / 2 + 9 + 4 * pr), fill=(255, 255, 255))
+        txt = fmt.format(v) if (race or rate or v > 0) else ""
         tf = MONOB(32) if fin else MONO(32)
         d.text((bx0 + bw_max + 30, yy + bh / 2 - 20), txt, font=tf, fill=(255, 255, 255) if fin else (190, 190, 200))
-        if fin and race:
+        if fin and (race or rate):
             rank = done_order.index(i) + 1; d.text((x + w - 80, yy + bh / 2 - 22), f"#{rank}", font=SANSB(32), fill=col)
         if fin and not race and base and b.get("note") is None and b["label"] != c.get("base"):
             k = b["value"] / base
@@ -603,7 +615,9 @@ def draw_chart(img, sh, lt, dur):
             note = b["note"]; nf = SANSB(26)
             if L + 30 + d.textlength(note, font=nf) < bw_max: d.text((bx0 + L + 20, yy + bh / 2 - 16), note, font=nf, fill=(230, 230, 235))
             else: d.text((bx0 + L - d.textlength(note, font=nf) - 20, yy + bh / 2 - 16), note, font=nf, fill=(20, 20, 24))
-    if race:
+    if rate:
+        el = clamp(lt - T0, 0, secs); text_c(d, x + w / 2, y + h - 70, f"time  {el:4.1f} s" + ("" if el < secs else "  ·  done"), MONOB(34), (250, 210, 90))
+    elif race:
         el = max(0.0, lt - T0); text_c(d, x + w / 2, y + h - 70, "time  " + fmt.format(min(el, vmax)) + ("" if el < vmax else "  ·  all done"), MONOB(34), (250, 210, 90))
     elif c.get("foot"):
         text_c(d, x + w / 2, y + h - 66, c["foot"], SANS(26), (175, 175, 190))
@@ -749,6 +763,9 @@ def build_audio():
     for s in SHOTS:
         a, sr = s["voice"]; a = np.interp(np.arange(0, len(a) * SR / sr) * sr / SR, np.arange(len(a)), a).astype(np.float32)
         i0 = int((s["start"] + 0.5) * SR); voice[i0:i0 + len(a)] += a[: N - i0]
+        if s.get("voice2"):
+            a2, sr2 = s["voice2"]; a2 = np.interp(np.arange(0, len(a2) * SR / sr2) * sr2 / SR, np.arange(len(a2)), a2).astype(np.float32)
+            j0 = int((s["start"] + 0.5 + s["voff2"]) * SR); voice[j0:j0 + len(a2)] += a2[: max(0, N - j0)]
     r = np.random.default_rng(5); fx = np.zeros(N, np.float32)
     lp = lambda x, f: sosfilt(butter(2, f, "low", fs=SR, output="sos"), x); hp = lambda x, f: sosfilt(butter(2, f, "high", fs=SR, output="sos"), x)
     clicks = [hp(r.standard_normal(900), 1800) * np.exp(-np.arange(900) / 90) * 0.05 for _ in range(6)]
@@ -785,9 +802,13 @@ def build_audio():
 def write_srt():
     def ts(x): return f"{int(x // 3600):02}:{int(x % 3600 // 60):02}:{x % 60:06.3f}".replace(".", ",")
     out = []; n = 1
+    segs = []
     for s in SHOTS:
-        a, sr = s["voice"]; a0 = s["start"] + 0.5; dur = len(a) / sr
-        sents = re.split(r"(?<=[.!?])\s+", s["shot"]["say"]); chunks = []
+        segs.append((s["voice"], s["start"] + 0.5, s["shot"]["say"]))
+        if s.get("voice2"): segs.append((s["voice2"], s["start"] + 0.5 + s["voff2"], s["shot"]["say2"]))
+    for (a, sr), a0, say in segs:
+        dur = len(a) / sr
+        sents = re.split(r"(?<=[.!?])\s+", say); chunks = []
         for se in sents:
             words = se.split(); cur = ""
             for w_ in words:
