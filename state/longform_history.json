@@ -4,13 +4,13 @@
    "slug": "kiri-mqtt",
    "date": "2026-11-17",
    "url": "https://www.youtube.com/watch?v=16lhtq-LCgg",
-   "title": "Kiri on Linux: Install + MQTT Pub/Sub in Rust with Docker Compose (only 23 MB RAM!)"
+   "title": "Docker Desktop Alternative in Rust? Install Kiri on Linux + MQTT Demo (23 MB RAM)"
   },
   {
    "slug": "todo-cli",
    "date": "2026-11-22",
    "url": "https://www.youtube.com/watch?v=0zTTX_rqksE",
-   "title": "Build a Todo CLI App in Rust (clap + serde) | Rust Projects #1"
+   "title": "Rust Project for Beginners: Build a Todo CLI App Step by Step | Rust Projects #1"
   },
   {
    "slug": "rust-speed",
@@ -29,7 +29,7 @@
    "slug": "file-organizer",
    "date": "2026-11-24",
    "url": "https://www.youtube.com/watch?v=m-C7Me6R_Pw",
-   "title": "Build a File Organizer in Rust (Sort Your Downloads Folder) | Rust Projects #2",
+   "title": "Automatically Organize Your Downloads Folder with Rust (Beginner Project) | Rust Projects #2",
    "publishAt": "2026-11-24T18:00:00+05:30"
   }
  ]

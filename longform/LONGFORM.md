@@ -72,7 +72,9 @@ Long videos DO accept custom thumbnails: pass it as `options.youtube.thumbnailMe
 `media_presign` like the video). If YouTube refuses it (unverified channel), publish without it and say so.
 
 ## 7. Publish (Uplika "ulika" tools)
-Title (search phrase first): e.g. `Build a Todo CLI App in Rust (clap + serde) | Rust Projects #1`.
+Title (search phrase first: the OUTCOME a viewer searches for, not the project name), e.g.
+`Automatically Organize Your Downloads Folder with Rust (Beginner Project) | Rust Projects #2` or
+`Rust Project for Beginners: Build a Todo CLI App Step by Step | Rust Projects #1`. ≤ 100 chars, no `<` or `>` anywhere.
 Description: 2-line summary, `🔗 Code: https://github.com/ShreyashSarage/Youtube_automation/tree/main/longform/<slug>/project`,
 the chapters from `build/chapters.txt`, the commands, versions, "Related Shorts" (the Rust Day N videos
 for the concepts used, from `state/history.json`), 8-12 hashtags.
