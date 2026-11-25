@@ -117,6 +117,17 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-03-how-functions-work.html"
    ]
+  },
+  {
+   "date": "2026-11-25",
+   "day": 11,
+   "topic": "if / else",
+   "title": "How if / else Works in Rust (and Why if 3 Fails) 🦀 | Rust Day 11 #Shorts",
+   "url": "https://www.youtube.com/watch?v=3NUV2cTuIC0",
+   "publishAt": "2026-11-25T10:03:21+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+   ]
   }
  ]
 }

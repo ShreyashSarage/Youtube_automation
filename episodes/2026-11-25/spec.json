@@ -1,0 +1,238 @@
+{
+ "day": 11,
+ "topic": "if / else",
+ "theme": "ocean",
+ "brand": "RUST  ·  DAY 11",
+ "crate": "branches",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "IF / ELSE",
+   "IN RUST"
+  ],
+  "visual": "pipeline",
+  "params": {
+   "stages": [
+    {
+     "name": "if number",
+     "out": [
+      "error"
+     ]
+    },
+    {
+     "name": "if number != 0",
+     "out": [
+      "true"
+     ]
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "How if / else Works in Rust (and Why if 3 Fails) 🦀 | Rust Day 11 #Shorts",
+  "description": "How if / else works in Rust: the condition must be a bool, and if is an expression you can assign with let. Rust Day 11 of the Zero to Pro series.\n\n📌 In this short:\n✅ if / else if / else: Rust runs only the FIRST arm whose condition is true\n✅ let temp = if cold { 5 } else { 25 }; works because if is an expression (both arms must have the same type)\n✅ if number { } is an error in Rust (E0308, expected bool): Rust never turns numbers into true/false for you\n\n💻 Code from the video:\nlet number = 6;\nif number % 4 == 0 {\n    println!(\"divides by 4\");\n} else if number % 3 == 0 {\n    println!(\"divides by 3\");\n} else {\n    println!(\"none of them\");\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-05-control-flow.html\n⏭️ Tomorrow: loop & break with a value\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 11",
+   "rustlang",
+   "rust if else",
+   "if expression",
+   "else if",
+   "rust control flow",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "pipeline",
+   "stages": [
+    {
+     "name": "if number",
+     "out": [
+      "error"
+     ]
+    },
+    {
+     "name": "if number != 0",
+     "out": [
+      "true"
+     ]
+    }
+   ],
+   "top": "Rust Day 11",
+   "big": "if (3)? Not in Rust",
+   "sub": [
+    "if / else, explained"
+   ],
+   "say": "In JavaScript, if three just works. In Rust, it won't even compile.",
+   "captions": "In JavaScript, if (3) just works. In Rust, it won't even compile."
+  },
+  {
+   "type": "code",
+   "heading": "if, else if, else",
+   "file": "main.rs",
+   "code": "fn main() {\n    let number = 6;\n    if number % 4 == 0 {\n        println!(\"divides by 4\");\n    } else if number % 3 == 0 {\n        println!(\"divides by 3\");\n    } else if number % 2 == 0 {\n        println!(\"divides by 2\");\n    } else {\n        println!(\"none of them\");\n    }\n}",
+   "steps": [
+    {
+     "lines": [
+      3
+     ],
+     "note": "the condition is a bool",
+     "at": "Each condition"
+    },
+    {
+     "lines": [
+      5
+     ],
+     "note": "6 % 3 == 0 is true",
+     "at": "three divides six"
+    },
+    {
+     "lines": [
+      6
+     ],
+     "note": "only this arm runs",
+     "at": "first true"
+    },
+    {
+     "lines": [
+      7
+     ],
+     "note": "never checked",
+     "at": "never even checked"
+    }
+   ],
+   "say": "Each condition is a true or false check. Four doesn't divide six, but three divides six, so this arm runs. Only the first true arm runs. Two also divides six, but it's never even checked.",
+   "captions": "Each condition is a true or false check. 4 doesn't divide 6, but 3 divides 6, so this arm runs. Only the first true arm runs. 2 also divides 6, but it's never even checked."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 1,
+   "caption": "divides by 3",
+   "say": "Run it: divides by three. Just one line."
+  },
+  {
+   "type": "visual",
+   "visual": "flow",
+   "heading": "First true arm wins",
+   "input": "6",
+   "kind": "if / else if",
+   "arms": [
+    {
+     "pattern": "% 4",
+     "result": "-"
+    },
+    {
+     "pattern": "% 3",
+     "result": "divides by 3"
+    },
+    {
+     "pattern": "% 2",
+     "result": "-"
+    },
+    {
+     "pattern": "else",
+     "result": "-"
+    }
+   ],
+   "hit": 1,
+   "say": "Rust checks the arms from top to bottom, and stops at the first match.",
+   "captions": "Rust checks the arms from top to bottom, and stops at the first match."
+  },
+  {
+   "type": "code",
+   "heading": "if gives a value",
+   "file": "main.rs",
+   "code": "fn main() {\n    let cold = true;\n    let temp = if cold {\n        5\n    } else {\n        25\n    };\n    println!(\"temp = {temp}\");\n}",
+   "expect": "temp = 5",
+   "steps": [
+    {
+     "lines": [
+      3
+     ],
+     "note": "if is an expression",
+     "at": "if is an expression"
+    },
+    {
+     "lines": [
+      4,
+      6
+     ],
+     "note": "both arms: same type",
+     "at": "same type"
+    },
+    {
+     "lines": [
+      8
+     ],
+     "note": "prints temp = 5",
+     "at": "temp is five"
+    }
+   ],
+   "say": "Remember yesterday: if is an expression, so you can store its value with let. Both arms must give the same type. cold is true, so temp is five.",
+   "captions": "Remember yesterday: if is an expression, so you can store its value with let. Both arms must give the same type. cold is true, so temp is 5."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "a number as the condition",
+   "file": "main.rs",
+   "code": "fn main() {\n    let number = 3;\n    if number {\n        println!(\"three\");\n    }\n}",
+   "highlight": [
+    3
+   ],
+   "expect_error": "E0308",
+   "say": "Now the mistake from other languages: if number, where number is three."
+  },
+  {
+   "type": "run",
+   "heading": "Expected bool",
+   "from_code": 5,
+   "caption": "expected bool, found integer",
+   "say": "Mismatched types: expected bool, found integer. Rust never turns a number into true or false for you.",
+   "captions": "Mismatched types: expected bool, found integer. Rust never turns a number into true or false for you."
+  },
+  {
+   "type": "visual",
+   "visual": "compiler",
+   "heading": "Say what you mean",
+   "sub": "if number != 0",
+   "file": "main.rs",
+   "output": "bool ✓",
+   "badge": "!= 0",
+   "say": "Write what you mean instead: if number is not equal to zero. Now it's a real bool, and it compiles.",
+   "captions": "Write what you mean instead: if number != 0. Now it's a real bool, and it compiles."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "conditions must be bool",
+    "first true arm runs",
+    "if gives a value",
+    "arms: same type"
+   ],
+   "say": "Recap: conditions must be bools, only the first true arm runs, and if gives a value, with the same type in every arm."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 11 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: loop &",
+    "break with a value"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: loop and break with a value. Follow for daily Rust!"
+  }
+ ]
+}
