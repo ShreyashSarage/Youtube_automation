@@ -31,6 +31,20 @@
    "url": "https://www.youtube.com/watch?v=m-C7Me6R_Pw",
    "title": "Automatically Organize Your Downloads Folder with Rust (Beginner Project) | Rust Projects #2",
    "publishAt": "2026-11-24T18:00:00+05:30"
+  },
+  {
+   "slug": "web-bench",
+   "date": "2026-11-27",
+   "url": "https://www.youtube.com/watch?v=-QZ5EO1nQs4",
+   "title": "How Many Requests Can Rust Handle? Rust vs Go vs Node vs Python (Real Load Test)",
+   "publishAt": "2026-11-27T18:00:00+05:30",
+   "special": true,
+   "short": {
+    "url": "https://www.youtube.com/watch?v=q22B38cFl6o",
+    "title": "Rust vs Node Web Server: 9x More Requests? (Real Load Test) 🦀 #Shorts",
+    "spec": "episodes/2026-11-27-webbench/spec.json",
+    "publishAt": "2026-11-27T18:00:00+05:30"
+   }
   }
  ]
 }
