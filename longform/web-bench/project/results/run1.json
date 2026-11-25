@@ -1,0 +1,106 @@
+{
+ "Rust": {
+  "check": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}",
+  "idle_mb": 3.6,
+  "get": {
+   "rps": 153323.29,
+   "p50": 0.618,
+   "p99": 2.64,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency   673.37us  471.74us  15.03ms   90.67%\n    Req/Sec    77.18k    11.77k  110.54k    68.33%\n  Latency Distribution\n     50%  618.00us\n     75%  785.00us\n     90%    0.97ms\n     99%    2.64ms\n  2302570 requests in 15.02s, 417.22MB read\nRequests/sec: 153323.29\nTransfer/sec:     27.78MB\n"
+  },
+  "post": {
+   "rps": 106033.82,
+   "p50": 0.96,
+   "p99": 1.83,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/orders\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     0.95ms  425.44us  13.50ms   79.66%\n    Req/Sec    53.36k     6.60k   72.97k    68.33%\n  Latency Distribution\n     50%    0.96ms\n     75%    1.15ms\n     90%    1.35ms\n     99%    1.83ms\n  1592074 requests in 15.01s, 223.19MB read\nRequests/sec: 106033.82\nTransfer/sec:     14.86MB\n"
+  },
+  "c1000": {
+   "rps": 172551.75,
+   "p50": 2.6,
+   "p99": 42.16,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     8.71ms   10.04ms  80.18ms   83.86%\n    Req/Sec    87.13k    11.13k  149.26k    79.33%\n  Latency Distribution\n     50%    2.60ms\n     75%   14.06ms\n     90%   23.18ms\n     99%   42.16ms\n  2598254 requests in 15.06s, 470.80MB read\nRequests/sec: 172551.75\nTransfer/sec:     31.27MB\n"
+  },
+  "peak_mb": 26.1
+ },
+ "Go": {
+  "check": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}\n",
+  "idle_mb": 7.4,
+  "get": {
+   "rps": 106127.18,
+   "p50": 0.9,
+   "p99": 3.73,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     1.03ms  824.96us  13.58ms   74.43%\n    Req/Sec    53.44k     4.90k   63.51k    65.33%\n  Latency Distribution\n     50%    0.90ms\n     75%    1.43ms\n     90%    2.01ms\n     99%    3.73ms\n  1594851 requests in 15.03s, 290.50MB read\nRequests/sec: 106127.18\nTransfer/sec:     19.33MB\n"
+  },
+  "post": {
+   "rps": 60885.36,
+   "p50": 1.62,
+   "p99": 5.47,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/orders\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     1.74ms    1.27ms  10.89ms   67.09%\n    Req/Sec    30.63k     2.02k   34.24k    69.33%\n  Latency Distribution\n     50%    1.62ms\n     75%    2.49ms\n     90%    3.42ms\n     99%    5.47ms\n  914230 requests in 15.02s, 129.04MB read\nRequests/sec:  60885.36\nTransfer/sec:      8.59MB\n"
+  },
+  "c1000": {
+   "rps": 105688.16,
+   "p50": 8.94,
+   "p99": 20.55,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     9.45ms    3.23ms  37.15ms   83.69%\n    Req/Sec    53.42k     3.80k   62.01k    76.00%\n  Latency Distribution\n     50%    8.94ms\n     75%   10.51ms\n     90%   12.90ms\n     99%   20.55ms\n  1594198 requests in 15.08s, 290.39MB read\nRequests/sec: 105688.16\nTransfer/sec:     19.25MB\n"
+  },
+  "peak_mb": 40.5
+ },
+ "Node": {
+  "check": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}",
+  "idle_mb": 184.3,
+  "get": {
+   "rps": 17284.41,
+   "p50": 4.67,
+   "p99": 15.52,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     5.98ms    3.99ms 182.09ms   91.50%\n    Req/Sec     8.70k     1.01k   10.81k    65.00%\n  Latency Distribution\n     50%    4.67ms\n     75%    6.86ms\n     90%    9.70ms\n     99%   15.52ms\n  259766 requests in 15.03s, 78.53MB read\nRequests/sec:  17284.41\nTransfer/sec:      5.23MB\n"
+  },
+  "post": {
+   "rps": 13805.53,
+   "p50": 5.9,
+   "p99": 22.16,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/orders\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     7.64ms    5.95ms 221.13ms   94.26%\n    Req/Sec     6.94k     1.32k    9.25k    67.33%\n  Latency Distribution\n     50%    5.90ms\n     75%    9.05ms\n     90%   11.69ms\n     99%   22.16ms\n  207332 requests in 15.02s, 54.18MB read\nRequests/sec:  13805.53\nTransfer/sec:      3.61MB\n"
+  },
+  "c1000": {
+   "rps": 15739.86,
+   "p50": 41.79,
+   "p99": 2620.0,
+   "errors": 398,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency   121.51ms  425.04ms   4.98s    95.91%\n    Req/Sec     7.95k     1.31k   10.71k    66.67%\n  Latency Distribution\n     50%   41.79ms\n     75%   54.79ms\n     90%   76.63ms\n     99%    2.62s \n  237248 requests in 15.07s, 71.72MB read\n  Socket errors: connect 0, read 0, write 0, timeout 398\nRequests/sec:  15739.86\nTransfer/sec:      4.76MB\n"
+  },
+  "peak_mb": 389.5
+ },
+ "Python": {
+  "check": "{\"id\":42,\"name\":\"user42\",\"email\":\"user42@example.com\",\"roles\":[\"reader\",\"writer\"]}",
+  "idle_mb": 137.5,
+  "get": {
+   "rps": 16161.38,
+   "p50": 5.73,
+   "p99": 10.67,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     6.21ms    1.70ms  82.52ms   87.81%\n    Req/Sec     8.13k   790.15     9.94k    65.00%\n  Latency Distribution\n     50%    5.73ms\n     75%    6.47ms\n     90%    8.20ms\n     99%   10.67ms\n  242650 requests in 15.01s, 47.90MB read\nRequests/sec:  16161.38\nTransfer/sec:      3.19MB\n"
+  },
+  "post": {
+   "rps": 13595.57,
+   "p50": 9.25,
+   "p99": 16.75,
+   "errors": 0,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/orders\n  2 threads and 100 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency     7.42ms    3.86ms  77.30ms   64.20%\n    Req/Sec     6.84k     1.15k    9.03k    62.00%\n  Latency Distribution\n     50%    9.25ms\n     75%   10.26ms\n     90%   11.06ms\n     99%   16.75ms\n  204106 requests in 15.01s, 29.59MB read\nRequests/sec:  13595.57\nTransfer/sec:      1.97MB\n"
+  },
+  "c1000": {
+   "rps": 14676.75,
+   "p50": 55.5,
+   "p99": 2350.0,
+   "errors": 284,
+   "raw": "Running 15s test @ http://127.0.0.1:8080/api/user/42\n  2 threads and 1000 connections\n  Thread Stats   Avg      Stdev     Max   +/- Stdev\n    Latency   112.15ms  373.39ms   4.98s    97.01%\n    Req/Sec     7.41k   751.80     9.03k    68.00%\n  Latency Distribution\n     50%   55.50ms\n     75%   61.87ms\n     90%   74.57ms\n     99%    2.35s \n  221184 requests in 15.07s, 43.66MB read\n  Socket errors: connect 0, read 0, write 0, timeout 284\nRequests/sec:  14676.75\nTransfer/sec:      2.90MB\n"
+  },
+  "peak_mb": 151.2
+ }
+}
