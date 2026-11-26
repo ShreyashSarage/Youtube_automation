@@ -128,6 +128,17 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
    ]
+  },
+  {
+   "date": "2026-11-26",
+   "day": 12,
+   "topic": "loop & break with a value",
+   "title": "Rust loop & break: Return a Value From a Loop 🦀 | Rust Day 12 #Shorts",
+   "url": "https://www.youtube.com/watch?v=Srh3s83cF5Q",
+   "publishAt": "2026-11-26T11:37:11+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+   ]
   }
  ]
 }

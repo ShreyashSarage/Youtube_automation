@@ -1,0 +1,262 @@
+{
+ "day": 12,
+ "topic": "loop & break with a value",
+ "theme": "matrix",
+ "brand": "RUST  ·  DAY 12",
+ "crate": "loops",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "LOOP &",
+   "BREAK"
+  ],
+  "visual": "pipeline",
+  "params": {
+   "stages": [
+    {
+     "name": "counter += 1",
+     "out": [
+      "1",
+      "2",
+      "…",
+      "10"
+     ]
+    },
+    {
+     "name": "break counter * 2",
+     "out": [
+      "20"
+     ]
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "Rust loop & break: Return a Value From a Loop 🦀 | Rust Day 12 #Shorts",
+  "description": "How loop and break work in Rust: a loop can hand a value back out with break value. Rust Day 12 of the Zero to Pro series.\n\n📌 In this short:\n✅ loop { } repeats forever until you break out of it\n✅ break counter * 2; returns a value from the loop: let result = loop { ... };\n✅ continue skips the rest of this pass; a while loop always gives back () (error E0308): only loop can break with a value\n\n💻 Code from the video:\nlet mut counter = 0;\nlet result = loop {\n    counter += 1;\n    if counter == 10 {\n        break counter * 2;\n    }\n};\nprintln!(\"{result}\"); // 20\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-05-control-flow.html\n⏭️ Tomorrow: while, for & ranges\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 12",
+   "rustlang",
+   "rust loop",
+   "rust break",
+   "break with value",
+   "rust continue",
+   "E0571",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "pipeline",
+   "stages": [
+    {
+     "name": "counter += 1",
+     "out": [
+      "1",
+      "2",
+      "…",
+      "10"
+     ]
+    },
+    {
+     "name": "break counter * 2",
+     "out": [
+      "20"
+     ]
+    }
+   ],
+   "top": "Rust Day 12",
+   "big": "A loop that returns?",
+   "sub": [
+    "loop, break & continue"
+   ],
+   "say": "In Rust, break can hand a value back out of a loop. Watch."
+  },
+  {
+   "type": "code",
+   "heading": "loop with a value",
+   "file": "main.rs",
+   "code": "fn main() {\n    let mut counter = 0;\n    let result = loop {\n        counter += 1;\n        if counter == 10 {\n            break counter * 2;\n        }\n    };\n    println!(\"{result}\");\n}",
+   "steps": [
+    {
+     "lines": [
+      3
+     ],
+     "note": "loop repeats forever",
+     "at": "loop repeats"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": "+1 every pass",
+     "at": "adds one"
+    },
+    {
+     "lines": [
+      5,
+      6
+     ],
+     "note": "break WITH a value",
+     "at": "break with"
+    },
+    {
+     "lines": [
+      8
+     ],
+     "note": "; ends the let",
+     "at": "semicolon"
+    }
+   ],
+   "say": "A loop repeats its block forever. Each pass adds one to counter. At ten, we break with counter times two, and that value comes out into result. The semicolon ends the let.",
+   "captions": "A loop repeats its block forever. Each pass adds 1 to counter. At 10, we break with counter * 2, and that value comes out into result. The semicolon ends the let."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 1,
+   "caption": "20",
+   "say": "Run it: twenty.",
+   "captions": "Run it: 20."
+  },
+  {
+   "type": "visual",
+   "visual": "pipeline",
+   "heading": "What happened",
+   "stages": [
+    {
+     "name": "counter",
+     "out": [
+      "1",
+      "2",
+      "3",
+      "…",
+      "10"
+     ]
+    },
+    {
+     "name": "10 * 2",
+     "out": [
+      "20"
+     ]
+    },
+    {
+     "name": "result",
+     "out": [
+      "20"
+     ]
+    }
+   ],
+   "say": "Counter counted to ten, then break sent twenty out into result. Like if, a loop is an expression.",
+   "captions": "Counter counted to 10, then break sent 20 out into result. Like if, a loop is an expression."
+  },
+  {
+   "type": "code",
+   "heading": "continue",
+   "file": "main.rs",
+   "code": "fn main() {\n    let mut n = 0;\n    loop {\n        n += 1;\n        if n % 2 == 0 {\n            continue;\n        }\n        if n > 7 { break; }\n        print!(\"{n} \");\n    }\n}",
+   "expect": "1 3 5 7",
+   "steps": [
+    {
+     "lines": [
+      5,
+      6
+     ],
+     "note": "even? skip this pass",
+     "at": "continue skips"
+    },
+    {
+     "lines": [
+      8
+     ],
+     "note": "past 7? stop the loop",
+     "at": "break stops"
+    },
+    {
+     "lines": [
+      9
+     ],
+     "note": "prints 1 3 5 7",
+     "at": "prints"
+    }
+   ],
+   "say": "continue skips the rest of this pass and jumps to the next one, so even numbers are skipped. And break stops the loop once n is past seven. It prints one, three, five, seven.",
+   "captions": "continue skips the rest of this pass and jumps to the next one, so even numbers are skipped. And break stops the loop once n is past 7. It prints 1 3 5 7."
+  },
+  {
+   "type": "visual",
+   "visual": "flow",
+   "heading": "Each pass",
+   "input": "n = 4",
+   "kind": "each pass",
+   "arms": [
+    {
+     "pattern": "even",
+     "result": "continue"
+    },
+    {
+     "pattern": "> 7",
+     "result": "break"
+    },
+    {
+     "pattern": "else",
+     "result": "print n"
+    }
+   ],
+   "hit": 0,
+   "say": "For n equals four: it's even, so continue jumps straight to the next pass.",
+   "captions": "For n = 4: it's even, so continue jumps straight to the next pass."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "a number from a while loop",
+   "file": "main.rs",
+   "code": "fn main() {\n    let mut n = 0;\n    let x: i32 = while n < 5 {\n        n += 1;\n    };\n}",
+   "highlight": [
+    3
+   ],
+   "expect_error": "E0308",
+   "say": "Now the mistake: expecting a number back from a while loop."
+  },
+  {
+   "type": "run",
+   "heading": "while gives ()",
+   "from_code": 6,
+   "caption": "expected i32, found ()",
+   "say": "Mismatched types: expected i32, found empty parentheses. A while loop might never run, so it always gives back nothing. Only loop can break with a value.",
+   "captions": "Mismatched types: expected i32, found (). A while loop might never run, so it always gives back nothing. Only loop can break with a value."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "loop repeats forever",
+    "break value returns it",
+    "continue skips a pass",
+    "values: only from loop"
+   ],
+   "say": "Recap: loop repeats forever, break value returns a value, continue skips a pass, and only loop can return a value."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 12 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: while,",
+    "for & ranges"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: while, for and ranges. Follow for daily Rust!"
+  }
+ ]
+}
