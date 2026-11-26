@@ -54,6 +54,11 @@ cold open (the finished app working) → intro → plan diagram → create proje
 and errors → release build / install / next steps → outro with a practice challenge.
 Add `chapter="Step N · ..."` to the first shot of each section (becomes YouTube chapters).
 
+## Look: clean (owner, Nov 26)
+`script.py` uses the clean style by default (`STYLE = "clean"`): a plain dark background, no camera moves or cursor, no typing.
+Code and commands appear in whole chunks, with the new lines highlighted while they're explained, and diagrams, charts and titles are shown finished.
+Keep explanations beginner friendly: one idea per shot, and say what each chunk does before moving on.
+
 ## 5. Check, then render
 ```bash
 python3 longform/engine/render_longform.py longform/<slug> --stills   # build/stills.png, 2 tiles per shot

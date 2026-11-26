@@ -41,6 +41,11 @@ Required top level:
 }
 ```
 
+### Look: clean (owner, Nov 26)
+Every Short uses the **clean** style (the default; `"style": "clean"`): a plain dark background, no moving background, no camera moves,
+flashes or glow, and every scene shown finished (no pop-in or slide-in). The only motion is the code-line highlight that follows the voice,
+plus plain captions. Don't set `"style": "cinematic"` unless the owner asks for it.
+
 ### Scene structure: detailed and flawless (8-10 scenes, 60-79 s, still a Short)
 The owner wants every lesson **very detailed**. Target **140-185 words** of narration and **60-79 s**
 (`voice.py` refuses anything over 1:19; the title still ends with `#Shorts`). Use this structure:

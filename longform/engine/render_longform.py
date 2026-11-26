@@ -13,6 +13,10 @@ HERE = os.path.abspath(sys.argv[1]); sys.path.insert(0, HERE)
 import script as S
 BUILD = os.path.join(HERE, "build"); os.makedirs(BUILD, exist_ok=True)
 PROJECT = getattr(S, "PROJECT", "project")
+# "clean" (default since Nov 26): plain dark background, no camera moves, no cursor, no typing; code/commands appear
+# in whole chunks with the new lines highlighted; diagrams, charts and titles are shown finished.
+CLEAN = getattr(S, "STYLE", "clean") == "clean"
+CLEAN_BG = (14, 16, 21)
 W, H, FPS = 1920, 1080, 30
 FD = "/usr/share/fonts/truetype/dejavu/"; _fc = {}
 def font(n, s):
@@ -76,8 +80,10 @@ def schedule():
                     if scene == "split": EV["clicks"].append(cur + 0.45); cur += 0.6
                     EV[key].append((cur, "prompt", prompt_text(d)))
                     cmd = act["cmd"]; cps = 11 if len(cmd) < 45 else 19
-                    ts = type_times(cmd, cps, cur + 0.25)
-                    for i, tt in enumerate(ts): EV[key].append((tt, "set_input", cmd[:i + 1])); EV["keys"].append(tt)
+                    ts = [cur + 0.3] * len(cmd) if CLEAN else type_times(cmd, cps, cur + 0.25)
+                    if CLEAN: EV[key].append((cur + 0.3, "set_input", cmd)); ts = [cur + 0.3]
+                    else:
+                        for i, tt in enumerate(ts): EV[key].append((tt, "set_input", cmd[:i + 1])); EV["keys"].append(tt)
                     cur = ts[-1] + rng.uniform(0.25, 0.45); EV[key].append((cur, "enter", None)); EV["keys"].append(cur)
                     if cmd == "clear":
                         EV[key].append((cur + 0.05, "clear", None)); cur += 0.3
@@ -146,8 +152,16 @@ def schedule():
                 for i, ln in enumerate(sh.get("highlight", [])): EV["ed"].append((cur + 1.0 + i * 0.4, "hl", ln))
             else:
                 a0, b0 = sh["type"]; b0 = min(b0, len(full))
-                EV["ed"].append((cur, "set", (f, a0, 0)))
-                chunk = "\n".join(full[a0:b0]); typed = re.sub(r"(?m)^ +", "", chunk)  # indentation is auto
+                if CLEAN:  # the whole chunk appears at once; its new lines stay highlighted while they're explained
+                    EV["ed"].append((cur, "set", (f, b0, 0)))
+                    for ln in range(a0 + 1, b0 + 1):
+                        if full[ln - 1].strip(): EV["ed"].append((cur + 0.05, "hl", ln))
+                    cur += 0.8
+                    continue_after = True
+                else:
+                    continue_after = False
+                    EV["ed"].append((cur, "set", (f, a0, 0)))
+                chunk = "\n".join(full[a0:b0]) if not continue_after else ""; typed = re.sub(r"(?m)^ +", "", chunk)  # indentation is auto
                 avail = max(4.0, vdur * 0.9 - 1.2); cps = clamp(len(typed) / avail, 9, 24)
                 ts = type_times(typed, cps, cur + 0.3); k = 0
                 # map typed chars back to (line, col) in the full file
@@ -161,9 +175,9 @@ def schedule():
                     EV["ed"].append((tt, "set", (f, li, col))); EV["keys"].append(tt)
                 cur = (ts[-1] if ts else cur) + 0.6
                 EV["ed"].append((cur, "set", (f, b0, 0)))
-        elif scene == "chart" and sh["chart"].get("mode") == "rate":
+        elif scene == "chart" and sh["chart"].get("mode") == "rate" and not CLEAN:
             cur = start + 1.0 + sh["chart"].get("seconds", 10) + 1.6
-        elif scene == "chart" and sh["chart"].get("mode") == "race":
+        elif scene == "chart" and sh["chart"].get("mode") == "race" and not CLEAN:
             cur = start + 1.0 + max(b["value"] for b in sh["chart"]["bars"]) + 1.6
         else:
             cur = start + 1.0
@@ -218,6 +232,7 @@ def editor_state(t):
 
 # ------------------------------------------------------------------ desktop
 def make_wallpaper():
+    if CLEAN: return Image.new("RGB", (W, H), CLEAN_BG)
     y, x = np.mgrid[0:H, 0:W].astype(np.float32)
     a = np.zeros((H, W, 3), np.float32)
     g = (x / W * 0.6 + y / H * 0.4)
@@ -251,7 +266,7 @@ def win_frame(img, x, y, w, h, title, focused=True, light=False):
     return x, y + 46
 
 # ------------------------------------------------------------------ terminal drawing
-TFS = 22; TCW = MONO(TFS).getlength("M"); TLH = 30
+TFS = 26 if CLEAN else 22; TCW = MONO(TFS).getlength("M"); TLH = 36 if CLEAN else 30
 SERVICE_COL = {"broker": (90, 200, 230), "subscriber": (230, 200, 90), "publisher": (130, 220, 120)}
 def out_segments(l):
     m = re.match(r"^(\s*)(Compiling|Finished|Adding|Updating|Locking|Creating|Downloaded|Downloading)\b(.*)$", l)
@@ -352,7 +367,7 @@ def wrap_segs(segs, cols):
     return out
 
 # ------------------------------------------------------------------ editor drawing
-EFS = 22; ECW = MONO(EFS).getlength("M"); ELH = 31
+EFS = 26 if CLEAN else 22; ECW = MONO(EFS).getlength("M"); ELH = 37 if CLEAN else 31
 KW = set("fn let mut pub struct enum impl use mod match if else for while loop return async await move ref as in const static type unsafe dyn self Self crate super true false Some None Ok Err break".split())
 def hl_rust(line):
     out = []
@@ -462,7 +477,10 @@ def draw_editor(img, t, hl_now):
         ox, oy = ex + 70, by + 50
         for hi, ht in hls:
             r = hi - 1 - top
-            if 0 <= r < rows: d.rectangle((ex, oy + r * ELH - 3, x + w, oy + r * ELH + ELH - 5), fill=(int(55 * ease((t - ht) / 0.4)) + 30, int(50 * ease((t - ht) / 0.4)) + 30, 30))
+            if 0 <= r < rows:
+                if CLEAN:  # subtle tint + thin accent edge: the new/explained lines stay readable
+                    d.rectangle((ex, oy + r * ELH - 3, x + w, oy + r * ELH + ELH - 5), fill=(40, 46, 60)); d.rectangle((ex, oy + r * ELH - 3, ex + 4, oy + r * ELH + ELH - 5), fill=(222, 105, 50))
+                else: d.rectangle((ex, oy + r * ELH - 3, x + w, oy + r * ELH + ELH - 5), fill=(int(55 * ease((t - ht) / 0.4)) + 30, int(50 * ease((t - ht) / 0.4)) + 30, 30))
         for r, line in enumerate(lines[top:top + rows]):
             i = top + r; yy = oy + r * ELH
             d.text((ex + 54 - d.textlength(str(i + 1), font=MONO(18)), yy + 3), str(i + 1), font=MONO(18), fill=(200, 200, 200) if i + 1 == ln_cur else (110, 110, 110))
@@ -506,12 +524,15 @@ def draw_diagram(img, which, lt, dur):
     """Generic sketchy whiteboard: S.DIAGRAMS[which] = {title, nodes:[{id,label,sub,x,y,w,h,color}], edges:[{src,dst,label,color}], notes:[{text,x,y,color,size}]}.
     Coordinates are on a 1680x890 board; nodes/edges/notes appear in list order over the shot."""
     spec = S.DIAGRAMS[which]
-    x, y, w, h = 120, 70, 1680, 960; bx, by = win_frame(img, x, y, w, h, f"{which} — Whiteboard", light=True)
-    d = ImageDraw.Draw(img); ink = (40, 40, 48)
+    x, y, w, h = 120, 70, 1680, 960; bx, by = win_frame(img, x, y, w, h, f"{which} — Whiteboard", light=not CLEAN)
+    d = ImageDraw.Draw(img); ink = (232, 234, 238) if CLEAN else (40, 40, 48)
     COL = {"orange": ((215, 90, 40), (255, 240, 230)), "blue": ((40, 110, 200), (240, 244, 255)), "green": ((60, 150, 80), (232, 248, 236)),
            "purple": ((130, 80, 190), (244, 238, 252)), "gray": ((120, 120, 130), (245, 245, 247)), "red": ((200, 60, 60), (253, 236, 236))}
+    if CLEAN:  # dark board: brighter lines, dark tinted fills
+        COL = {"orange": ((240, 130, 75), (52, 34, 26)), "blue": ((110, 165, 245), (26, 36, 56)), "green": ((110, 205, 125), (26, 46, 32)),
+               "purple": ((185, 140, 240), (40, 32, 56)), "gray": ((170, 174, 184), (38, 40, 46)), "red": ((240, 110, 110), (56, 30, 30))}
     for gx in range(bx + 40, x + w, 40):
-        for gy in range(by + 40, y + h, 40): d.point((gx, gy), fill=(215, 215, 220))
+        for gy in range(by + 40, y + h, 40): d.point((gx, gy), fill=(48, 50, 58) if CLEAN else (215, 215, 220))
     text_c(d, x + w / 2, by + 30, spec.get("title", ""), SANSB(40), ink)
     items = [("node", n) for n in spec.get("nodes", [])] + [("edge", e) for e in spec.get("edges", [])] + [("note", n) for n in spec.get("notes", [])]
     n_items = max(1, len(items)); pos = {}
@@ -528,7 +549,7 @@ def draw_diagram(img, which, lt, dur):
                 text_c(d, nx + nw / 2, ny + (nh / 2 - 38 if it.get("sub") else nh / 2 - 18), lab, f, ink)
                 if it.get("sub"):
                     f2 = MONO(22) if it.get("mono") else SANS(22)
-                    text_c(d, nx + nw / 2, ny + nh / 2 + 8, it["sub"], f2, (90, 90, 90))
+                    text_c(d, nx + nw / 2, ny + nh / 2 + 8, it["sub"], f2, (175, 180, 190) if CLEAN else (90, 90, 90))
         elif kind == "edge":
             ax, ay, aw, ah = pos[it["src"]]; cx_, cy_, cw_, ch_ = pos[it["dst"]]
             a = (ax + aw / 2, ay + ah / 2); b = (cx_ + cw_ / 2, cy_ + ch_ / 2)
@@ -648,7 +669,7 @@ def lower_third(d, t):
     for (ct, text) in CHAPTERS:
         lt = t - ct
         if 0 <= lt < 4.2:
-            a = eout(lt / 0.45) * (1 - ease((lt - 3.6) / 0.6)); tw = d.textlength(text, font=SANSB(30))
+            a = 1.0 if CLEAN else eout(lt / 0.45) * (1 - ease((lt - 3.6) / 0.6)); tw = d.textlength(text, font=SANSB(30))
             x0 = 60 - (1 - a) * 500; y0 = H - 140
             d.rounded_rectangle((x0, y0, x0 + tw + 70, y0 + 64), 14, fill=(215, 90, 40)); d.rectangle((x0, y0, x0 + 10, y0 + 64), fill=(255, 220, 190))
             d.text((x0 + 38, y0 + 14), text, font=SANSB(30), fill=(255, 255, 255))
@@ -694,7 +715,8 @@ def precompute_paths():
 def compose_base(t):
     si, s = shot_at(t); sh = s["shot"]; lt = t - s["start"]
     img = WALL.copy(); d = ImageDraw.Draw(img)
-    cs = clock_str(t); d.text((W / 2 - d.textlength(cs, font=SANSB(17)) / 2, 7), cs, font=SANSB(17), fill=(235, 235, 235))
+    if not CLEAN: cs = clock_str(t); d.text((W / 2 - d.textlength(cs, font=SANSB(17)) / 2, 7), cs, font=SANSB(17), fill=(235, 235, 235))
+    if CLEAN and sh["scene"] in ("diagram", "title", "codes", "chart"): lt = 1e3 if sh["scene"] != "chart" else max(lt, s["dur"] + 30)
     focus = None
     if sh["scene"] == "terminal":
         tk = "t%d" % next((a.get("term", 1) for a in sh.get("actions", []) if a.get("term")), 1)
@@ -723,6 +745,8 @@ def render_frame(i):
     mx, my = MOUSE[i]
     n = bisect.bisect_right(EV["clicks"], t); click = 0.0
     if n and t - EV["clicks"][n - 1] < 0.35: click = 1 - (t - EV["clicks"][n - 1]) / 0.35
+    if CLEAN:
+        d = ImageDraw.Draw(img); lower_third(d, t); badges(d, t); return img.tobytes()
     if s["shot"]["scene"] not in ("title", "chart", "codes"): draw_cursor(d, mx, my, click)
     zx, zy, zs = CAM[i]
     if zs > 1.001:
@@ -742,6 +766,8 @@ FRAME_CACHE = {}
 FOCUS = None; MOUSE = None; CAM = None
 def init_paths():
     global FOCUS, MOUSE, CAM
+    if CLEAN:  # no camera moves and no cursor
+        FOCUS = [None] * NFR; MOUSE = [(0.0, 0.0)] * NFR; CAM = [(W / 2, H / 2, 1.0)] * NFR; return
     cache = os.path.join(BUILD, "paths.json")
     key = hashlib.md5(open(os.path.join(HERE, "script.py"), "rb").read() + open(__file__, "rb").read()).hexdigest()
     if os.path.exists(cache):
@@ -770,11 +796,11 @@ def build_audio():
     lp = lambda x, f: sosfilt(butter(2, f, "low", fs=SR, output="sos"), x); hp = lambda x, f: sosfilt(butter(2, f, "high", fs=SR, output="sos"), x)
     clicks = [hp(r.standard_normal(900), 1800) * np.exp(-np.arange(900) / 90) * 0.05 for _ in range(6)]
     thock = lp(r.standard_normal(1600), 900) * np.exp(-np.arange(1600) / 260) * 0.08
-    for t in EV["keys"]:
+    for t in ([] if CLEAN else EV["keys"]):
         i0 = int(t * SR); c = clicks[r.integers(0, 6)] * r.uniform(0.6, 1.1)
         fx[i0:i0 + len(c)] += c[: max(0, N - i0)]
         fx[i0:i0 + 1600] += thock[: max(0, min(1600, N - i0))] * 0.35
-    for t in EV["clicks"]:
+    for t in ([] if CLEAN else EV["clicks"]):
         i0 = int(t * SR); c = hp(r.standard_normal(600), 2500) * np.exp(-np.arange(600) / 60) * 0.12; fx[i0:i0 + 600] += c[: max(0, N - i0)]
     # soft lo-fi bed: 76 BPM, Rhodes-ish chords + brushed beat, ducked under the voice
     bpm = 76; beat = 60 / bpm; bar = beat * 4; tt = np.arange(N) / SR; music = np.zeros(N, np.float32)

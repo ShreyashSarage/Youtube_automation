@@ -41,6 +41,9 @@ THEMES = {
     "gold":   dict(A=(255, 190, 40), A2=(255, 110, 60),  b1=(80, 55, 5),  b2=(60, 20, 10), b3=(50, 35, 0)),
 }
 TH = THEMES[SPEC.get("theme", "rust")]
+# "clean" (default since Nov 26): flat dark background, no motion graphics; scenes are shown in their finished state
+CLEAN = SPEC.get("style", "clean") == "clean"
+CLEAN_BG = (14, 16, 21)
 RUST = TH["A"]; BLUE = TH["A2"]; BLUE_BAR = tuple(int(c * 0.65) for c in TH["A2"])
 import visuals as VIS
 VIS.setpal(A=RUST, A2=BLUE)
@@ -51,6 +54,7 @@ def backout(t):
     t = clamp(t); c = 1.9; return 1 + (c + 1) * (t - 1) ** 3 + c * (t - 1) ** 2
 def mix(c, a): a = clamp(a); return tuple(int(v * a) for v in c)
 def appear(t, start, dur=0.5):
+    if CLEAN: return 1.0, 0
     e = ease((t - start) / dur); return e, (1 - e) * 70
 
 def wrap(d, text, fn, size, maxw, maxlines=3, minsize=28):
@@ -226,7 +230,7 @@ def sc_code(d, t, s, dur):
     longest = max(len(l) for l in lines) or 1
     fs = int(min(46, (W - 230) / (longest * 0.602)))
     f = M(fs); lh = fs * 1.5
-    e = ease((t - 0.4) / 0.6); x0, x1 = 60, W - 60
+    e = 1.0 if CLEAN else ease((t - 0.4) / 0.6); x0, x1 = 60, W - 60
     top = max(y + 50, 560); hgt = 120 + lh * len(lines)
     steps = s.get("steps", [])
     reveal = min(1.6, dur * 0.25) if steps else dur * 0.6
@@ -243,7 +247,7 @@ def sc_code(d, t, s, dur):
     if e > 0.95:
         per = max(0.08, reveal / len(lines))
         for i, l in enumerate(lines):
-            la = ease((t - 1.0 - i * per) / 0.3)
+            la = 1.0 if CLEAN else ease((t - 1.0 - i * per) / 0.3)
             if la <= 0: break
             x = x0 + 46; yy = top + 90 + i * lh
             hi = (i + 1 in cur["lines"]) if cur else (i + 1 in s.get("highlight", []))
@@ -411,7 +415,9 @@ def addblob(out, b, cx, cy, k=1.0):
     sx0, sy0 = max(0, -x0), max(0, -y0); dx0, dy0 = max(0, x0), max(0, y0); dx1, dy1 = min(W, x0 + w), min(H, y0 + h)
     if dx1 > dx0 and dy1 > dy0: out[dy0:dy1, dx0:dx1] += b[sy0:sy0 + dy1 - dy0, sx0:sx0 + dx1 - dx0] * k
 
+CLEAN_ARR = np.zeros((H, W, 3), np.float32) + np.array(CLEAN_BG, np.float32)
 def background(T, beat):
+    if CLEAN: return CLEAN_ARR.copy()
     img = Image.new("RGB", (W, H)); d = ImageDraw.Draw(img); sp = (T * 0.55) % 1.0
     for i in range(14):
         z = (i + sp) / 14; y = HORIZON + (H - HORIZON) * z ** 2.2
@@ -428,7 +434,7 @@ def background(T, beat):
 
 def hud(T):
     img = Image.new("RGB", (W, H)); d = ImageDraw.Draw(img)
-    d.rectangle((0, 0, W, 8), fill=(30, 36, 44)); d.rectangle((0, 0, W * T / TOTAL, 8), fill=RUST)
+    if not CLEAN: d.rectangle((0, 0, W, 8), fill=(30, 36, 44)); d.rectangle((0, 0, W * T / TOTAL, 8), fill=RUST)
     d.text((60, 64), BRAND, font=B(34), fill=RUST)
     return np.asarray(img, np.float32)
 
@@ -438,6 +444,13 @@ def render(idx):
     beat = math.exp(-((T % 0.5) * 9)) if T >= DROP else 0.0
     out = background(T, beat)
     layer = Image.new("RGB", (W, H)); sc = SCENES[si]
+    if CLEAN:
+        # finished state of the scene; code scenes keep real time so the explained line is highlighted with the voice
+        TYPES[sc["type"]](ImageDraw.Draw(layer), t if sc["type"] == "code" else max(dur - 0.05, 0.0), sc, dur)
+        out = out + np.asarray(layer, np.float32) + hud(T)
+        frame = np.clip(out, 0, 255).astype(np.uint8)
+        if CAPS: frame = burn_caption(frame, T)
+        return frame.tobytes()
     TYPES[sc["type"]](ImageDraw.Draw(layer), t, sc, dur)
     last = si == len(SCENES) - 1
     e = ease(t / 0.55); x = 0 if last else clamp((t - (dur - 0.4)) / 0.4)
@@ -472,7 +485,7 @@ def burn_caption(frame, T):
     cur = next((c for c in CAPS if c[0] <= T < c[1] + 0.08), None)
     if not cur: return frame
     a0, a1, text = cur; words = text.split(); img = Image.fromarray(frame); d = ImageDraw.Draw(img)
-    pop = backout((T - a0) / 0.18); size = int(66 * (0.82 + 0.18 * pop)); f = B(size)
+    pop = 1.0 if CLEAN else backout((T - a0) / 0.18); size = int(66 * (0.82 + 0.18 * pop)); f = B(size)
     sp = d.textlength(" ", font=f); widths = [d.textlength(w_, font=f) for w_ in words]
     total = sum(widths) + sp * (len(words) - 1)
     while total > 860 and size > 40:
@@ -484,7 +497,7 @@ def burn_caption(frame, T):
         acc += c
     x = (W - total) / 2; y = CAP_Y - (size - 66) / 2
     for i, (w_, wd) in enumerate(zip(words, widths)):
-        on = i == act
+        on = (i == act) and not CLEAN
         if on:  # highlight pill behind the active word
             d.rounded_rectangle((x - 12, y - 6, x + wd + 12, y + size * 1.16), 16, fill=RUST)
         d.text((x, y), w_, font=f, fill=(10, 10, 14) if on else WHITE, stroke_width=0 if on else 6, stroke_fill=(0, 0, 0))
@@ -509,8 +522,8 @@ def thumb_image():
     layer = Image.new("RGB", (W, H)); VIS.VISUALS[vis](ImageDraw.Draw(layer), 30.0, 6.0, params)  # finished state
     sc = 1.12; layer = layer.transform((W, H), Image.AFFINE, (1 / sc, 0, W / 2 - W / 2 / sc, 0, 1 / sc, 1010 - 1010 / sc + 60 / sc), Image.BILINEAR)
     small = layer.resize((W // 4, H // 4), Image.BILINEAR).filter(ImageFilter.GaussianBlur(9)).resize((W, H), Image.BILINEAR)
-    out += np.asarray(layer, np.float32) * 0.9 + np.asarray(small, np.float32) * 1.4
-    out *= VIG
+    if CLEAN: out += np.asarray(layer, np.float32)
+    else: out += np.asarray(layer, np.float32) * 0.9 + np.asarray(small, np.float32) * 1.4; out *= VIG
     img = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)); d = ImageDraw.Draw(img)
     # top band: badge + title (inside Shorts-safe area)
     if th.get("badge"):
@@ -535,14 +548,14 @@ def thumb_wide():
     th = thumb_spec(); vis = th["visual"]; TW, THH = 1280, 720
     params = next((x for x in SCENES if x.get("visual") == vis), {}); params = dict(params, **th.get("params", {}))
     params = {k: v for k, v in params.items() if k not in ("heading", "sub", "caption")}
-    bg = background(4.0, 0.0)[560:560 + 608] * VIG[560:560 + 608]
+    bg = background(4.0, 0.0)[560:560 + 608] * (1 if CLEAN else VIG[560:560 + 608])
     img = Image.fromarray(np.clip(bg, 0, 255).astype(np.uint8)).resize((TW, THH), Image.BILINEAR)
     layer = Image.new("RGB", (W, H)); VIS.VISUALS[vis](ImageDraw.Draw(layer), 30.0, 6.0, params)
     art = layer.crop((40, 520, 1040, 1380)).resize((780, 671), Image.BILINEAR)
     glow = art.resize((195, 168), Image.BILINEAR).filter(ImageFilter.GaussianBlur(6)).resize((780, 671), Image.BILINEAR)
     region = np.asarray(img, np.float32); x0, y0 = TW - 780 + 40, 30
     sub = region[y0:y0 + 671, x0:x0 + 740]
-    sub += (np.asarray(art, np.float32) * 0.95 + np.asarray(glow, np.float32) * 1.3)[:, :740][: sub.shape[0]]
+    sub += (np.asarray(art, np.float32) * (1.0 if CLEAN else 0.95) + np.asarray(glow, np.float32) * (0 if CLEAN else 1.3))[:, :740][: sub.shape[0]]
     img = Image.fromarray(np.clip(region, 0, 255).astype(np.uint8)); d = ImageDraw.Draw(img)
     y = 70
     if th.get("badge"):
