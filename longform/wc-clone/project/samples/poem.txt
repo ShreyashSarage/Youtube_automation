@@ -1,0 +1,4 @@
+Ferris the crab writes Rust all day,
+the borrow checker shows the way.
+No null, no leaks, no data race,
+just tests that pass and a happy face.

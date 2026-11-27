@@ -1,0 +1,4 @@
+TODO: write more tests
+  spaces   between   words   don't count twice
+
+the last line has no newline

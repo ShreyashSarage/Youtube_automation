@@ -1,0 +1,146 @@
+{
+ "new": {
+  "cmd": "cargo new rwc",
+  "out": "    Creating binary (application) `rwc` package\nnote: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html",
+  "code": 0,
+  "secs": 0.1
+ },
+ "add_clap": {
+  "cmd": "cargo add clap --features derive",
+  "out": "    Updating crates.io index\n      Adding clap v4.6.10 to dependencies\n             Features:\n             + color\n             + derive\n             + error-context\n             + help\n             + std\n             + suggestions\n             + usage\n             - cargo\n             - debug\n             - deprecated\n             - env\n             - string\n             - unicode\n             - unstable-derive-ui-tests\n             - unstable-doc\n             - unstable-ext\n             - unstable-markdown\n             - unstable-styles\n             - unstable-v5\n             - wrap_help\n    Updating crates.io index\n     Locking 21 packages to latest Rust 1.97.0 compatible versions",
+  "code": 0,
+  "secs": 0.4
+ },
+ "cat_toml": {
+  "cmd": "cat Cargo.toml",
+  "out": "[package]\nname = \"rwc\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[dependencies]\nclap = { version = \"4.6.10\", features = [\"derive\"] }",
+  "code": 0,
+  "secs": 0.0
+ },
+ "samples": {
+  "cmd": "ls samples && cat samples/poem.txt",
+  "out": "notes.txt\npoem.txt\nFerris the crab writes Rust all day,\nthe borrow checker shows the way.\nNo null, no leaks, no data race,\njust tests that pass and a happy face.",
+  "code": 0,
+  "secs": 0.0
+ },
+ "notes_a": {
+  "cmd": "cat -A samples/notes.txt; echo",
+  "out": "TODO: write more tests$\n  spaces   between   words   don't count twice$\n$\nthe last line has no newline",
+  "code": 0,
+  "secs": 0.0
+ },
+ "build": {
+  "cmd": "cargo build",
+  "out": "   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling unicode-ident v1.0.27\n   Compiling utf8parse v0.2.2\n   Compiling anstyle-parse v1.0.0\n   Compiling is_terminal_polyfill v1.70.2\n   Compiling anstyle v1.0.14\n   Compiling anstyle-query v1.1.5\n   Compiling colorchoice v1.0.5\n   Compiling heck v0.5.0\n   Compiling clap_lex v1.1.2\n   Compiling anstream v1.0.0\n   Compiling strsim v0.11.1\n   Compiling clap_builder v4.6.10\n   Compiling syn v3.0.10\n   Compiling clap_derive v4.6.9\n   Compiling clap v4.6.10\n   Compiling rwc v0.1.0 (/home/dev/rwc)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.40s",
+  "code": 0,
+  "secs": 4.5
+ },
+ "test": {
+  "cmd": "cargo test",
+  "out": "   Compiling rwc v0.1.0 (/home/dev/rwc)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.26s\n     Running unittests src/main.rs (target/debug/deps/rwc-eb792e915f9f8707)\n\nrunning 5 tests\ntest tests::emoji_is_four_bytes ... ok\ntest tests::counts_lines_words_and_bytes ... ok\ntest tests::last_line_without_newline ... ok\ntest tests::empty_input_is_all_zeros ... ok\ntest tests::extra_spaces_are_not_words ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+  "code": 0,
+  "secs": 0.3
+ },
+ "help": {
+  "cmd": "cargo run -q -- --help",
+  "out": "Count lines, words and bytes, like the Unix `wc` tool\n\nUsage: rwc [OPTIONS] [FILES]...\n\nArguments:\n  [FILES]...  Files to read (none, or \"-\", means standard input)\n\nOptions:\n  -l, --lines    Print the line count\n  -w, --words    Print the word count\n  -c, --bytes    Print the byte count\n  -h, --help     Print help\n  -V, --version  Print version",
+  "code": 0,
+  "secs": 0.1
+ },
+ "run_poem": {
+  "cmd": "cargo run -q -- samples/poem.txt",
+  "out": "  4  28 143 samples/poem.txt",
+  "code": 0,
+  "secs": 0.1
+ },
+ "wc_poem": {
+  "cmd": "wc samples/poem.txt",
+  "out": "  4  28 143 samples/poem.txt",
+  "code": 0,
+  "secs": 0.0
+ },
+ "run_both": {
+  "cmd": "cargo run -q -- samples/poem.txt samples/notes.txt",
+  "out": "  4  28 143 samples/poem.txt\n  3  16  99 samples/notes.txt\n  7  44 242 total",
+  "code": 0,
+  "secs": 0.1
+ },
+ "wc_both": {
+  "cmd": "wc samples/poem.txt samples/notes.txt",
+  "out": "  4  28 143 samples/poem.txt\n  3  16  99 samples/notes.txt\n  7  44 242 total",
+  "code": 0,
+  "secs": 0.0
+ },
+ "run_l": {
+  "cmd": "cargo run -q -- -l samples/poem.txt",
+  "out": "4 samples/poem.txt",
+  "code": 0,
+  "secs": 0.1
+ },
+ "wc_l": {
+  "cmd": "wc -l samples/poem.txt",
+  "out": "4 samples/poem.txt",
+  "code": 0,
+  "secs": 0.0
+ },
+ "run_stdin": {
+  "cmd": "cat samples/poem.txt | cargo run -q --",
+  "out": "      4      28     143",
+  "code": 0,
+  "secs": 0.1
+ },
+ "wc_stdin": {
+  "cmd": "cat samples/poem.txt | wc",
+  "out": "      4      28     143",
+  "code": 0,
+  "secs": 0.0
+ },
+ "run_err": {
+  "cmd": "cargo run -q -- samples/poem.txt nope.txt",
+  "out": "rwc: nope.txt: No such file or directory (os error 2)\n  4  28 143 samples/poem.txt\n  4  28 143 total",
+  "code": 1,
+  "secs": 0.1
+ },
+ "release": {
+  "cmd": "cargo build --release",
+  "out": "   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.27\n   Compiling quote v1.0.47\n   Compiling utf8parse v0.2.2\n   Compiling anstyle-parse v1.0.0\n   Compiling is_terminal_polyfill v1.70.2\n   Compiling anstyle v1.0.14\n   Compiling anstyle-query v1.1.5\n   Compiling colorchoice v1.0.5\n   Compiling heck v0.5.0\n   Compiling clap_lex v1.1.2\n   Compiling anstream v1.0.0\n   Compiling strsim v0.11.1\n   Compiling clap_builder v4.6.10\n   Compiling syn v3.0.10\n   Compiling clap_derive v4.6.9\n   Compiling clap v4.6.10\n   Compiling rwc v0.1.0 (/home/dev/rwc)\n    Finished `release` profile [optimized] target(s) in 6.25s",
+  "code": 0,
+  "secs": 6.3
+ },
+ "big": {
+  "cmd": "yes 'ferris the crab writes rust all day' | head -n 2000000 > big.txt && du -h --apparent-size big.txt",
+  "out": "69M\tbig.txt",
+  "code": 0,
+  "secs": 0.2
+ },
+ "time_rwc": {
+  "cmd": "time ./target/release/rwc big.txt",
+  "out": " 2000000 14000000 72000000 big.txt\n\nreal\t0m0.117s\nuser\t0m0.096s\nsys\t0m0.020s",
+  "code": 0,
+  "secs": 0.1
+ },
+ "time_wc": {
+  "cmd": "time wc big.txt",
+  "out": " 2000000 14000000 72000000 big.txt\n\nreal\t0m0.229s\nuser\t0m0.223s\nsys\t0m0.004s",
+  "code": 0,
+  "secs": 0.2
+ },
+ "diff": {
+  "cmd": "diff <(wc samples/*.txt big.txt) <(./target/release/rwc samples/*.txt big.txt) && echo identical",
+  "out": "identical",
+  "code": 0,
+  "secs": 0.3
+ },
+ "install": {
+  "cmd": "cargo install --path .",
+  "out": "  Installing /home/dev/.cargo/bin/rwc\n   Installed package `rwc v0.1.0 (/home/dev/rwc)` (executable `rwc`)\nwarning: be sure to add `/home/dev/.cargo/bin` to your PATH to be able to run the installed binaries",
+  "code": 0,
+  "secs": 0.3
+ },
+ "global": {
+  "cmd": "rwc --version",
+  "out": "rwc 0.1.0",
+  "code": 0,
+  "secs": 0.0
+ }
+}

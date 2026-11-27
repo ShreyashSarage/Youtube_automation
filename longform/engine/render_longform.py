@@ -474,6 +474,7 @@ def draw_editor(img, t, hl_now):
         lines = full[:nl] + ([full[nl][:col]] if col and nl < len(full) else [])
         ln_cur = len(lines) if not col else nl + 1
         rows = int((h - 46 - 38 - 30 - 16) / ELH); top = max(0, ln_cur - rows + 3)
+        if CLEAN and hls: top = max(0, min(top, min(hl for hl, _ in hls) - 3))  # keep the explained chunk's first lines in view
         ox, oy = ex + 70, by + 50
         for hi, ht in hls:
             r = hi - 1 - top

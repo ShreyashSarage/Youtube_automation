@@ -1,0 +1,112 @@
+[
+ {
+  "id": "new",
+  "project": "rwc",
+  "cmd": "cargo new rwc",
+  "cwd": "home"
+ },
+ {
+  "id": "add_clap",
+  "cmd": "cargo add clap --features derive"
+ },
+ {
+  "id": "cat_toml",
+  "cmd": "cat Cargo.toml"
+ },
+ {
+  "id": "samples",
+  "cmd": "ls samples && cat samples/poem.txt",
+  "write": [
+   "samples/poem.txt",
+   "samples/notes.txt"
+  ]
+ },
+ {
+  "id": "notes_a",
+  "cmd": "cat -A samples/notes.txt; echo"
+ },
+ {
+  "id": "build",
+  "cmd": "cargo build",
+  "write": [
+   "src/main.rs"
+  ]
+ },
+ {
+  "id": "test",
+  "cmd": "cargo test"
+ },
+ {
+  "id": "help",
+  "cmd": "cargo run -q -- --help"
+ },
+ {
+  "id": "run_poem",
+  "cmd": "cargo run -q -- samples/poem.txt"
+ },
+ {
+  "id": "wc_poem",
+  "cmd": "wc samples/poem.txt"
+ },
+ {
+  "id": "run_both",
+  "cmd": "cargo run -q -- samples/poem.txt samples/notes.txt"
+ },
+ {
+  "id": "wc_both",
+  "cmd": "wc samples/poem.txt samples/notes.txt"
+ },
+ {
+  "id": "run_l",
+  "cmd": "cargo run -q -- -l samples/poem.txt"
+ },
+ {
+  "id": "wc_l",
+  "cmd": "wc -l samples/poem.txt"
+ },
+ {
+  "id": "run_stdin",
+  "cmd": "cat samples/poem.txt | cargo run -q --"
+ },
+ {
+  "id": "wc_stdin",
+  "cmd": "cat samples/poem.txt | wc"
+ },
+ {
+  "id": "run_err",
+  "cmd": "cargo run -q -- samples/poem.txt nope.txt",
+  "may_fail": true
+ },
+ {
+  "id": "release",
+  "cmd": "cargo build --release"
+ },
+ {
+  "id": "big",
+  "cmd": "yes 'ferris the crab writes rust all day' | head -n 2000000 > big.txt && du -h --apparent-size big.txt"
+ },
+ {
+  "id": "time_rwc",
+  "cmd": "time ./target/release/rwc big.txt",
+  "stderr_first": false
+ },
+ {
+  "id": "time_wc",
+  "cmd": "time wc big.txt",
+  "stderr_first": false
+ },
+ {
+  "id": "diff",
+  "cmd": "diff <(wc samples/*.txt big.txt) <(./target/release/rwc samples/*.txt big.txt) && echo identical"
+ },
+ {
+  "id": "install",
+  "cmd": "CARGO_INSTALL_ROOT=$(cd .. && pwd)/.cargo cargo install --path . 2>&1 | tail -3",
+  "shown": "cargo install --path ."
+ },
+ {
+  "id": "global",
+  "cmd": "PATH=$(cd .. && pwd)/.cargo/bin:$PATH && cd /tmp && rwc --version",
+  "shown": "rwc --version"
+ }
+]
