@@ -40,7 +40,7 @@ for i, sc in enumerate(spec["scenes"]):
         subprocess.run(["cargo", "new", "-q", "--vcs", "none", crate], cwd=td, check=True)
         pd = os.path.join(td, crate); open(os.path.join(pd, "src", "main.rs"), "w").write(src_sc.get("check") or src_sc["code"])
         r = subprocess.run(["cargo", "run", "-q" if sc.get("quiet") else "--color=never"] + ([] if sc.get("quiet") else []), cwd=pd,
-                           capture_output=True, text=True, timeout=300, env=dict(os.environ, CARGO_TERM_COLOR="never"))
+                           capture_output=True, text=True, timeout=300, env={**{k: v for k, v in os.environ.items() if k != "RUST_BACKTRACE"}, "CARGO_TERM_COLOR": "never"})
         text = (r.stderr + r.stdout).replace(td, "~")
     lines = [l.rstrip() for l in text.split("\n")]
     cut = next((k for k, l in enumerate(lines) if l.startswith("error: could not compile") or l.startswith("For more information")), len(lines))
