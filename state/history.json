@@ -139,6 +139,17 @@
    "sources": [
     "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
    ]
+  },
+  {
+   "date": "2026-11-27",
+   "day": 13,
+   "topic": "while, for & ranges",
+   "title": "Rust for vs while Loops + Ranges (0..5 vs 0..=5) 🦀 | Rust Day 13 #Shorts",
+   "url": "https://www.youtube.com/watch?v=PIKAKbHiDn8",
+   "publishAt": "2026-11-27T10:45:32+05:30",
+   "sources": [
+    "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+   ]
   }
  ]
 }

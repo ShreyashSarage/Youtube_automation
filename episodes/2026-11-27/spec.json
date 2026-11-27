@@ -1,0 +1,251 @@
+{
+ "day": 13,
+ "topic": "while, for & ranges",
+ "theme": "ocean",
+ "style": "clean",
+ "brand": "RUST  ·  DAY 13",
+ "crate": "loops",
+ "sources": [
+  "https://doc.rust-lang.org/book/ch03-05-control-flow.html"
+ ],
+ "thumbnail": {
+  "lines": [
+   "FOR, WHILE",
+   "& RANGES"
+  ],
+  "visual": "pipeline",
+  "params": {
+   "stages": [
+    {
+     "name": "0..5",
+     "out": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+     ]
+    },
+    {
+     "name": "0..=5",
+     "out": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    }
+   ]
+  }
+ },
+ "youtube": {
+  "title": "Rust for vs while Loops + Ranges (0..5 vs 0..=5) 🦀 | Rust Day 13 #Shorts",
+  "description": "while, for and ranges in Rust: why 0..5 stops at 4, and why for is safer than a while loop with an index. Rust Day 13 of the Zero to Pro series.\n\n📌 In this short:\n✅ while runs as long as its condition is true (a countdown: 3! 2! 1! LIFTOFF!)\n✅ for x in a walks through every item, with no index to get wrong\n✅ Ranges: 0..5 is 0 to 4, 0..=5 includes 5, and (1..4).rev() counts down 3, 2, 1\n\n💻 Code from the video:\nlet a = [10, 20, 30];\nfor x in a {\n    println!(\"{x}\");\n}\nfor n in (1..4).rev() {\n    println!(\"{n}!\");\n}\n\n📖 Learn more: https://doc.rust-lang.org/book/ch03-05-control-flow.html\n⏭️ Tomorrow: Loop labels\n\nFollow for a new Rust lesson every day at 10 AM IST, from zero to pro 🦀\n💬 Questions? Drop them in the comments 👇\n\n#rust #rustlang #learnrust #rustprogramming #programming #coding #codingforbeginners #learntocode #100daysofcode #developer #shorts",
+  "tags": [
+   "rust",
+   "rust programming",
+   "learn rust",
+   "rust tutorial",
+   "rust for beginners",
+   "rust day 13",
+   "rustlang",
+   "rust for loop",
+   "rust while loop",
+   "rust ranges",
+   "rev",
+   "index out of bounds",
+   "programming",
+   "coding"
+  ]
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "visual": "pipeline",
+   "stages": [
+    {
+     "name": "0..5",
+     "out": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+     ]
+    },
+    {
+     "name": "0..=5",
+     "out": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    }
+   ],
+   "top": "Rust Day 13",
+   "big": "0..5 or 0..=5?",
+   "sub": [
+    "while, for & ranges"
+   ],
+   "say": "Zero dot dot five stops at four. Add an equals sign, and it reaches five.",
+   "captions": "0..5 stops at 4. Add an equals sign, and it reaches 5."
+  },
+  {
+   "type": "code",
+   "heading": "while",
+   "file": "main.rs",
+   "code": "fn main() {\n    let mut number = 3;\n    while number != 0 {\n        println!(\"{number}!\");\n        number -= 1;\n    }\n    println!(\"LIFTOFF!\");\n}",
+   "steps": [
+    {
+     "lines": [
+      3
+     ],
+     "note": "runs while this is true",
+     "at": "while the condition"
+    },
+    {
+     "lines": [
+      4,
+      5
+     ],
+     "note": "print, then count down",
+     "at": "prints"
+    },
+    {
+     "lines": [
+      7
+     ],
+     "note": "after the loop ends",
+     "at": "Then"
+    }
+   ],
+   "say": "A while loop runs while the condition is true. While number isn't zero, it prints the number and subtracts one. Then, liftoff.",
+   "captions": "A while loop runs while the condition is true. While number != 0, it prints the number and subtracts 1. Then, liftoff."
+  },
+  {
+   "type": "run",
+   "heading": "Run it",
+   "from_code": 1,
+   "caption": "3! 2! 1! LIFTOFF!",
+   "say": "Three, two, one, liftoff."
+  },
+  {
+   "type": "code",
+   "heading": "for",
+   "file": "main.rs",
+   "code": "fn main() {\n    let a = [10, 20, 30];\n    for x in a {\n        println!(\"{x}\");\n    }\n}",
+   "expect": "10\n20\n30",
+   "steps": [
+    {
+     "lines": [
+      3
+     ],
+     "note": "every item, in order",
+     "at": "for x in a"
+    },
+    {
+     "lines": [
+      4
+     ],
+     "note": "prints 10, 20, 30",
+     "at": "no index"
+    }
+   ],
+   "say": "To go through an array, use for. for x in a gives each item in order: ten, twenty, thirty. There's no index, so no way to go past the end.",
+   "captions": "To go through an array, use for. for x in a gives each item in order: 10, 20, 30. There's no index, so no way to go past the end."
+  },
+  {
+   "type": "visual",
+   "visual": "pipeline",
+   "heading": "Ranges",
+   "stages": [
+    {
+     "name": "0..5",
+     "out": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+     ]
+    },
+    {
+     "name": "0..=5",
+     "out": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    },
+    {
+     "name": "(1..4).rev()",
+     "out": [
+      "3",
+      "2",
+      "1"
+     ]
+    }
+   ],
+   "say": "Ranges give for a sequence of numbers. Zero dot dot five is zero to four. With an equals sign, five is included. And dot rev counts backwards.",
+   "captions": "Ranges give for a sequence of numbers. 0..5 is 0 to 4. With an equals sign, 5 is included. And .rev() counts backwards."
+  },
+  {
+   "type": "code",
+   "heading": "Common mistake",
+   "sub": "an index that goes too far",
+   "file": "main.rs",
+   "code": "fn main() {\n    let a = [10, 20, 30];\n    let mut i = 0;\n    while i <= 3 {\n        println!(\"{}\", a[i]);\n        i += 1;\n    }\n}",
+   "highlight": [
+    4,
+    5
+   ],
+   "say": "Now the classic while loop bug: less than or equal to three, on an array of three items.",
+   "captions": "Now the classic while loop bug: <= 3, on an array of 3 items."
+  },
+  {
+   "type": "run",
+   "heading": "It panics",
+   "from_code": 5,
+   "caption": "index out of bounds",
+   "say": "It prints ten, twenty, thirty, then panics: index out of bounds. Rust stops instead of reading random memory.",
+   "captions": "It prints 10, 20, 30, then panics: index out of bounds. Rust stops instead of reading random memory."
+  },
+  {
+   "type": "visual",
+   "visual": "shield",
+   "heading": "Use for instead",
+   "label": "a[3] blocked",
+   "say": "With for x in a, this bug can't happen. That's why Rust developers reach for for first.",
+   "captions": "With for x in a, this bug can't happen. That's why Rust developers reach for \"for\" first."
+  },
+  {
+   "type": "bullets",
+   "heading": "Recap",
+   "items": [
+    "while: until false",
+    "for x in a: every item",
+    "0..5 stops at 4",
+    "0..=5 includes 5"
+   ],
+   "say": "Recap: while runs until its condition is false, for walks every item, and ranges stop before the end unless you add an equals sign."
+  },
+  {
+   "type": "cta",
+   "heading": "Day 13 ✓",
+   "link": "doc.rust-lang.org/book",
+   "question": [
+    "Tomorrow: Loop labels"
+   ],
+   "sub": "Follow to learn Rust daily",
+   "say": "Tomorrow: loop labels. Follow for daily Rust!"
+  }
+ ]
+}
