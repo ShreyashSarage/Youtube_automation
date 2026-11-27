@@ -45,6 +45,13 @@
     "spec": "episodes/2026-11-27-webbench/spec.json",
     "publishAt": "2026-11-27T18:00:00+05:30"
    }
+  },
+  {
+   "slug": "wc-clone",
+   "date": "2026-11-28",
+   "url": "https://www.youtube.com/watch?v=VE5-ck4kwL8",
+   "title": "Rewrite the Linux wc Command in Rust (with Unit Tests) | Rust Projects #3",
+   "publishAt": "2026-11-28T18:00:00+05:30"
   }
  ]
 }
